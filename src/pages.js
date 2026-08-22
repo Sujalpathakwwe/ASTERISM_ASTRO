@@ -476,7 +476,27 @@ export const pages = {
 <a class="social-icon" href="https://www.reddit.com/r/PalmReading/" target="_blank" rel="noopener noreferrer" aria-label="Reddit" title="Reddit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.1 11.2c.1-.3.2-.7.2-1.1 0-1.3-1-2.3-2.3-2.3-.6 0-1.2.2-1.6.6-1.1-.8-2.5-1.3-4-1.4l.8-3.5 2.4.5c.1.8.8 1.4 1.6 1.4.9 0 1.6-.7 1.6-1.6s-.7-1.6-1.6-1.6c-.6 0-1.2.4-1.4.9l-2.8-.6c-.4-.1-.7.2-.8.5l-1 4.1c-1.5.1-2.9.6-4 1.4-.5-.4-1-.6-1.6-.6-1.3 0-2.3 1-2.3 2.3 0 .4.1.8.3 1.1-.4.6-.6 1.3-.6 2 0 3.1 3.6 5.6 8.1 5.6s8.1-2.5 8.1-5.6c0-.7-.2-1.4-.7-2Z"></path></svg></a>
 <a class="social-icon" href="https://linktr.ee/asterismastro" target="_blank" rel="noopener noreferrer" aria-label="Linktree" title="Linktree"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3h2v5.1l3.6-3.6 1.4 1.4-3.6 3.6H20v2h-5.6l3.6 3.6-1.4 1.4-3.6-3.6V21h-2v-8.1l-3.6 3.6L6 15.1l3.6-3.6H4v-2h5.6L6 5.9l1.4-1.4L11 8.1V3Z"></path></svg></a>
 </div></div><div><h4>Services</h4><a href="services.html">Palmistry</a><a href="services.html">Vedic Astrology</a><a href="services.html">Relationship Analysis</a><a href="services.html">Career & Finance</a></div><div><h4>Company</h4><a href="about.html">About Us</a><a href="pricing.html">Pricing</a><a href="testimonials.html">Testimonials</a><a href="blog.html">Journal</a><a href="contact.html">Contact</a></div><div><h4>Legal</h4><a href="privacy-policy.html">Privacy Policy</a><a href="terms-of-service.html">Terms of Service</a><a href="refund-policy.html">Refund Policy</a><a href="disclaimer.html">Disclaimer</a></div></div><div class="container copyright">© 2026 Asterism Astro. All rights reserved.</div></footer><div class="notice"></div><script src="script.js"></script></body></html>`,
-  "index.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Asterism Astro — Asterism Astro</title><link rel="stylesheet" href="styles.css"></head><body><header class="site-header"><div class="container nav">
+  "index.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Asterism Astro — Astrology, Palmistry & Consultations</title>
+<meta name="description" content="Asterism Astro offers thoughtful astrology, palmistry, relationship analysis and divinatory consultations for personal insight and reflection.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Asterism Astro — Astrology, Palmistry & Consultations">
+<meta property="og:description" content="Thoughtful astrology, palmistry and divinatory consultations for personal insight and reflection.">
+<meta property="og:url" content="https://www.asterismastro.com/">
+<meta property="og:site_name" content="Asterism Astro">
+<link rel="canonical" href="https://www.asterismastro.com/">
+<link rel="stylesheet" href="styles.css"><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Asterism Astro",
+  "alternateName": "Asterism Astro",
+  "url": "https://www.asterismastro.com/"
+}
+</script>
+
+</head><body><header class="site-header"><div class="container nav">
 <a class="brand" href="index.html"><span class="brand-mark">✧</span>Asterism Astro</a>
 <nav class="navlinks"><a href="index.html">Home</a><a href="services.html">Services</a><a href="about.html">About</a><a href="pricing.html">Pricing</a><a href="testimonials.html">Testimonials</a><a href="blog.html">Blog</a><a href="contact.html">Contact</a></nav>
 <div class="actions"><button type="button" data-theme-toggle class="theme-toggle" title="Toggle theme">☼</button><a class="btn btn-gold" href="contact.html">Book a Consultation</a><button class="mobile-menu">☰</button></div>
