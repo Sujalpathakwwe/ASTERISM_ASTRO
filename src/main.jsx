@@ -1768,7 +1768,30 @@ function App() {
           );
         }
       );
+    const desktopAccountLink =
+  document.querySelector(
+    ".session-account-link"
+  );
 
+if (desktopAccountLink) {
+
+  if (nextSession) {
+
+    desktopAccountLink.href =
+      "/account";
+
+    desktopAccountLink.textContent =
+      "My Account";
+
+  } else {
+
+    desktopAccountLink.href =
+      "/login";
+
+    desktopAccountLink.textContent =
+      "Log In";
+  }
+}
 
     return () => {
 
@@ -1863,15 +1886,6 @@ function App() {
   ======================================================= */
 
   useEffect(() => {
-
-    console.log(
-      "[wheel-debug] LOAD STATIC PAGE effect ran. currentPath=",
-      currentPath,
-      "isReactOnlyPage=",
-      isReactOnlyPage,
-      "time=",
-      new Date().toISOString()
-    );
 
     if (isReactOnlyPage) {
 
@@ -2172,44 +2186,8 @@ function App() {
 
 
     setHtml(
-      (previousHtml) => {
-
-        const nextHtml =
-          doc.body?.innerHTML ||
-          "";
-
-        if (
-          previousHtml !==
-          nextHtml
-        ) {
-
-          console.log(
-            "[wheel-debug] html state is CHANGING. previous length=",
-            previousHtml.length,
-            "next length=",
-            nextHtml.length,
-            "previous includes wheel section=",
-            previousHtml.includes(
-              "zodiac-wheel-root"
-            ),
-            "next includes wheel section=",
-            nextHtml.includes(
-              "zodiac-wheel-root"
-            ),
-            "time=",
-            new Date().toISOString()
-          );
-
-        } else {
-
-          console.log(
-            "[wheel-debug] html state recomputed but is IDENTICAL to previous — no DOM change, no wheel remount. time=",
-            new Date().toISOString()
-          );
-        }
-
-        return nextHtml;
-      }
+      doc.body?.innerHTML ||
+      ""
     );
 
 
@@ -2299,22 +2277,8 @@ function App() {
 
 
     if (!element) {
-
-      console.log(
-        "[wheel-debug] ZODIAC WHEEL effect ran but #zodiac-wheel-root was NOT found in the DOM. time=",
-        new Date().toISOString()
-      );
-
       return;
     }
-
-
-    console.log(
-      "[wheel-debug] ZODIAC WHEEL effect MOUNTING into element=",
-      element,
-      "time=",
-      new Date().toISOString()
-    );
 
 
     element.style.width =
@@ -2342,13 +2306,6 @@ function App() {
 
 
     return () => {
-
-      console.log(
-        "[wheel-debug] ZODIAC WHEEL effect CLEANUP (unmounting) element=",
-        element,
-        "time=",
-        new Date().toISOString()
-      );
 
       wheelRoot.unmount();
 

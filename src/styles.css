@@ -11833,3 +11833,27 @@ html[data-theme="dark"]
   }
 
 }
+.brand-logo{
+  display:block;
+  width:150px;
+  height:auto;
+  max-height:52px;
+  object-fit:contain;
+}
+
+@media (max-width:600px){
+  .brand-logo{
+    width:118px;
+    max-height:46px;
+  }
+}
+/* Improve logo visibility in dark mode without changing layout */
+.dark .brand-logo,
+body.dark .brand-logo,
+html.dark .brand-logo {
+  filter:
+    brightness(1.15)
+    contrast(1.08)
+    drop-shadow(0 0 1px rgba(255, 255, 255, 0.45))
+    drop-shadow(0 0 5px rgba(212, 165, 55, 0.22));
+}
