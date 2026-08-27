@@ -1622,12 +1622,34 @@ function AccountPage({
 function App() {
   
   const [detectedCountry, setDetectedCountry] = useState(null);
+const [countryLoading, setCountryLoading] = useState(true);
 
-  useEffect(() => {
-    detectCountry().then((country) => {
+useEffect(() => {
+  let mounted = true;
+
+  detectCountry()
+    .then((country) => {
+      if (!mounted) return;
+
       console.log("Detected country:", country);
       setDetectedCountry(country);
-  });
+      
+    })
+    .catch((error) => {
+      console.error("Country detection failed:", error);
+      if (mounted) {
+        setDetectedCountry(null);
+      }
+    })
+    .finally(() => {
+      if (mounted) {
+        setCountryLoading(false);
+      }
+    });
+
+  return () => {
+    mounted = false;
+  };
 }, []);
 
   const location =
@@ -1979,6 +2001,76 @@ if (desktopAccountLink) {
     document.title =
       doc.title ||
       "Asterism Astro";
+
+    /* =====================================================
+       PRICING CURRENCY
+       Apply the detected currency to the parsed pricing page
+       before it is injected into the React DOM. INR is already
+       present in the HTML as the instant fallback.
+    ===================================================== */
+    if (
+      file === "pricing.html" &&
+      detectedCountry?.code
+    ) {
+      const pricingCurrencyRates = {
+        IN: { currency: "INR", rate: 1 },
+        US: { currency: "USD", rate: 0.0119 },
+        GB: { currency: "GBP", rate: 0.0088 },
+        CA: { currency: "CAD", rate: 0.0162 },
+        AU: { currency: "AUD", rate: 0.0182 },
+        AE: { currency: "AED", rate: 0.0437 },
+        SG: { currency: "SGD", rate: 0.0159 },
+        JP: { currency: "JPY", rate: 1.76 },
+        DE: { currency: "EUR", rate: 0.0102 },
+        FR: { currency: "EUR", rate: 0.0102 },
+        IT: { currency: "EUR", rate: 0.0102 },
+        ES: { currency: "EUR", rate: 0.0102 },
+        NL: { currency: "EUR", rate: 0.0102 },
+        CH: { currency: "CHF", rate: 0.0100 },
+        ZA: { currency: "ZAR", rate: 0.0209 },
+        SA: { currency: "SAR", rate: 0.0446 },
+        QA: { currency: "QAR", rate: 0.0433 },
+        KW: { currency: "KWD", rate: 0.00365 },
+        MY: { currency: "MYR", rate: 0.0500 },
+        TH: { currency: "THB", rate: 0.380 },
+        ID: { currency: "IDR", rate: 190 },
+        PH: { currency: "PHP", rate: 0.680 },
+        BR: { currency: "BRL", rate: 0.064 },
+        MX: { currency: "MXN", rate: 0.220 },
+        KR: { currency: "KRW", rate: 16.0 },
+      };
+
+      const pricingData =
+        pricingCurrencyRates[detectedCountry.code] ||
+        pricingCurrencyRates.IN;
+
+      doc
+        .querySelectorAll(".dynamic-price")
+        .forEach((element) => {
+          const baseINR =
+            Number(element.dataset.priceInr);
+
+          if (!Number.isFinite(baseINR)) {
+            return;
+          }
+
+          const converted =
+            Math.round(
+              baseINR * pricingData.rate
+            );
+
+          element.textContent =
+            new Intl.NumberFormat(
+              undefined,
+              {
+                style: "currency",
+                currency: pricingData.currency,
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
+              }
+            ).format(converted);
+        });
+    }
 
 
     /* =====================================================

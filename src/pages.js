@@ -532,105 +532,479 @@ export const pages = {
 <div><h4>Company</h4><a href="about.html">About Us</a><a href="pricing.html">Pricing</a><a href="testimonials.html">Testimonials</a><a href="blog.html">Journal</a><a href="contact.html">Contact</a></div>
 <div><h4>Legal</h4><a href="privacy-policy.html">Privacy Policy</a><a href="terms-of-service.html">Terms of Service</a><a href="refund-policy.html">Refund Policy</a><a href="disclaimer.html">Disclaimer</a></div>
 </div><div class="container copyright">© 2026 Asterism Astro. All rights reserved.</div></footer><div class="notice"></div><script src="script.js"></script></body></html>`,
-  "pricing.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pricing — Asterism Astro</title><link rel="stylesheet" href="styles.css"></head><body><header class="site-header"><div class="container nav">
-<a class="brand" href="index.html" aria-label="Asterism Astro Home"><img src="/asterism-astro-logo-transparent.png" alt="Asterism Astro" class="brand-logo"></a>
-<nav class="navlinks"><a href="index.html">Home</a><a href="services.html">Services</a><a href="about.html">About</a><a href="pricing.html">Pricing</a><a href="testimonials.html">Testimonials</a><a href="blog.html">Blog</a><a href="contact.html">Contact</a></nav>
-<div class="actions"><button type="button" data-theme-toggle class="theme-toggle" title="Toggle theme">☼</button><a class="btn btn-gold" href="contact.html">Book a Consultation</a><button class="mobile-menu">☰</button></div>
-</div></header>
-<main><section class="page-hero"><div class="container"><h1>Consultations</h1><p>Clear consultation formats with time reserved for your questions.</p></div></section>
+  "pricing.html": `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pricing — Asterism Astro</title>
+<link rel="stylesheet" href="src/styles.css">
+<style>
+.pricing-grid-compatibility {
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  max-width:920px !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  gap:20px !important;
+}
+@media (max-width:620px) {
+  .pricing-grid-compatibility {
+    grid-template-columns:1fr !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="site-header">
+<div class="container nav">
+
+<a class="brand" href="index.html">
+<span class="brand-mark">✧</span>Asterism Astro
+</a>
+
+<nav class="navlinks">
+<a href="index.html">Home</a>
+<a href="services.html">Services</a>
+<a href="about.html">About</a>
+<a href="pricing.html">Pricing</a>
+<a href="testimonials.html">Testimonials</a>
+<a href="blog.html">Blog</a>
+<a href="contact.html">Contact</a>
+</nav>
+
+<div class="actions">
+<button type="button" data-theme-toggle class="theme-toggle" title="Toggle theme">☼</button>
+<a class="btn btn-gold" href="contact.html">Book a Consultation</a>
+<button class="mobile-menu">☰</button>
+</div>
+
+</div>
+</header>
+
+<main>
+
+<section class="page-hero">
+<div class="container">
+<h1>Consultations</h1>
+<p>Clear consultation formats with time reserved for your questions.</p>
+</div>
+</section>
 
 <section class="section all-pricing-readings">
-  <div class="container">
-    <div class="section-intro">
-      <div class="eyebrow">ALL READINGS</div>
-      <h2>Choose your consultation.</h2>
-      <p>Each service is priced according to the depth and scope of the consultation. Read through the descriptions before choosing the reading that best matches what you want to explore.</p>
-    </div>
-    <div class="pricing-readings-grid">
-      
-    <article class="pricing-reading-card">
-      <div class="pricing-reading-top"><span class="pricing-reading-tier">Consultation</span></div>
-      <h3>Palm Reading</h3>
-      <p>A detailed interpretation of the hands, looking at the major lines, mounts, fingers, hand shape, markings, and the way these features work together. The reading can explore personality patterns, emotional nature, relationships, career tendencies, strengths, recurring challenges, and broader life themes. Palmistry is especially useful for understanding patterns rather than reducing a person to a single prediction, and the reading focuses on the features actually visible in the hands provided.</p>
-      <div class="pricing-reading-bottom"><strong>$36 / ₹3100</strong><a href="contact.html">Book / Enquire →</a></div>
-    </article>
-    <article class="pricing-reading-card">
-      <div class="pricing-reading-top"><span class="pricing-reading-tier">Consultation</span></div>
-      <h3>Vedic Birth Chart</h3>
-      <p>A focused Vedic astrology consultation built around the natal chart. It examines the Ascendant, Moon, Sun, planetary placements, houses, signs, nakshatras, aspects, yogas, and the condition of important houses and lords. The reading can be directed toward a particular question while still placing that question within the wider structure of the chart, helping identify both supportive patterns and areas that require greater effort or awareness.</p>
-      <div class="pricing-reading-bottom"><strong>$60 / ₹5100</strong><a href="contact.html">Book / Enquire →</a></div>
-    </article>
-    <article class="pricing-reading-card">
-      <div class="pricing-reading-top"><span class="pricing-reading-tier">Consultation</span></div>
-      <h3>Relationship Analysis</h3>
-      <p>A focused relationship reading examining how two people interact emotionally and psychologically through their charts. It can explore attraction, emotional compatibility, communication, attachment patterns, expectations, conflict areas, affection, independence, and the ways each person may experience the relationship differently. The purpose is not simply to label a relationship as good or bad, but to explain the dynamics that make the connection work or create friction.</p>
-      <div class="pricing-reading-bottom"><strong>$60 / ₹5100</strong><a href="contact.html">Book / Enquire →</a></div>
-    </article>
-    <article class="pricing-reading-card">
-      <div class="pricing-reading-top"><span class="pricing-reading-tier">Consultation</span></div>
-      <h3>Career & Finance</h3>
-      <p>A focused analysis of professional direction and financial tendencies through the birth chart. It examines career houses, their lords, relevant planets, strengths, work style, ambition, earning patterns, professional environments, and periods of opportunity or pressure. The reading can help distinguish between what a person is naturally suited to, what requires development, and where their chart suggests recurring professional themes.</p>
-      <div class="pricing-reading-bottom"><strong>$60 / ₹5100</strong><a href="contact.html">Book / Enquire →</a></div>
-    </article>
-    <article class="pricing-reading-card">
-      <div class="pricing-reading-top"><span class="pricing-reading-tier">Consultation</span></div>
-      <h3>Marriage & Partnership</h3>
-      <p>A specialised reading focused on long-term partnership and marriage. It examines the relevant houses, their lords, Venus and Jupiter, the Moon, relationship indicators, timing factors, and patterns that may influence commitment. Depending on the question, the reading can explore the nature of a future partner, relationship expectations, marriage dynamics, compatibility, challenges, and significant periods affecting partnership.</p>
-      <div class="pricing-reading-bottom"><strong>$60 / ₹5100</strong><a href="contact.html">Book / Enquire →</a></div>
-    </article>
-    <article class="pricing-reading-card">
-      <div class="pricing-reading-top"><span class="pricing-reading-tier">Consultation</span></div>
-      <h3>Career Deep Dive</h3>
-      <p>A comprehensive career consultation that goes substantially deeper than a focused career reading. It brings together the natal chart, planetary strengths, career houses, divisional considerations where appropriate, yogas, dashas, transits, and timing indicators. It is designed for people trying to understand their broader professional direction, major career transitions, suitable fields, leadership potential, obstacles, earning patterns, and longer-term development rather than asking about one isolated career question.</p>
-      <div class="pricing-reading-bottom"><strong>$90 / ₹7500</strong><a href="contact.html">Book / Enquire →</a></div>
-    </article>
-    <article class="pricing-reading-card">
-      <div class="pricing-reading-top"><span class="pricing-reading-tier">Consultation</span></div>
-      <h3>Relationship Deep Dive</h3>
-      <p>A comprehensive relationship consultation for situations that require a much more complete picture. It examines both individual charts alongside their interaction, including emotional needs, attraction, communication, conflict patterns, attachment, expectations, commitment, compatibility, recurring relationship themes, and relevant timing periods. It is particularly suited to complex or long-standing connections where a short compatibility reading would not provide enough context.</p>
-      <div class="pricing-reading-bottom"><strong>$90 / ₹7500</strong><a href="contact.html">Book / Enquire →</a></div>
-    </article>
-    <article class="pricing-reading-card">
-      <div class="pricing-reading-top"><span class="pricing-reading-tier">Consultation</span></div>
-      <h3>Life Path Deep Reading</h3>
-      <p>A broad, comprehensive reading intended to examine the major areas of life together rather than focusing on one question. It can cover personality, emotional patterns, family themes, relationships, marriage, education, career, finances, strengths, vulnerabilities, major turning points, planetary periods, and longer-term development. The emphasis is on connecting different parts of the chart into one coherent picture of how the person's life may unfold.</p>
-      <div class="pricing-reading-bottom"><strong>$90 / ₹7500</strong><a href="contact.html">Book / Enquire →</a></div>
-    </article>
-    <article class="pricing-reading-card">
-      <div class="pricing-reading-top"><span class="pricing-reading-tier">Consultation</span></div>
-      <h3>Dasha & Timing Reading</h3>
-      <p>A specialised timing consultation centred on planetary periods and major timing techniques. It examines the active Mahadasha and Antardasha, the planets involved, their natal condition, house ownership and placement, and relevant transit influences. The goal is to understand why a particular period may feel the way it does and which areas of life are likely to receive greater attention during upcoming phases.</p>
-      <div class="pricing-reading-bottom"><strong>$60 / ₹5100</strong><a href="contact.html">Book / Enquire →</a></div>
-    </article>
-    <article class="pricing-reading-card">
-      <div class="pricing-reading-top"><span class="pricing-reading-tier">Consultation</span></div>
-      <h3>Synastry & Compatibility</h3>
-      <p>A detailed comparison of two birth charts, with emphasis on how the planets of one person interact with the chart of the other. It can examine attraction, emotional security, communication, sexual and romantic chemistry, shared values, conflict, support, commitment, and long-term compatibility. Rather than relying on a single compatibility score, the reading explains the individual planetary connections that create both ease and difficulty in the relationship.</p>
-      <div class="pricing-reading-bottom"><strong>$60 / ₹5100</strong><a href="contact.html">Book / Enquire →</a></div>
-    </article>
-    </div>
-  </div>
+<div class="container">
+
+<div class="section-intro">
+<div class="eyebrow">ALL READINGS</div>
+<h2>Choose your consultation.</h2>
+<p>
+Each service is priced according to the depth and scope of the consultation.
+Read through the descriptions before choosing the reading that best matches
+what you want to explore.
+</p>
+</div>
+
+<div class="pricing-category pricing-category-core">
+<div class="pricing-category-heading"><div class="pricing-category-icon">☼</div><div><div class="pricing-category-kicker">CORE READINGS</div><h2>Core Readings</h2></div></div>
+<div class="pricing-readings-grid pricing-grid-core">
+
+<article class="pricing-reading-card">
+<div class="pricing-reading-top">
+<span class="pricing-reading-tier">CORE READING</span>
+</div>
+<h3>Palm Reading</h3>
+<p>
+A detailed interpretation of the hands, looking at the major lines, mounts,
+fingers, hand shape, markings, and the way these features work together.
+The reading can explore personality patterns, emotional nature, relationships,
+career tendencies, strengths, recurring challenges, and broader life themes.
+Palmistry is especially useful for understanding patterns rather than reducing
+a person to a single prediction, and the reading focuses on the features
+actually visible in the hands provided.
+</p>
+<div class="pricing-reading-bottom">
+<strong class="dynamic-price" data-price-inr="3100">₹3,100</strong>
+<a href="contact.html">Book / Enquire →</a>
+</div>
+</article>
+
+<article class="pricing-reading-card">
+<div class="pricing-reading-top">
+<span class="pricing-reading-tier">CORE READING</span>
+</div>
+<h3>Vedic Birth Chart</h3>
+<p>
+A focused Vedic astrology consultation built around the natal chart. It
+examines the Ascendant, Moon, Sun, planetary placements, houses, signs,
+nakshatras, aspects, yogas, and the condition of important houses and lords.
+The reading can be directed toward a particular question while still placing
+that question within the wider structure of the chart, helping identify both
+supportive patterns and areas that require greater effort or awareness.
+</p>
+<div class="pricing-reading-bottom">
+<strong class="dynamic-price" data-price-inr="5100">₹5,100</strong>
+<a href="contact.html">Book / Enquire →</a>
+</div>
+</article>
+
+<article class="pricing-reading-card">
+<div class="pricing-reading-top">
+<span class="pricing-reading-tier">CORE READING</span>
+</div>
+<h3>Relationship Analysis</h3>
+<p>
+A focused relationship reading examining how two people interact emotionally
+and psychologically through their charts. It can explore attraction, emotional
+compatibility, communication, attachment patterns, expectations, conflict
+areas, affection, independence, and the ways each person may experience the
+relationship differently. The purpose is not simply to label a relationship
+as good or bad, but to explain the dynamics that make the connection work or
+create friction.
+</p>
+<div class="pricing-reading-bottom">
+<strong class="dynamic-price" data-price-inr="5100">₹5,100</strong>
+<a href="contact.html">Book / Enquire →</a>
+</div>
+</article>
+
+<article class="pricing-reading-card">
+<div class="pricing-reading-top">
+<span class="pricing-reading-tier">CORE READING</span>
+</div>
+<h3>Career &amp; Finance</h3>
+<p>
+A focused analysis of professional direction and financial tendencies through
+the birth chart. It examines career houses, their lords, relevant planets,
+strengths, work style, ambition, earning patterns, professional environments,
+and periods of opportunity or pressure. The reading can help distinguish
+between what a person is naturally suited to, what requires development, and
+where their chart suggests recurring professional themes.
+</p>
+<div class="pricing-reading-bottom">
+<strong class="dynamic-price" data-price-inr="5100">₹5,100</strong>
+<a href="contact.html">Book / Enquire →</a>
+</div>
+</article>
+
+</div>
+</div>
+
+<div class="pricing-category pricing-category-deep">
+<div class="pricing-category-heading"><div class="pricing-category-icon">☾</div><div><div class="pricing-category-kicker">DEEP DIVE READINGS</div><h2>Deep Dive Readings</h2></div></div>
+<div class="pricing-readings-grid pricing-grid-deep">
+
+<article class="pricing-reading-card">
+<div class="pricing-reading-top">
+<span class="pricing-reading-tier">DEEP DIVE</span>
+</div>
+<h3>Career Deep Dive</h3>
+<p>
+A comprehensive career consultation that goes substantially deeper than a
+focused career reading. It brings together the natal chart, planetary
+strengths, career houses, divisional considerations where appropriate, yogas,
+dashas, transits, and timing indicators. It is designed for people trying to
+understand their broader professional direction, major career transitions,
+suitable fields, leadership potential, obstacles, earning patterns, and
+longer-term development rather than asking about one isolated career question.
+</p>
+<div class="pricing-reading-bottom">
+<strong class="dynamic-price" data-price-inr="9500">₹9,500</strong>
+<a href="contact.html">Book / Enquire →</a>
+</div>
+</article>
+
+<article class="pricing-reading-card">
+<div class="pricing-reading-top">
+<span class="pricing-reading-tier">DEEP DIVE</span>
+</div>
+<h3>Relationship Deep Dive</h3>
+<p>
+A comprehensive relationship consultation for situations that require a much
+more complete picture. It examines both individual charts alongside their
+interaction, including emotional needs, attraction, communication, conflict
+patterns, attachment, expectations, commitment, compatibility, recurring
+relationship themes, and relevant timing periods. It is particularly suited
+to complex or long-standing connections where a short compatibility reading
+would not provide enough context.
+</p>
+<div class="pricing-reading-bottom">
+<strong class="dynamic-price" data-price-inr="9500">₹9,500</strong>
+<a href="contact.html">Book / Enquire →</a>
+</div>
+</article>
+
+<article class="pricing-reading-card">
+<div class="pricing-reading-top">
+<span class="pricing-reading-tier">DEEP DIVE</span>
+</div>
+<h3>Life Path Deep Reading</h3>
+<p>
+A broad, comprehensive reading intended to examine the major areas of life
+together rather than focusing on one question. It can cover personality,
+emotional patterns, family themes, relationships, marriage, education, career,
+finances, strengths, vulnerabilities, major turning points, planetary periods,
+and longer-term development. The emphasis is on connecting different parts
+of the chart into one coherent picture of how the person's life may unfold.
+</p>
+<div class="pricing-reading-bottom">
+<strong class="dynamic-price" data-price-inr="11000">₹11,000</strong>
+<a href="contact.html">Book / Enquire →</a>
+</div>
+</article>
+
+<article class="pricing-reading-card">
+<div class="pricing-reading-top">
+<span class="pricing-reading-tier">DEEP DIVE</span>
+</div>
+<h3>Dasha &amp; Timing Reading</h3>
+<p>
+A specialised timing consultation centred on planetary periods and major
+timing techniques. It examines the active Mahadasha and Antardasha, the
+planets involved, their natal condition, house ownership and placement, and
+relevant transit influences. The goal is to understand why a particular
+period may feel the way it does and which areas of life are likely to receive
+greater attention during upcoming phases.
+</p>
+<div class="pricing-reading-bottom">
+<strong class="dynamic-price" data-price-inr="7500">₹7,500</strong>
+<a href="contact.html">Book / Enquire →</a>
+</div>
+</article>
+
+</div>
+</div>
+
+<div class="pricing-category pricing-category-compatibility">
+<div class="pricing-category-heading"><div class="pricing-category-icon">♡</div><div><div class="pricing-category-kicker">COMPATIBILITY &AMP; PARTNERSHIP</div><h2>Compatibility &amp; Partnership</h2></div></div>
+<div class="pricing-readings-grid pricing-grid-compatibility" style="grid-template-columns:repeat(2,minmax(0,1fr));max-width:920px;margin-left:auto;margin-right:auto;">
+
+<article class="pricing-reading-card">
+<div class="pricing-reading-top">
+<span class="pricing-reading-tier">PARTNERSHIP</span>
+</div>
+<h3>Synastry &amp; Compatibility</h3>
+<p>
+A detailed comparison of two birth charts, with emphasis on how the planets
+of one person interact with the chart of the other. It can examine attraction,
+emotional security, communication, sexual and romantic chemistry, shared
+values, conflict, support, commitment, and long-term compatibility. Rather
+than relying on a single compatibility score, the reading explains the
+individual planetary connections that create both ease and difficulty in
+the relationship.
+</p>
+<div class="pricing-reading-bottom">
+<strong class="dynamic-price" data-price-inr="5100">₹5,100</strong>
+<a href="contact.html">Book / Enquire →</a>
+</div>
+</article>
+
+<article class="pricing-reading-card">
+<div class="pricing-reading-top">
+<span class="pricing-reading-tier">PARTNERSHIP</span>
+</div>
+<h3>Marriage &amp; Partnership</h3>
+<p>
+A specialised reading focused on long-term partnership and marriage. It
+examines the relevant houses, their lords, Venus and Jupiter, the Moon,
+relationship indicators, timing factors, and patterns that may influence
+commitment. Depending on the question, the reading can explore the nature of
+a future partner, relationship expectations, marriage dynamics, compatibility,
+challenges, and significant periods affecting partnership.
+</p>
+<div class="pricing-reading-bottom">
+<strong class="dynamic-price" data-price-inr="5100">₹5,100</strong>
+<a href="contact.html">Book / Enquire →</a>
+</div>
+</article>
+
+</div>
+</div>
+</div>
 </section>
-</main><footer class="footer"><div class="container footer-grid">
-<div><div class="brand"><span class="brand-mark">✧</span>Asterism Astro</div><p>Ancient wisdom, modern guidance. Thoughtful astrology and divinatory consultations for curious individuals.</p>
+
+</main>
+
+<footer class="footer">
+<div class="container footer-grid">
+
+<div>
+<div class="brand">
+<span class="brand-mark">✧</span>Asterism Astro
+</div>
+
+<p>
+Ancient wisdom, modern guidance. Thoughtful astrology and divinatory
+consultations for curious individuals.
+</p>
+
 <div class="social-links" aria-label="Social links">
-<a class="social-icon" href="https://www.instagram.com/asterism_astro/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram">
-<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.4" cy="6.6" r="1"></circle></svg>
+
+<a class="social-icon"
+href="https://www.instagram.com/asterism_astro/"
+target="_blank"
+rel="noopener noreferrer"
+aria-label="Instagram"
+title="Instagram">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+<rect x="3" y="3" width="18" height="18" rx="5"></rect>
+<circle cx="12" cy="12" r="4"></circle>
+<circle cx="17.4" cy="6.6" r="1"></circle>
+</svg>
 </a>
-<a class="social-icon" href="https://discord.gg/Puj8sHbJ9" target="_blank" rel="noopener noreferrer" aria-label="Discord" title="Discord">
-<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.7 5.2A16.4 16.4 0 0 0 15 4l-.5 1.1a14.4 14.4 0 0 0-5 0L9 4a16.4 16.4 0 0 0-3.7 1.2C3.1 8.4 2.5 11.5 2.8 14.6a15.6 15.6 0 0 0 4.5 2.3l1.1-1.5c-.6-.2-1.2-.5-1.7-.8l.4-.3c3.3 1.5 6.9 1.5 10.2 0l.4.3c-.5.3-1.1.6-1.7.8l1.1 1.5a15.6 15.6 0 0 0 4.5-2.3c.3-3.6-.6-6.7-2.9-9.4ZM8.6 13.1c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Zm6.8 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Z"></path></svg>
+
+<a class="social-icon"
+href="https://discord.gg/Puj8sHbJ9"
+target="_blank"
+rel="noopener noreferrer"
+aria-label="Discord"
+title="Discord">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+<path d="M18.7 5.2A16.4 16.4 0 0 0 15 4l-.5 1.1a14.4 14.4 0 0 0-5 0L9 4a16.4 16.4 0 0 0-3.7 1.2C3.1 8.4 2.5 11.5 2.8 14.6a15.6 15.6 0 0 0 4.5 2.3l1.1-1.5c-.6-.2-1.2-.5-1.7-.8l.4-.3c3.3 1.5 6.9 1.5 10.2 0l.4.3c-.5.3-1.1.6-1.7.8l1.1 1.5a15.6 15.6 0 0 0 4.5-2.3c.3-3.6-.6-6.7-2.9-9.4ZM8.6 13.1c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.7 1.8 2-.8 2-1.8 2Zm6.8 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.7 1.8 2-.8 2-1.8 2Z"></path>
+</svg>
 </a>
-<a class="social-icon" href="https://www.reddit.com/r/PalmReading/" target="_blank" rel="noopener noreferrer" aria-label="Reddit" title="Reddit">
-<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.1 11.2c.1-.3.2-.7.2-1.1 0-1.3-1-2.3-2.3-2.3-.6 0-1.2.2-1.6.6-1.1-.8-2.5-1.3-4-1.4l.8-3.5 2.4.5c.1.8.8 1.4 1.6 1.4.9 0 1.6-.7 1.6-1.6s-.7-1.6-1.6-1.6c-.6 0-1.2.4-1.4.9l-2.8-.6c-.4-.1-.7.2-.8.5l-1 4.1c-1.5.1-2.9.6-4 1.4-.5-.4-1-.6-1.6-.6-1.3 0-2.3 1-2.3 2.3 0 .4.1.8.3 1.1-.4.6-.6 1.3-.6 2 0 3.1 3.6 5.6 8.1 5.6s8.1-2.5 8.1-5.6c0-.7-.2-1.4-.7-2ZM8.2 12.5c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5Zm7.9 3.1c-.9.9-2.4 1.3-4.1 1.3s-3.2-.4-4.1-1.3c-.2-.2-.2-.5 0-.7s.5-.2.7 0c.7.7 1.9 1 3.4 1s2.7-.3 3.4-1c.2-.2.5-.2.7 0s.2.5 0 .7Zm-.3-1.6c-.8 0-1.5-.7-1.5-1.5s.7-1.5 1.5-1.5 1.5.7 1.5 1.5-.7 1.5-1.5 1.5Z"></path></svg>
+
+<a class="social-icon"
+href="https://www.reddit.com/r/PalmReading/"
+target="_blank"
+rel="noopener noreferrer"
+aria-label="Reddit"
+title="Reddit">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+<path d="M20.1 11.2c.1-.3.2-.7.2-1.1 0-1.3-1-2.3-2.3-2.3-.6 0-1.2.2-1.6.6-1.1-.8-2.5-1.3-4-1.4l.8-3.5 2.4.5c.1.8.8 1.4 1.6 1.4.9 0 1.6-.7 1.6-1.6s-.7-1.6-1.6-1.6c-.6 0-1.2.4-1.4.9l-2.8-.6c-.4-.1-.7.2-.8.5l-1 4.1c-1.5.1-2.9.6-4 1.4-.5-.4-1-.6-1.6-.6-1.3 0-2.3 1-2.3 2.3 0 .4.1.8.3 1.1-.4.6-.6 1.3-.6 2 0 3.1 3.6 5.6 8.1 5.6s8.1-2.5 8.1-5.6c0-.7-.2-1.4-.7-2Z"></path>
+</svg>
 </a>
-<a class="social-icon" href="https://linktr.ee/asterismastro" target="_blank" rel="noopener noreferrer" aria-label="Linktree" title="Linktree">
-<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3h2v5.1l3.6-3.6 1.4 1.4-3.6 3.6H20v2h-5.6l3.6 3.6-1.4 1.4-3.6-3.6V21h-2v-8.1l-3.6 3.6L6 15.1l3.6-3.6H4v-2h5.6L6 5.9l1.4-1.4L11 8.1V3Z"></path></svg>
+
+<a class="social-icon"
+href="https://linktr.ee/asterismastro"
+target="_blank"
+rel="noopener noreferrer"
+aria-label="Linktree"
+title="Linktree">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+<path d="M11 3h2v5.1l3.6-3.6 1.4 1.4-3.6 3.6H20v2h-5.6l3.6 3.6-1.4 1.4-3.6-3.6V21h-2v-8.1l-3.6 3.6L6 15.1l1.4-1.4 3.6 3.6V3Z"></path>
+</svg>
 </a>
-</div></div>
-<div><h4>Services</h4><a href="services.html">Palmistry</a><a href="services.html">Vedic Astrology</a><a href="services.html">Relationship Analysis</a><a href="services.html">Career & Finance</a></div>
-<div><h4>Company</h4><a href="about.html">About Us</a><a href="pricing.html">Pricing</a><a href="testimonials.html">Testimonials</a><a href="blog.html">Journal</a><a href="contact.html">Contact</a></div>
-<div><h4>Legal</h4><a href="privacy-policy.html">Privacy Policy</a><a href="terms-of-service.html">Terms of Service</a><a href="refund-policy.html">Refund Policy</a><a href="disclaimer.html">Disclaimer</a></div>
-</div><div class="container copyright">© 2026 Asterism Astro. All rights reserved.</div></footer><div class="notice"></div><script src="script.js"></script></body></html>`,
+
+</div>
+</div>
+
+<div>
+<h4>Services</h4>
+<a href="services.html">Palmistry</a>
+<a href="services.html">Vedic Astrology</a>
+<a href="services.html">Relationship Analysis</a>
+<a href="services.html">Career &amp; Finance</a>
+</div>
+
+<div>
+<h4>Company</h4>
+<a href="about.html">About Us</a>
+<a href="pricing.html">Pricing</a>
+<a href="testimonials.html">Testimonials</a>
+<a href="blog.html">Journal</a>
+<a href="contact.html">Contact</a>
+</div>
+
+<div>
+<h4>Legal</h4>
+<a href="privacy-policy.html">Privacy Policy</a>
+<a href="terms-of-service.html">Terms of Service</a>
+<a href="refund-policy.html">Refund Policy</a>
+<a href="disclaimer.html">Disclaimer</a>
+</div>
+
+</div>
+
+<div class="container copyright">
+© 2026 Asterism Astro. All rights reserved.
+</div>
+</footer>
+
+<div class="notice"></div>
+
+<script src="script.js"></script>
+
+<script>
+(async function () {
+
+  const currencyRates = {
+    IN: { currency: "INR", rate: 1 },
+    US: { currency: "USD", rate: 0.0119 },
+    GB: { currency: "GBP", rate: 0.0088 },
+    CA: { currency: "CAD", rate: 0.0162 },
+    AU: { currency: "AUD", rate: 0.0182 },
+    AE: { currency: "AED", rate: 0.0437 },
+    SG: { currency: "SGD", rate: 0.0159 },
+    JP: { currency: "JPY", rate: 1.76 },
+    NZ: { currency: "NZD", rate: 0.0201 },
+    DE: { currency: "EUR", rate: 0.0102 },
+    FR: { currency: "EUR", rate: 0.0102 },
+    IT: { currency: "EUR", rate: 0.0102 },
+    ES: { currency: "EUR", rate: 0.0102 },
+    NL: { currency: "EUR", rate: 0.0102 },
+    BE: { currency: "EUR", rate: 0.0102 },
+    AT: { currency: "EUR", rate: 0.0102 },
+    IE: { currency: "EUR", rate: 0.0102 },
+    PT: { currency: "EUR", rate: 0.0102 },
+    PL: { currency: "PLN", rate: 0.030 },
+    CH: { currency: "CHF", rate: 0.0100 },
+    ZA: { currency: "ZAR", rate: 0.0209 },
+    SA: { currency: "SAR", rate: 0.0446 },
+    QA: { currency: "QAR", rate: 0.0433 },
+    KW: { currency: "KWD", rate: 0.00365 },
+    MY: { currency: "MYR", rate: 0.0500 },
+    TH: { currency: "THB", rate: 0.380 },
+    ID: { currency: "IDR", rate: 190 },
+    PH: { currency: "PHP", rate: 0.680 },
+    BR: { currency: "BRL", rate: 0.064 },
+    MX: { currency: "MXN", rate: 0.220 },
+    KR: { currency: "KRW", rate: 16.0 }
+  };
+
+  function renderPrices(data) {
+    document.querySelectorAll(".dynamic-price").forEach(function (element) {
+      const baseINR = Number(element.dataset.priceInr);
+      if (!baseINR) return;
+
+      const converted = Math.round(baseINR * data.rate);
+
+      element.textContent = new Intl.NumberFormat(undefined, {
+        style: "currency",
+        currency: data.currency,
+        maximumFractionDigits: 0
+      }).format(converted);
+    });
+  }
+
+  // Always show INR immediately while the visitor's location is being detected.
+  renderPrices(currencyRates.IN);
+
+  let country = null;
+
+  try {
+    const response = await fetch("https://ipapi.co/json/", { cache: "no-store" });
+    if (response.ok) {
+      const location = await response.json();
+      country = location.country_code || null;
+    }
+  } catch (error) {
+    console.log("IP country detection failed:", error);
+  }
+
+  // If detection fails, remain on INR rather than using an old stored currency.
+  country = country || "IN";
+  localStorage.setItem("selectedCountry", country);
+
+  const data = currencyRates[country] || currencyRates.IN;
+  renderPrices(data);
+
+})();
+</script>
+
+</body>
+</html>`,
   "privacy-policy.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Privacy Policy — Asterism Astro</title><link rel="stylesheet" href="styles.css"></head><body><header class="site-header"><div class="container nav"><a class="brand" href="index.html" aria-label="Asterism Astro Home"><img src="/asterism-astro-logo-transparent.png" alt="Asterism Astro" class="brand-logo"></a><nav class="navlinks"><a href="index.html">Home</a><a href="services.html">Services</a><a href="about.html">About</a><a href="pricing.html">Pricing</a><a href="testimonials.html">Testimonials</a><a href="blog.html">Blog</a><a href="contact.html">Contact</a></nav><div class="actions"><button type="button" data-theme-toggle class="theme-toggle">☼</button><a class="btn btn-gold" href="contact.html">Book a Consultation</a><button class="mobile-menu">☰</button></div></div></header><main><section class="legal-hero"><div class="container legal-hero-inner"><div class="legal-kicker">ASTERISM ASTRO · LEGAL</div><h1>Privacy Policy</h1><p>This Privacy Policy explains how Asterism Astro may collect, use, store, and protect information when you visit our website, contact us, enquire about a consultation, or use one of our services. We aim to keep the handling of personal information proportionate to the purpose for which it was provided and to be transparent about the circumstances in which information may be processed.</p><div class="legal-meta">Last updated: August 19, 2026</div></div></section><section class="section legal-section"><div class="container legal-layout"><aside class="legal-side"><div class="legal-side-title">Legal</div><a href="privacy-policy.html">Privacy Policy</a><a href="terms-of-service.html">Terms of Service</a><a href="refund-policy.html">Refund Policy</a><a href="disclaimer.html">Disclaimer</a></aside><article class="legal-document"><section class="legal-block"><h2>1. Scope of This Policy</h2><p>This Privacy Policy explains how Asterism Astro may collect, use, store, and protect information when you visit our website, contact us, enquire about a consultation, or use one of our services. We aim to keep the handling of personal information proportionate to the purpose for which it was provided and to be transparent about the circumstances in which information may be processed.</p></section><section class="legal-block"><h2>2. Information You Voluntarily Provide</h2><p>When you contact Asterism Astro, you may choose to provide information such as your name, email address, contact details, consultation preferences, and the subject of your enquiry. For services that require personal information, you may also provide birth date, birth time, birth place, photographs of your palms, handwriting samples, relationship information, or other material that you voluntarily submit for analysis.</p></section><section class="legal-block"><h2>3. Information Collected Through the Website</h2><p>When you browse the website, certain technical information may be recorded by our hosting, security, analytics, or other infrastructure providers. This may include your IP address, browser and operating-system type, device information, pages visited, approximate access time, referring page, and basic diagnostic information. This information helps us maintain website security, identify technical problems, and understand general website usage.</p></section><section class="legal-block"><h2>4. How We Use Personal Information</h2><p>We may use information you provide to respond to enquiries, communicate about consultations, understand the scope of the service you have requested, prepare for and conduct a consultation, arrange appointments, process or confirm payments, respond to follow-up questions, maintain appropriate business records, and improve our website or services. We may also use information where reasonably necessary to protect the website against misuse, fraud, security incidents, or other unlawful activity.</p></section><section class="legal-block"><h2>5. Information Used for Readings</h2><p>Information supplied for an astrology, palmistry, graphology, relationship, or other consultation can be personal and sometimes sensitive in nature. We ask clients to provide information relevant to the service rather than unnecessary personal details. Information is used in the context in which it was provided and should not be assumed to be used for unrelated purposes.</p></section><section class="legal-block"><h2>6. Communication With Clients</h2><p>If you contact us, we may retain correspondence so that we can understand the history of an enquiry, answer follow-up questions, manage bookings, and resolve disputes or service issues. We may contact you using the email address or other contact information you provide where communication is reasonably connected to your enquiry or consultation.</p></section><section class="legal-block"><h2>7. Payments and Third-Party Providers</h2><p>Payments may be processed through external payment providers. Where this occurs, payment credentials such as card or banking information are generally handled directly by the payment provider rather than stored by Asterism Astro. Third-party providers may have their own privacy policies, security practices, and terms, which should be reviewed before using their services.</p></section><section class="legal-block"><h2>8. When Information May Be Shared</h2><p>We do not sell or rent personal information. Information may be processed by trusted providers that help us host the website, communicate with clients, schedule services, process payments, maintain security, or perform necessary technical functions. We may also disclose information where required by law, legal process, or to protect the rights, safety, and security of Asterism Astro or another person.</p></section><section class="legal-block"><h2>9. Retention of Information</h2><p>Information is retained for as long as reasonably necessary for the purpose for which it was collected, to maintain an ongoing client relationship, to keep appropriate accounting and business records, to resolve disputes, or to comply with applicable legal obligations. Retention periods may therefore differ depending on the type of information and the reason it was collected.</p></section><section class="legal-block"><h2>10. Data Security</h2><p>We take reasonable technical and organisational measures to reduce the risk of unauthorised access, alteration, disclosure, loss, or misuse of information. However, no website, email service, cloud platform, or electronic transmission can be guaranteed to be completely secure. You should avoid sending information that you do not consider appropriate to share through an online service.</p></section><section class="legal-block"><h2>11. Your Rights and Choices</h2><p>Depending on the law applicable to you, you may have rights to request access to personal information, ask for inaccurate information to be corrected, object to certain processing, request deletion, or withdraw consent where processing is based on consent. Requests can be made through our Contact page and will be considered in accordance with applicable legal requirements.</p></section><section class="legal-block"><h2>12. Cookies and Similar Technologies</h2><p>The website or services used to operate the website may use cookies or similar technologies for basic functionality, security, analytics, or user preferences. The exact technologies used can change as the website develops. Where applicable, your browser settings may allow you to restrict or delete cookies, although doing so can affect certain website functions.</p></section><section class="legal-block"><h2>13. Children and Young Users</h2><p>Our services are not specifically designed for children. If information relating to a child is submitted, it should ordinarily be provided by, or with the involvement of, a parent or legal guardian. If we become aware that information has been provided improperly, we may take reasonable steps to remove it.</p></section><section class="legal-block"><h2>14. International Processing</h2><p>Because website hosting, communication, payment, and other technology providers may operate internationally, information may sometimes be processed in a country different from the country in which you live. Where applicable, we seek to use appropriate contractual, technical, or organisational safeguards for such processing.</p></section><section class="legal-block"><h2>15. Changes to This Policy</h2><p>Our website, services, technology providers, and legal obligations may change over time. We may therefore update this Privacy Policy periodically. The latest version will be published on this page, together with its updated date. We encourage you to review this page occasionally if you continue to use our services.</p></section><section class="legal-block"><h2>16. Contact and Privacy Requests</h2><p>If you have a question about this policy, believe that your information has been handled incorrectly, or would like to make a privacy-related request, please contact Asterism Astro through the Contact page. Please provide enough information for us to understand and respond to your request.</p></section><div class="legal-end">If you have questions about this policy or how it applies to your situation, please contact Asterism Astro before using the relevant service.</div></article></div></section></main><footer class="footer"><div class="container footer-grid"><div><div class="brand"><span class="brand-mark">✧</span>Asterism Astro</div><p>Ancient wisdom, modern guidance. Thoughtful astrology and divinatory consultations for curious individuals.</p><div class="social-links" aria-label="Social links">
 <a class="social-icon" href="https://www.instagram.com/asterism_astro/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.4" cy="6.6" r="1"></circle></svg></a>
 <a class="social-icon" href="https://discord.gg/Puj8sHbJ9" target="_blank" rel="noopener noreferrer" aria-label="Discord" title="Discord"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.7 5.2A16.4 16.4 0 0 0 15 4l-.5 1.1a14.4 14.4 0 0 0-5 0L9 4a16.4 16.4 0 0 0-3.7 1.2C3.1 8.4 2.5 11.5 2.8 14.6a15.6 15.6 0 0 0 4.5 2.3l1.1-1.5c-.6-.2-1.2-.5-1.7-.8l.4-.3c3.3 1.5 6.9 1.5 10.2 0l.4.3c-.5.3-1.1.6-1.7.8l1.1 1.5a15.6 15.6 0 0 0 4.5-2.3c.3-3.6-.6-6.7-2.9-9.4ZM8.6 13.1c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Zm6.8 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Z"></path></svg></a>

@@ -12048,3 +12048,85 @@ header .country-indicator {
   border-color: rgba(166, 127, 38, 0.40) !important;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07) !important;
 }
+
+
+/* =========================================================
+   PRICING CATEGORY GROUPS — FINAL
+   ========================================================= */
+.pricing-category{margin:0 auto 22px;padding:26px 18px 18px;border:1px solid rgba(202,161,58,.18);border-radius:14px;background:#0b1220;}
+.pricing-category-core{background:linear-gradient(145deg,#0d1522,#09111c);}
+.pricing-category-deep{background:linear-gradient(145deg,#11101d,#0c101b);border-color:rgba(142,96,181,.22);}
+.pricing-category-compatibility{background:linear-gradient(145deg,#0d1714,#09120f);border-color:rgba(101,146,85,.22);}
+.pricing-category-heading{text-align:center;margin-bottom:18px;}
+.pricing-category-heading .category-icon{width:46px;height:46px;margin:0 auto 8px;display:grid;place-items:center;border-radius:50%;background:rgba(202,161,58,.11);color:var(--gold);font-size:24px;}
+.pricing-category-deep .category-icon{background:rgba(142,96,181,.13);color:#b88bd6;}
+.pricing-category-compatibility .category-icon{background:rgba(101,146,85,.13);color:#91b682;}
+.pricing-category-heading h2{margin:0;font-family:Georgia,"Times New Roman",serif;font-size:27px;font-weight:400;color:var(--text);}
+.category-ornament{width:54px;height:1px;margin:10px auto 0;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.pricing-category-deep .category-ornament{background:linear-gradient(90deg,transparent,#a779c6,transparent);}
+.pricing-category-compatibility .category-ornament{background:linear-gradient(90deg,transparent,#779d6a,transparent);}
+.pricing-category .pricing-readings-grid{max-width:none;margin:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;}
+.pricing-category .pricing-reading-card{min-width:0;min-height:310px;padding:22px 19px;border-radius:7px;}
+.pricing-category .pricing-reading-card h3{font-size:21px;}
+.pricing-category .pricing-reading-card p{font-size:12.5px;line-height:1.75;}
+.pricing-category .pricing-readings-grid-two{grid-template-columns:repeat(2,minmax(0,1fr));}
+.pricing-category .pricing-readings-grid-two .pricing-reading-card{min-height:205px;}
+html[data-theme="light"] .pricing-category-core{background:#fffaf0;border-color:#e5d9c3;}
+html[data-theme="light"] .pricing-category-deep{background:#faf6fc;border-color:#e2d5eb;}
+html[data-theme="light"] .pricing-category-compatibility{background:#f5f9f2;border-color:#d9e4d2;}
+html[data-theme="light"] .pricing-category .pricing-reading-card{background:#fffdf9!important;border-color:#ddd6c9!important;}
+@media(max-width:1000px){.pricing-category .pricing-readings-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.pricing-category .pricing-readings-grid-two{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:650px){.pricing-category{padding:22px 12px 14px;}.pricing-category .pricing-readings-grid,.pricing-category .pricing-readings-grid-two{grid-template-columns:1fr;}.pricing-category .pricing-reading-card{min-height:0;}}
+/* FIX — Compatibility & Partnership section */
+
+.pricing-category.compatibility {
+    padding: 28px 18px 24px;
+}
+
+.pricing-category.compatibility .pricing-category-heading {
+    margin-bottom: 22px;
+}
+
+.pricing-category.compatibility .pricing-category-grid.two {
+    width: min(100%, 920px);
+    max-width: 920px;
+    margin: 0 auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.pricing-category.compatibility .pricing-reading-card {
+    min-height: 280px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.pricing-category.compatibility .pricing-reading-card h3 {
+    text-align: center;
+}
+
+.pricing-category.compatibility .pricing-reading-card p {
+    text-align: center;
+}
+
+@media (max-width: 800px) {
+    .pricing-category.compatibility .pricing-category-grid.two {
+        grid-template-columns: 1fr;
+        max-width: 560px;
+    }
+}
+
+@media (max-width: 520px) {
+    .pricing-category.compatibility {
+        padding: 24px 12px;
+    }
+
+    .pricing-category.compatibility .pricing-category-grid.two {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .pricing-category.compatibility .pricing-reading-card {
+        min-height: auto;
+    }
+}
