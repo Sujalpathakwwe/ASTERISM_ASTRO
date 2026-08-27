@@ -14,7 +14,10 @@ import {
 } from "react-router-dom";
 
 import { pages } from "./pages";
-
+import {
+  detectCountry,
+  COUNTRY_DATA,
+} from "./utils/country";
 import Auth from "./Auth.jsx";
 import AuthConfirm from "./AuthConfirm.jsx";
 import Booking from "./Booking.jsx";
@@ -1617,6 +1620,15 @@ function AccountPage({
 ========================================================= */
 
 function App() {
+  
+  const [detectedCountry, setDetectedCountry] = useState(null);
+
+  useEffect(() => {
+    detectCountry().then((country) => {
+      console.log("Detected country:", country);
+      setDetectedCountry(country);
+  });
+}, []);
 
   const location =
     useLocation();
@@ -1980,7 +1992,69 @@ if (desktopAccountLink) {
 
 
     if (actions) {
+      
+            /* =====================================================
+         COUNTRY INDICATOR
+      ===================================================== */
 
+      if (detectedCountry) {
+        const oldCountry =
+          actions.querySelector(
+            ".country-indicator"
+          );
+
+        if (oldCountry) {
+          oldCountry.remove();
+        }
+
+        const countryButton =
+          doc.createElement("button");
+
+        countryButton.className =
+          "country-indicator";
+
+        countryButton.type = "button";
+
+        countryButton.textContent =
+          `${detectedCountry.flag || "🌐"} ${detectedCountry.code || ""}`;
+        
+        
+
+        countryButton.title =
+          `${detectedCountry.name || ""} • ${detectedCountry.currency || ""}`;
+        
+        
+        countryButton.style.cssText = `
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 8px 12px;
+          border: 1px solid rgba(120, 90, 30, 0.2);
+          border-radius: 20px;
+          background: transparent;
+          color: inherit;
+          cursor: pointer;
+          font: inherit;
+        `;
+
+        const themeButton =
+          actions.querySelector(
+            "[data-theme-toggle]"
+          );
+
+        if (themeButton) {
+          actions.insertBefore(
+            countryButton,
+            themeButton
+          );
+        } else {
+          actions.prepend(
+            countryButton
+          );
+        }
+      }
+      
+      
       const existing =
         actions.querySelector(
           ".session-account-link"
@@ -2199,9 +2273,10 @@ if (desktopAccountLink) {
       0
     );
 
-  }, [
+    }, [
     currentPath,
     isReactOnlyPage,
+    detectedCountry,
   ]);
 
 

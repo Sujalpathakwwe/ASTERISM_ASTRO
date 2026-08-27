@@ -13,6 +13,7 @@
     "@react-three/fiber": "^9.7.0",
     "@supabase/supabase-js": "^2.112.3",
     "country-state-city": "^3.2.1",
+    "country-to-currency": "^3.0.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-router-dom": "^7.8.2"
