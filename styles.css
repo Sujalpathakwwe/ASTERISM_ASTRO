@@ -824,3 +824,325 @@ html[data-theme="light"] .contact-panel{background:#fbfaf6!important;border-colo
 .card .link:hover{
   text-decoration:none;
 }
+
+/* =========================================================
+   SERVICES PAGE — PREMIUM FINAL POLISH
+   Paste AFTER all existing CSS
+   ========================================================= */
+
+.services-page {
+  background:
+    radial-gradient(circle at 82% 18%, rgba(194, 145, 45, 0.055), transparent 28%),
+    radial-gradient(circle at 15% 70%, rgba(194, 145, 45, 0.035), transparent 30%);
+}
+
+/* Main content width */
+.services-page .container,
+.services-page .section-container {
+  max-width: 1055px;
+}
+
+/* ---------------------------------------------------------
+   INTRO / OUR READINGS
+--------------------------------------------------------- */
+
+.services-page .readings-intro {
+  max-width: 850px;
+}
+
+.services-page .readings-intro h1,
+.services-page .readings-intro h2 {
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+}
+
+.services-page .readings-intro p {
+  max-width: 720px;
+  line-height: 1.75;
+  color: #686b70;
+}
+
+/* Gold eyebrow labels */
+.services-page .eyebrow,
+.services-page .section-label,
+.services-page .label {
+  letter-spacing: 0.24em;
+  font-size: 11px;
+  font-weight: 700;
+  color: #b98622;
+}
+
+/* ---------------------------------------------------------
+   SECTION HEADERS
+--------------------------------------------------------- */
+
+.services-page .section-heading {
+  position: relative;
+  padding-bottom: 18px;
+  margin-bottom: 20px;
+}
+
+.services-page .section-heading::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(185, 134, 34, 0.35),
+    rgba(185, 134, 34, 0.08),
+    transparent
+  );
+}
+
+.services-page .section-heading h2 {
+  letter-spacing: -0.025em;
+}
+
+/* Right-side descriptions */
+.services-page .section-heading > p {
+  color: #777a7e;
+  line-height: 1.6;
+}
+
+/* ---------------------------------------------------------
+   READING CARDS
+--------------------------------------------------------- */
+
+.services-page .reading-card,
+.services-page .service-card,
+.services-page .card {
+  position: relative;
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.94),
+      rgba(250, 248, 242, 0.94)
+    );
+
+  border: 1px solid rgba(183, 151, 88, 0.24);
+  border-radius: 18px;
+
+  box-shadow:
+    0 10px 30px rgba(54, 45, 30, 0.045),
+    0 2px 7px rgba(54, 45, 30, 0.025);
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+/* Very subtle golden glow */
+.services-page .reading-card::before,
+.services-page .service-card::before,
+.services-page .card::before {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  top: -100px;
+  right: -80px;
+
+  background: radial-gradient(
+    circle,
+    rgba(194, 145, 45, 0.10),
+    transparent 70%
+  );
+
+  pointer-events: none;
+}
+
+/* Hover */
+.services-page .reading-card:hover,
+.services-page .service-card:hover,
+.services-page .card:hover {
+  transform: translateY(-4px);
+
+  border-color: rgba(185, 134, 34, 0.38);
+
+  box-shadow:
+    0 18px 40px rgba(54, 45, 30, 0.075),
+    0 4px 12px rgba(54, 45, 30, 0.035);
+}
+
+/* ---------------------------------------------------------
+   CARD NUMBER
+--------------------------------------------------------- */
+
+.services-page .card-number,
+.services-page .number {
+  color: #b9892b;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+/* ---------------------------------------------------------
+   CARD TITLES
+--------------------------------------------------------- */
+
+.services-page .reading-card h3,
+.services-page .service-card h3,
+.services-page .card h3 {
+  color: #27282c;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  transition: color 0.25s ease;
+}
+
+.services-page .reading-card:hover h3,
+.services-page .service-card:hover h3,
+.services-page .card:hover h3 {
+  color: #9d701c;
+}
+
+/* ---------------------------------------------------------
+   CARD DESCRIPTION
+--------------------------------------------------------- */
+
+.services-page .reading-card p,
+.services-page .service-card p,
+.services-page .card p {
+  color: #686b70;
+  line-height: 1.65;
+}
+
+/* ---------------------------------------------------------
+   EXPLORE / READ MORE LINKS
+--------------------------------------------------------- */
+
+.services-page .reading-card a,
+.services-page .service-card a,
+.services-page .card a {
+  position: relative;
+
+  color: #a8771c;
+  font-weight: 600;
+  text-decoration: none;
+
+  transition:
+    color 0.25s ease,
+    letter-spacing 0.25s ease;
+}
+
+.services-page .reading-card a:hover,
+.services-page .service-card a:hover,
+.services-page .card a:hover {
+  color: #805b14;
+  letter-spacing: 0.01em;
+}
+
+/* Arrow animation */
+.services-page .reading-card a span,
+.services-page .service-card a span,
+.services-page .card a span {
+  display: inline-block;
+  transition: transform 0.25s ease;
+}
+
+.services-page .reading-card a:hover span,
+.services-page .service-card a:hover span,
+.services-page .card a:hover span {
+  transform: translateX(4px);
+}
+
+/* ---------------------------------------------------------
+   DEEP DIVE CARDS
+--------------------------------------------------------- */
+
+.services-page .deep-dive .reading-card,
+.services-page .deep-dive .service-card,
+.services-page .deep-dive .card {
+  background:
+    linear-gradient(
+      145deg,
+      #fbfaf6,
+      #f7f4ec
+    );
+}
+
+/* ---------------------------------------------------------
+   PAGE BACKGROUND DETAILS
+--------------------------------------------------------- */
+
+.services-page section {
+  position: relative;
+}
+
+.services-page section + section {
+  border-top-color: rgba(183, 151, 88, 0.12);
+}
+
+/* ---------------------------------------------------------
+   BUTTON POLISH
+--------------------------------------------------------- */
+
+.services-page .btn-primary,
+.services-page .primary-btn {
+  box-shadow:
+    0 7px 18px rgba(184, 137, 35, 0.16);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.services-page .btn-primary:hover,
+.services-page .primary-btn:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 11px 24px rgba(184, 137, 35, 0.22);
+}
+
+.services-page .btn-secondary,
+.services-page .secondary-btn {
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+
+.services-page .btn-secondary:hover,
+.services-page .secondary-btn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(185, 134, 34, 0.38);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+/* ---------------------------------------------------------
+   RESPONSIVE
+--------------------------------------------------------- */
+
+@media (max-width: 900px) {
+
+  .services-page .reading-card,
+  .services-page .service-card,
+  .services-page .card {
+    border-radius: 15px;
+  }
+
+}
+
+@media (max-width: 600px) {
+
+  .services-page .reading-card,
+  .services-page .service-card,
+  .services-page .card {
+    box-shadow:
+      0 7px 22px rgba(54, 45, 30, 0.045);
+  }
+
+  .services-page .reading-card:hover,
+  .services-page .service-card:hover,
+  .services-page .card:hover {
+    transform: translateY(-2px);
+  }
+
+}

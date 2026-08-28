@@ -12212,3 +12212,284 @@ html[data-theme="light"] .pricing-category .pricing-reading-card{background:#fff
     line-height: 38px;
   }
 }
+/* =========================================================
+   ASTERISM ASTRO — SERVICES PREMIUM POLISH
+   PASTE AT THE VERY END
+   ========================================================= */
+
+.services-page .services-categories {
+  padding-top: 92px;
+  padding-bottom: 120px;
+}
+
+.services-page .services-intro {
+  max-width: 820px;
+  margin-bottom: 62px;
+}
+
+.services-page .services-intro h2 {
+  font-size: clamp(38px, 4.2vw, 54px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  margin-top: 12px;
+  margin-bottom: 20px;
+}
+
+.services-page .services-intro p {
+  max-width: 720px;
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+/* GOLD LABELS */
+.services-page .services-category-kicker,
+.services-page .service-card-label {
+  color: #b48627;
+  letter-spacing: .22em;
+  font-weight: 700;
+}
+
+/* CATEGORY */
+.services-page .services-category {
+  margin-top: 72px;
+}
+
+.services-page .services-category-head {
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(174,145,82,.20);
+}
+
+.services-page .services-category-head h3 {
+  font-size: 34px;
+  line-height: 1.1;
+  letter-spacing: -.025em;
+}
+
+.services-page .services-category-head p {
+  max-width: 480px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* CARDS */
+.services-page .services-cards {
+  gap: 20px;
+}
+
+.services-page .service-card {
+  min-height: 250px;
+  padding: 32px;
+  gap: 26px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.94),
+      rgba(249,247,241,.92)
+    );
+
+  border: 1px solid rgba(174,145,82,.22);
+  border-radius: 20px;
+
+  box-shadow:
+    0 8px 24px rgba(55,45,25,.035);
+
+  transition:
+    transform .3s ease,
+    box-shadow .3s ease,
+    border-color .3s ease;
+}
+
+/* subtle inner glow */
+.services-page .service-card::before {
+  content: "";
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  right: -120px;
+  top: -120px;
+
+  background: radial-gradient(
+    circle,
+    rgba(190,145,45,.10),
+    transparent 68%
+  );
+
+  pointer-events: none;
+}
+
+/* HOVER */
+.services-page .service-card:hover {
+  transform: translateY(-5px);
+
+  border-color: rgba(174,145,82,.42);
+
+  box-shadow:
+    0 18px 42px rgba(65,50,25,.075);
+}
+
+/* NUMBER */
+.services-page .service-number {
+  font-size: 27px;
+  color: #b58a35;
+  min-width: 30px;
+}
+
+/* BODY */
+.services-page .service-card-body {
+  position: relative;
+  z-index: 1;
+}
+
+/* LABEL */
+.services-page .service-card-label {
+  font-size: 10px;
+  margin-bottom: 13px;
+}
+
+/* TITLE */
+.services-page .service-card h4 {
+  font-size: 27px;
+  line-height: 1.12;
+  letter-spacing: -.025em;
+  margin-bottom: 14px;
+
+  transition: color .25s ease;
+}
+
+.services-page .service-card:hover h4 {
+  color: #9c711f;
+}
+
+/* DESCRIPTION */
+.services-page .service-card p {
+  font-size: 14px;
+  line-height: 1.75;
+  max-width: 540px;
+  margin-bottom: 24px;
+  color: #686b70;
+}
+
+/* LINK */
+.services-page .service-card a {
+  font-size: 13px;
+  color: #a8771d;
+
+  transition:
+    color .25s ease,
+    letter-spacing .25s ease;
+}
+
+.services-page .service-card a:hover {
+  color: #805b12;
+  letter-spacing: .015em;
+}
+
+.services-page .service-card a span {
+  transition: transform .25s ease;
+}
+
+.services-page .service-card a:hover span {
+  transform: translateX(5px);
+}
+
+/* DEEP DIVE SECTION */
+.services-page .services-category + .services-category {
+  margin-top: 82px;
+}
+
+/* NOTE / FINAL CTA */
+.services-page .services-note {
+  margin-top: 82px;
+  padding: 38px 42px;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(193,151,50,.10),
+      rgba(193,151,50,.035)
+    );
+
+  border: 1px solid rgba(174,145,82,.22);
+
+  box-shadow:
+    0 10px 30px rgba(55,45,25,.035);
+}
+
+/* DARK MODE */
+html.dark-mode .services-page .service-card {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(15,25,41,.96),
+      rgba(8,16,29,.96)
+    );
+
+  border-color: rgba(174,145,82,.20);
+}
+
+html.dark-mode .services-page .service-card:hover {
+  border-color: rgba(199,154,47,.40);
+  box-shadow:
+    0 18px 45px rgba(0,0,0,.28);
+}
+
+html.dark-mode .services-page .service-card p {
+  color: #a3a9b5;
+}
+
+html.dark-mode .services-page .service-card:hover h4 {
+  color: #d2a54b;
+}
+
+/* MOBILE */
+@media (max-width: 850px) {
+
+  .services-page .services-categories {
+    padding-top: 65px;
+    padding-bottom: 80px;
+  }
+
+  .services-page .services-intro {
+    margin-bottom: 48px;
+  }
+
+  .services-page .services-intro h2 {
+    font-size: 40px;
+  }
+
+  .services-page .services-category {
+    margin-top: 52px;
+  }
+
+  .services-page .service-card {
+    min-height: 0;
+    padding: 27px;
+  }
+
+}
+
+@media (max-width: 520px) {
+
+  .services-page .services-intro h2 {
+    font-size: 36px;
+  }
+
+  .services-page .service-card {
+    padding: 24px;
+    gap: 18px;
+    border-radius: 16px;
+  }
+
+  .services-page .service-card h4 {
+    font-size: 24px;
+  }
+
+  .services-page .service-card p {
+    font-size: 13px;
+  }
+
+}
