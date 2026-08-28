@@ -12130,3 +12130,85 @@ html[data-theme="light"] .pricing-category .pricing-reading-card{background:#fff
         min-height: auto;
     }
 }
+/* MOBILE HEADER FIX */
+@media (max-width: 600px) {
+
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .site-header {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .site-header > .container {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .nav {
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .brand {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  .brand-logo {
+    max-width: 55px;
+  }
+
+  .actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 7px;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .actions .theme-toggle {
+    width: 42px;
+    min-width: 42px;
+    height: 38px;
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  .actions .btn-gold {
+    width: 112px;
+    min-width: 112px;
+    max-width: 112px;
+    min-height: 38px;
+    padding: 7px 8px;
+    font-size: 12px;
+    line-height: 1.15;
+    white-space: normal;
+    overflow: visible;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .actions .mobile-menu {
+    width: 32px;
+    min-width: 32px;
+    height: 38px;
+    padding: 0;
+    margin: 0;
+    flex-shrink: 0;
+    font-size: 21px;
+    line-height: 38px;
+  }
+}
