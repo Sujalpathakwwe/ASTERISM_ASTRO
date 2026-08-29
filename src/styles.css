@@ -12493,3 +12493,67 @@ html.dark-mode .services-page .service-card:hover h4 {
   }
 
 }
+/* About Page - Owner & Practitioner styling */
+.about-final .owner-card {
+  margin-top: 32px;
+  padding: 32px;
+  border: 1px solid rgba(210, 166, 64, 0.18);
+  border-radius: 8px;
+  background: rgba(10, 18, 32, 0.65);
+}
+
+.about-final .owner-card h3 {
+  margin: 0 0 18px;
+  color: #d2a640;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 20px;
+  font-style: italic;
+}
+
+.about-final .owner-card h4 {
+  margin: 0 0 14px;
+  color: #f1eee7;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 21px;
+  font-weight: 500;
+}
+
+.about-final .owner-card p {
+  margin: 0 0 18px;
+  color: #8993a5;
+  line-height: 1.8;
+}
+
+.about-final .owner-card p:last-child {
+  margin-bottom: 0;
+}
+
+.about-final .approach-card {
+  margin-top: 16px;
+  padding: 32px;
+  border: 1px solid rgba(210, 166, 64, 0.18);
+  border-radius: 8px;
+  background: rgba(10, 18, 32, 0.65);
+}
+
+.about-final .approach-card .eyebrow {
+  margin-bottom: 18px;
+  color: #d2a640;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.about-final .approach-card h3 {
+  margin: 0 0 12px;
+  color: #f1eee7;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.about-final .approach-card p {
+  margin: 0;
+  color: #8993a5;
+  line-height: 1.7;
+}
