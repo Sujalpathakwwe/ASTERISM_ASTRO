@@ -21,6 +21,12 @@ export const pages = {
       <p>Asterism Astro is a consultation and guidance practice built around astrology, palmistry and related divinatory traditions. We work with people who are curious about themselves, their relationships, their direction in life, or a period of change they are trying to understand.</p>
       <p>Our approach is neither to dismiss these traditions as meaningless nor to present them as unquestionable truth. We believe there is value in studying an ancient system carefully while still leaving room for uncertainty, personal agency and the complexity of real life.</p>
       <p>That balance is at the heart of Asterism Astro. A chart, a palm or a symbolic system can provide a framework for asking better questions. The purpose of a consultation is to explore that framework with you — not to take your decisions away from you.</p>
+      <div class="about-owner">
+        <div class="eyebrow">Owner &amp; Practitioner</div>
+        <h3>Sujal Pathak</h3>
+        <p>Asterism Astro is owned and operated by Sujal Pathak, an independent astrology and divination service provider.</p>
+        <p>Asterism Astro is the brand name under which online astrology, palmistry, relationship analysis, career and finance readings, graphology, and related consultation services are provided.</p>
+      </div>
     </div>
     <div class="card about-note">
       <div class="eyebrow">Our Approach</div>
