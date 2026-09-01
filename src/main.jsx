@@ -24,6 +24,7 @@ import Booking from "./Booking.jsx";
 import AdminDashboard from "./AdminDashboard.jsx";
 import AdminAvailability from "./AdminAvailability.jsx";
 import AdminConsultations from "./AdminConsultations.jsx";
+
 import ZodiacWheel from "./ZodiacWheel.jsx";
 
 import { supabase } from "./lib/supabase";
@@ -1746,7 +1747,11 @@ useEffect(() => {
       } =
         await supabase.auth
           .getSession();
-
+      
+          console.log(
+  "STARTUP SESSION:",
+  data.session ? "LOGGED IN" : "NO SESSION"
+);
 
       if (!mounted) {
         return;
@@ -1780,52 +1785,29 @@ useEffect(() => {
 
 
     const {
-      data: listener,
-    } =
-      supabase.auth.onAuthStateChange(
-        (
-          _event,
-          nextSession
-        ) => {
+  data: listener,
+} =
+  supabase.auth.onAuthStateChange(
+    (
+      _event,
+      nextSession
+    ) => {
 
-          if (!mounted) {
-            return;
-          }
+      if (!mounted) {
+        return;
+      }
 
-
-          setSession(
-            nextSession
-          );
-
-          setSessionLoading(
-            false
-          );
-        }
+      setSession(
+        nextSession
       );
-    const desktopAccountLink =
-  document.querySelector(
-    ".session-account-link"
+
+      setSessionLoading(
+        false
+      );
+
+      
+    }
   );
-
-if (desktopAccountLink) {
-
-  if (nextSession) {
-
-    desktopAccountLink.href =
-      "/account";
-
-    desktopAccountLink.textContent =
-      "My Account";
-
-  } else {
-
-    desktopAccountLink.href =
-      "/login";
-
-    desktopAccountLink.textContent =
-      "Log In";
-  }
-}
 
     return () => {
 
@@ -1920,7 +1902,7 @@ if (desktopAccountLink) {
   ======================================================= */
 
   useEffect(() => {
-
+    
     if (isReactOnlyPage) {
 
       setHtml("");
@@ -2078,9 +2060,53 @@ if (desktopAccountLink) {
     ===================================================== */
 
     const actions =
-      doc.querySelector(
-        ".actions"
-      );
+  doc.querySelector(
+    ".actions"
+  );
+
+if (actions) {
+
+  const existing =
+    actions.querySelectorAll(
+      ".session-account-link"
+    );
+
+  existing.forEach(
+    (link) => link.remove()
+  );
+
+  const accountLink =
+    doc.createElement("a");
+
+  accountLink.className =
+    "session-account-link";
+
+  accountLink.href =
+    session
+      ? "/account"
+      : "/login";
+
+  accountLink.textContent =
+    session
+      ? "My Account"
+      : "Log In";
+
+  const themeButton =
+    actions.querySelector(
+      "[data-theme-toggle]"
+    );
+
+  if (themeButton) {
+    actions.insertBefore(
+      accountLink,
+      themeButton
+    );
+  } else {
+    actions.prepend(
+      accountLink
+    );
+  }
+}
 
 
     if (actions) {
@@ -2168,10 +2194,14 @@ if (desktopAccountLink) {
         "session-account-link";
 
       accountLink.href =
-        "/login";
+  session
+    ? "/account"
+    : "/login";
 
-      accountLink.textContent =
-        "Log In";
+accountLink.textContent =
+  session
+    ? "My Account"
+    : "Log In";
 
 
       const themeButton =
@@ -2369,6 +2399,7 @@ if (desktopAccountLink) {
     currentPath,
     isReactOnlyPage,
     detectedCountry,
+    
   ]);
 
 
@@ -2381,23 +2412,16 @@ if (desktopAccountLink) {
 
   useEffect(() => {
 
-    if (
-      isReactOnlyPage
-    ) {
-      return;
-    }
+  if (isReactOnlyPage) {
+    return;
+  }
 
+  const accountLinks =
+    document.querySelectorAll(
+      ".session-account-link"
+    );
 
-    const accountLink =
-      document.querySelector(
-        ".session-account-link"
-      );
-
-
-    if (!accountLink) {
-      return;
-    }
-
+  accountLinks.forEach((accountLink) => {
 
     if (session) {
 
@@ -2416,11 +2440,14 @@ if (desktopAccountLink) {
         "Log In";
     }
 
-  }, [
-    session,
-    isReactOnlyPage,
-    currentPath,
-  ]);
+  });
+
+}, [
+  session,
+  isReactOnlyPage,
+  currentPath,
+  html,
+]);
 
 
   /* =======================================================
@@ -2977,6 +3004,7 @@ if (desktopAccountLink) {
   }, [
     navigate,
     session,
+    sessionLoading,
   ]);
 
 
