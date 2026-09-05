@@ -1,6 +1,7 @@
 import React, {
   useEffect,
   useState,
+  useRef,
 } from "react";
 
 import {
@@ -1669,7 +1670,10 @@ useEffect(() => {
     menuOpen,
     setMenuOpen,
   ] = useState(false);
+  
 
+
+const zodiacRootRef = useRef(null);
   const [
     session,
     setSession,
@@ -2380,6 +2384,10 @@ accountLink.textContent =
       }
     }
 
+    if (zodiacRootRef.current) {
+  zodiacRootRef.current.unmount();
+  zodiacRootRef.current = null;
+}
 
     setHtml(
       doc.body?.innerHTML ||
@@ -2492,7 +2500,8 @@ accountLink.textContent =
       createRoot(
         element
       );
-
+    
+    zodiacRootRef.current = wheelRoot;
 
     wheelRoot.render(
       <ZodiacWheel />
@@ -2500,10 +2509,10 @@ accountLink.textContent =
 
 
     return () => {
-
-      wheelRoot.unmount();
-
-    };
+  if (element.isConnected) {
+    wheelRoot.unmount();
+  }
+};
 
   }, [
     html,
@@ -2511,7 +2520,362 @@ accountLink.textContent =
     isReactOnlyPage,
   ]);
 
+  /* =======================================================
+   PLANETARY CAROUSEL
+======================================================= */
 
+useEffect(() => {
+  if (
+    isReactOnlyPage ||
+    currentPath !== "/"
+  ) {
+    return;
+  }
+
+  const image =
+    document.getElementById(
+      "planet-card-image"
+    );
+
+  const label =
+    document.getElementById(
+      "planet-card-label"
+    );
+
+  const title =
+    document.getElementById(
+      "planet-card-title"
+    );
+
+  const description =
+    document.getElementById(
+      "planet-card-description"
+    );
+
+  const themes =
+    document.getElementById(
+      "planet-card-themes"
+    );
+
+  const influence =
+    document.getElementById(
+      "planet-card-influence"
+    );
+
+  const link =
+    document.getElementById(
+      "planet-card-link"
+    );
+
+  const previous =
+    document.getElementById(
+      "planet-prev"
+    );
+
+  const next =
+    document.getElementById(
+      "planet-next"
+    );
+
+  const dotsContainer =
+    document.getElementById(
+      "planet-dots"
+    );
+
+  if (
+    !image ||
+    !label ||
+    !title ||
+    !description ||
+    !themes ||
+    !influence ||
+    !link ||
+    !previous ||
+    !next ||
+    !dotsContainer
+  ) {
+    return;
+  }
+
+  const planets = [
+    {
+      name: "SUN",
+      image: "/images/planets/sun.png",
+      title: "Vitality & Identity",
+      description:
+        "The Sun represents vitality, confidence, identity and the expression of one's essential nature.",
+      themes:
+        "Vitality, confidence, identity, leadership",
+      influence:
+        "Self-expression, purpose and personal strength",
+      link: "/sun.html",
+    },
+    {
+      name: "MOON",
+      image: "/images/planets/moon.png",
+      title: "Mind & Emotions",
+      description:
+        "The Moon is associated with emotions, instinct, inner security and the way we process experience.",
+      themes:
+        "Emotions, intuition, mind, security",
+      influence:
+        "Feelings, habits and emotional responses",
+      link: "/moon.html",
+    },
+    {
+      name: "MERCURY",
+      image: "/images/planets/mercury.png",
+      title: "Intellect & Communication",
+      description:
+        "Mercury represents intellect, communication, learning and the way information is understood and expressed.",
+      themes:
+        "Communication, intellect, learning, analysis",
+      influence:
+        "Thinking, speech and decision-making",
+      link: "/mercury.html",
+    },
+    {
+      name: "VENUS",
+      image: "/images/planets/venus.png",
+      title: "Love & Harmony",
+      description:
+        "Venus represents attraction, affection, beauty, pleasure and the values we bring into relationships.",
+      themes:
+        "Love, attraction, beauty, harmony",
+      influence:
+        "Relationships, creativity and personal values",
+      link: "/venus.html",
+    },
+    {
+      name: "MARS",
+      image: "/images/planets/mars.png",
+      title: "Action & Drive",
+      description:
+        "Mars represents courage, initiative, physical energy and the way we pursue what we want.",
+      themes:
+        "Drive, courage, action, ambition",
+      influence:
+        "Motivation, assertion and competitive energy",
+      link: "/mars.html",
+    },
+    {
+      name: "JUPITER",
+      image: "/images/planets/jupiter.png",
+      title: "Expansion & Wisdom",
+      description:
+        "Jupiter represents growth, higher learning, abundance and opportunity. Its influence is associated with optimism, knowledge and a broader perspective on life.",
+      themes:
+        "Growth, wisdom, learning, prosperity",
+      influence:
+        "Expansion, guidance and long-term development",
+      link: "/jupiter.html",
+    },
+    {
+      name: "SATURN",
+      image: "/images/planets/saturn.png",
+      title: "Discipline & Structure",
+      description:
+        "Saturn represents responsibility, discipline, boundaries and the lessons that develop through time and persistence.",
+      themes:
+        "Discipline, responsibility, patience, structure",
+      influence:
+        "Commitment, endurance and long-term growth",
+      link: "/saturn.html",
+    },
+    {
+      name: "RAHU",
+      image: "/images/planets/rahu.png",
+      title: "Desire & Ambition",
+      description:
+        "Rahu represents intense desire, ambition, unconventional experiences and the urge to move beyond familiar boundaries.",
+      themes:
+        "Desire, ambition, intensity, change",
+      influence:
+        "Obsession, experimentation and worldly pursuit",
+      link: "/rahu.html",
+    },
+    {
+      name: "KETU",
+      image: "/images/planets/ketu.png",
+      title: "Detachment & Insight",
+      description:
+        "Ketu is associated with detachment, introspection, instinct and experiences that turn attention inward.",
+      themes:
+        "Detachment, intuition, insight, release",
+      influence:
+        "Inner awareness and separation from attachment",
+      link: "/ketu.html",
+    },
+    {
+      name: "URANUS",
+      image: "/images/planets/uranus.png",
+      title: "Change & Innovation",
+      description:
+        "Uranus represents disruption, independence, originality and sudden shifts that challenge established patterns.",
+      themes:
+        "Innovation, freedom, change, originality",
+      influence:
+        "Breakthroughs, independence and transformation",
+      link: "/uranus.html",
+    },
+    {
+      name: "NEPTUNE",
+      image: "/images/planets/neptune.png",
+      title: "Imagination & Intuition",
+      description:
+        "Neptune represents imagination, sensitivity, intuition and the less tangible dimensions of experience.",
+      themes:
+        "Imagination, intuition, sensitivity, vision",
+      influence:
+        "Dreams, ideals and spiritual perception",
+      link: "/neptune.html",
+    },
+    {
+      name: "PLUTO",
+      image: "/images/planets/pluto.png",
+      title: "Transformation & Renewal",
+      description:
+        "Pluto represents deep transformation, regeneration and the powerful processes that reshape life from within.",
+      themes:
+        "Transformation, power, renewal, depth",
+      influence:
+        "Rebirth, psychological depth and profound change",
+      link: "/pluto.html",
+    },
+  ];
+
+  let currentIndex = 5;
+
+  dotsContainer.innerHTML = "";
+
+  planets.forEach(
+    (_, index) => {
+      const dot =
+        document.createElement(
+          "span"
+        );
+
+      dot.className =
+        "planet-dot";
+
+      dot.dataset.planetIndex = index;
+
+      dotsContainer.appendChild(
+        dot
+      );
+    }
+  );
+
+  const dots =
+    dotsContainer.querySelectorAll(
+      ".planet-dot"
+    );
+
+  function updatePlanet() {
+    const planet =
+      planets[currentIndex];
+
+    image.src = planet.image;
+    image.alt = planet.name;
+
+    label.textContent =
+      planet.name;
+
+    title.textContent =
+      planet.title;
+
+    description.textContent =
+      planet.description;
+
+    themes.textContent =
+      planet.themes;
+
+    influence.textContent =
+      planet.influence;
+
+    link.href =
+      planet.link;
+
+    dots.forEach(
+      (dot, index) => {
+        dot.classList.toggle(
+          "active",
+          index === currentIndex
+        );
+      }
+    );
+  }
+
+  function showPrevious() {
+    currentIndex =
+      (currentIndex -
+        1 +
+        planets.length) %
+      planets.length;
+
+    updatePlanet();
+  }
+
+  function showNext() {
+    currentIndex =
+      (currentIndex + 1) %
+      planets.length;
+
+    updatePlanet();
+  }
+
+  function handlePlanetCarouselClick(event) {
+  const arrow = event.target.closest(
+    "#planet-prev, #planet-next"
+  );
+
+  if (arrow) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (arrow.id === "planet-prev") {
+      showPrevious();
+    } else {
+      showNext();
+    }
+
+    return;
+  }
+
+  const dot = event.target.closest(".planet-dot");
+
+  if (dot) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    currentIndex = Number(
+      dot.dataset.planetIndex
+    );
+
+    updatePlanet();
+  }
+}
+
+document.addEventListener(
+  "click",
+  handlePlanetCarouselClick
+);
+
+  requestAnimationFrame(() => {
+  updatePlanet();
+});
+
+return () => {
+    document.removeEventListener(
+  "click",
+  handlePlanetCarouselClick
+);
+  };
+}, [
+  html,
+  currentPath,
+  isReactOnlyPage,
+]);
   /* =======================================================
      THEME
   ======================================================= */

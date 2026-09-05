@@ -422,7 +422,340 @@ export const pages = {
 </div></header>
 <main><section class="page-hero"><div class="container"><h1>Journal</h1><p>Notes on astrology, relationships, self-reflection and traditional divination.</p></div></section>
 <section class="section"><div class="container grid-2">
-<article class="card blog-card"><div class="date">JUNE 18, 2026</div><h3>The Lines of Your Hand: What the Heart Line Reveals</h3><p>Heart-line patterns can be explored through depth, direction, curvature and relationship to the other major lines.</p><a class="link" href="article-01.html">Read Article →</a></article><article class="card blog-card"><div class="date">JUNE 04, 2026</div><h3>Using Astrology to Navigate Relationship Challenges</h3><p>Synastry can provide a structured way to examine recurring relational patterns without reducing a relationship to a single placement.</p><a class="link" href="article-02.html">Read Article →</a></article><article class="card blog-card"><div class="date">MAY 22, 2026</div><h3>Saturn Returns: The True Cycle Repeating Period of Life</h3><p>Saturn cycles are often associated with periods of restructuring, responsibility and long-term decisions.</p><a class="link" href="article-03.html">Read Article →</a></article><article class="card blog-card"><div class="date">MAY 08, 2026</div><h3>Understanding Your 7th House</h3><p>The 7th house is a useful starting point for exploring partnership patterns, but its ruler, occupants and broader chart context matter.</p><a class="link" href="article-04.html">Read Article →</a></article><article class="card blog-card"><div class="date">APRIL 19, 2026</div><h3>Palmistry: What Changes and What Doesn't</h3><p>Some markings are traditionally read as dynamic while major structures are considered more stable.</p><a class="link" href="article-05.html">Read Article →</a></article><article class="card blog-card"><div class="date">APRIL 02, 2026</div><h3>Timing in Vedic Astrology</h3><p>Dashas and transits can be used together to build a more nuanced timeline.</p><a class="link" href="article-06.html">Read Article →</a></article></div></div></section></main><footer class="footer"><div class="container footer-grid">
+<article class="card blog-card"><div class="date">JUNE 18, 2026</div><h3>The Lines of Your Hand: What the Heart Line Reveals</h3><p>Heart-line patterns can be explored through depth, direction, curvature and relationship to the other major lines.</p><a class="link" href="article-01.html">Read Article →</a></article><article class="card blog-card"><div class="date">JUNE 04, 2026</div><h3>Using Astrology to Navigate Relationship Challenges</h3><p>Synastry can provide a structured way to examine recurring relational patterns without reducing a relationship to a single placement.</p><a class="link" href="article-02.html">Read Article →</a></article><article class="card blog-card"><div class="date">MAY 22, 2026</div><h3>Saturn Returns: The True Cycle Repeating Period of Life</h3><p>Saturn cycles are often associated with periods of restructuring, responsibility and long-term decisions.</p><a class="link" href="article-03.html">Read Article →</a></article><article class="card blog-card"><div class="date">MAY 08, 2026</div><h3>Understanding Your 7th House</h3><p>The 7th house is a useful starting point for exploring partnership patterns, but its ruler, occupants and broader chart context matter.</p><a class="link" href="article-04.html">Read Article →</a></article><article class="card blog-card"><div class="date">APRIL 19, 2026</div><h3>Palmistry: What Changes and What Doesn't</h3><p>Some markings are traditionally read as dynamic while major structures are considered more stable.</p><a class="link" href="article-05.html">Read Article →</a></article><article class="card blog-card"><div class="date">APRIL 02, 2026</div><h3>Timing in Vedic Astrology</h3><p>Dashas and transits can be used together to build a more nuanced timeline.</p><a class="link" href="article-06.html">Read Article →</a></article></div></div></section><section class="section planetary-journal">
+  <div class="container">
+
+    <div class="planetary-journal-heading">
+      <div class="eyebrow">ASTROLOGY KNOWLEDGE</div>
+
+      <h2>The Planets</h2>
+
+      <p>
+        Explore the traditional symbolism, qualities and areas of life
+        associated with each planetary influence.
+      </p>
+    </div>
+
+
+    <div class="planetary-journal-grid">
+
+
+      <!-- SUN -->
+
+      <article class="planetary-journal-card">
+
+        <div class="planet-symbol">☉</div>
+
+        <div class="planetary-card-content">
+
+          <div class="planet-label">SUN</div>
+
+          <h3>Identity, Vitality & Leadership</h3>
+
+          <p>
+            The Sun represents identity, confidence, vitality,
+            authority and personal expression.
+          </p>
+
+          <a class="planetary-link" href="sun.html">
+            Explore Planet →
+          </a>
+
+        </div>
+
+      </article>
+
+
+      <!-- MOON -->
+
+      <article class="planetary-journal-card">
+
+        <div class="planet-symbol">☽</div>
+
+        <div class="planetary-card-content">
+
+          <div class="planet-label">MOON</div>
+
+          <h3>Emotions, Mind & Inner Security</h3>
+
+          <p>
+            The Moon is traditionally associated with emotions,
+            habits, memory, sensitivity and inner security.
+          </p>
+
+          <a class="planetary-link" href="moon.html">
+            Explore Planet →
+          </a>
+
+        </div>
+
+      </article>
+
+
+      <!-- MERCURY -->
+
+      <article class="planetary-journal-card">
+
+        <div class="planet-symbol">☿</div>
+
+        <div class="planetary-card-content">
+
+          <div class="planet-label">MERCURY</div>
+
+          <h3>Intellect, Communication & Learning</h3>
+
+          <p>
+            Mercury relates to communication, reasoning, learning,
+            analysis and intellectual expression.
+          </p>
+
+          <a class="planetary-link" href="mercury.html">
+            Explore Planet →
+          </a>
+
+        </div>
+
+      </article>
+
+
+      <!-- VENUS -->
+
+      <article class="planetary-journal-card">
+
+        <div class="planet-symbol">♀</div>
+
+        <div class="planetary-card-content">
+
+          <div class="planet-label">VENUS</div>
+
+          <h3>Love, Beauty & Relationships</h3>
+
+          <p>
+            Venus represents affection, attraction, beauty, pleasure,
+            values and relationship dynamics.
+          </p>
+
+          <a class="planetary-link" href="venus.html">
+            Explore Planet →
+          </a>
+
+        </div>
+
+      </article>
+
+
+      <!-- MARS -->
+
+      <article class="planetary-journal-card">
+
+        <div class="planet-symbol">♂</div>
+
+        <div class="planetary-card-content">
+
+          <div class="planet-label">MARS</div>
+
+          <h3>Action, Courage & Ambition</h3>
+
+          <p>
+            Mars is associated with action, courage, energy,
+            initiative, competition and determination.
+          </p>
+
+          <a class="planetary-link" href="mars.html">
+            Explore Planet →
+          </a>
+
+        </div>
+
+      </article>
+
+
+      <!-- JUPITER -->
+
+      <article class="planetary-journal-card">
+
+        <div class="planet-symbol">♃</div>
+
+        <div class="planetary-card-content">
+
+          <div class="planet-label">JUPITER</div>
+
+          <h3>Wisdom, Growth & Prosperity</h3>
+
+          <p>
+            Jupiter traditionally signifies wisdom, expansion,
+            learning, optimism, guidance and growth.
+          </p>
+
+          <a class="planetary-link" href="jupiter.html">
+            Explore Planet →
+          </a>
+
+        </div>
+
+      </article>
+
+
+      <!-- SATURN -->
+
+      <article class="planetary-journal-card">
+
+        <div class="planet-symbol">♄</div>
+
+        <div class="planetary-card-content">
+
+          <div class="planet-label">SATURN</div>
+
+          <h3>Discipline, Responsibility & Structure</h3>
+
+          <p>
+            Saturn represents discipline, responsibility, patience,
+            limitations, structure and long-term growth.
+          </p>
+
+          <a class="planetary-link" href="saturn.html">
+            Explore Planet →
+          </a>
+
+        </div>
+
+      </article>
+
+
+      <!-- RAHU -->
+
+      <article class="planetary-journal-card">
+
+        <div class="planet-symbol">☊</div>
+
+        <div class="planetary-card-content">
+
+          <div class="planet-label">RAHU</div>
+
+          <h3>Desire, Ambition & Worldly Experience</h3>
+
+          <p>
+            Rahu is traditionally associated with intense desire,
+            ambition, fascination, experimentation and worldly pursuits.
+          </p>
+
+          <a class="planetary-link" href="rahu.html">
+            Explore Planet →
+          </a>
+
+        </div>
+
+      </article>
+
+
+      <!-- KETU -->
+
+      <article class="planetary-journal-card">
+
+        <div class="planet-symbol">☋</div>
+
+        <div class="planetary-card-content">
+
+          <div class="planet-label">KETU</div>
+
+          <h3>Detachment, Insight & Spirituality</h3>
+
+          <p>
+            Ketu is associated with detachment, inward focus,
+            spiritual insight, unusual experiences and release.
+          </p>
+
+          <a class="planetary-link" href="ketu.html">
+            Explore Planet →
+          </a>
+
+        </div>
+
+      </article>
+
+
+      <!-- URANUS -->
+
+      <article class="planetary-journal-card">
+
+        <div class="planet-symbol">♅</div>
+
+        <div class="planetary-card-content">
+
+          <div class="planet-label">URANUS</div>
+
+          <h3>Change, Freedom & Innovation</h3>
+
+          <p>
+            Uranus is traditionally associated with independence,
+            disruption, innovation, awakening and sudden change.
+          </p>
+
+          <a class="planetary-link" href="uranus.html">
+            Explore Planet →
+          </a>
+
+        </div>
+
+      </article>
+
+
+      <!-- NEPTUNE -->
+
+      <article class="planetary-journal-card">
+
+        <div class="planet-symbol">♆</div>
+
+        <div class="planetary-card-content">
+
+          <div class="planet-label">NEPTUNE</div>
+
+          <h3>Imagination, Intuition & Ideals</h3>
+
+          <p>
+            Neptune relates to imagination, sensitivity, ideals,
+            spirituality, dreams and the search for meaning.
+          </p>
+
+          <a class="planetary-link" href="neptune.html">
+            Explore Planet →
+          </a>
+
+        </div>
+
+      </article>
+
+
+      <!-- PLUTO -->
+
+      <article class="planetary-journal-card">
+
+        <div class="planet-symbol">♇</div>
+
+        <div class="planetary-card-content">
+
+          <div class="planet-label">PLUTO</div>
+
+          <h3>Transformation, Power & Renewal</h3>
+
+          <p>
+            Pluto is associated with deep transformation,
+            psychological intensity, power, endings and renewal.
+          </p>
+
+          <a class="planetary-link" href="pluto.html">
+            Explore Planet →
+          </a>
+
+        </div>
+
+      </article>
+
+
+    </div>
+
+  </div>
+</section></main><footer class="footer"><div class="container footer-grid">
 <div><div class="brand"><span class="brand-mark">✧</span>Asterism Astro</div><p>Ancient wisdom, modern guidance. Thoughtful astrology and divinatory consultations for curious individuals.</p>
 <div class="social-links" aria-label="Social links">
 <a class="social-icon" href="https://www.instagram.com/asterism_astro/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram">
@@ -516,7 +849,477 @@ export const pages = {
 <div class="card"><div class="card-icon">✦</div><h3>Vedic Astrology Reading</h3><p>A comprehensive birth-chart analysis covering personality, timing, relationships and life themes.</p><span class="link"><a class="link" href="reading-02.html">Learn More →</a></span></div>
 <div class="card"><div class="card-icon">♡</div><h3>Relationship & Synastry</h3><p>Astrological compatibility insights for romantic, emotional and interpersonal dynamics.</p><span class="link"><a class="link" href="reading-03.html">Learn More →</a></span></div>
 <div class="card"><div class="card-icon">◈</div><h3>Career & Finance</h3><p>A focused consultation exploring strengths, timing, opportunities and practical direction.</p><span class="link"><a class="link" href="reading-04.html">Learn More →</a></span></div>
+</div>
+
+<div class="services-more">
+  <a class="btn btn-outline" href="services.html">
+    Show More Services →
+  </a>
 </div></div></section>
+
+<section class="why-asterism">
+
+  <div class="why-asterism-overlay"></div>
+
+  <div class="why-asterism-content">
+
+    <div class="why-asterism-text">
+
+      <div class="eyebrow">Why Asterism Astro?</div>
+
+      <h2>A more thoughtful approach to guidance.</h2>
+
+      <p class="why-intro">
+        Traditional systems, interpreted with clarity, context and care.
+      </p>
+
+      <div class="why-grid">
+
+        <div class="why-item">
+          <div class="why-planet">☉</div>
+          <div class="why-item-content">
+            <h3>Personalised Analysis</h3>
+            <p>
+              Your reading is focused on your individual chart, palm and
+              circumstances rather than generic interpretations.
+            </p>
+          </div>
+        </div>
+
+        <div class="why-item">
+          <div class="why-planet">☽</div>
+          <div class="why-item-content">
+            <h3>Clear & Practical</h3>
+            <p>
+              Traditional methods are translated into insights that are
+              understandable, relevant and useful in real life.
+            </p>
+          </div>
+        </div>
+
+        <div class="why-item">
+          <div class="why-planet">♃</div>
+          <div class="why-item-content">
+            <h3>Deep Attention</h3>
+            <p>
+              Each consultation takes time to explore the patterns, timing
+              and themes that matter to your question.
+            </p>
+          </div>
+        </div>
+
+        <div class="why-item">
+          <div class="why-planet">♄</div>
+          <div class="why-item-content">
+            <h3>Private & Confidential</h3>
+            <p>
+              Your personal information, questions and consultation are
+              treated with discretion and respect.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section class="how-it-works">
+
+  <div class="how-orbit how-orbit-left">
+    <span class="orbit-ring orbit-ring-1"></span>
+    <span class="orbit-ring orbit-ring-2"></span>
+    <span class="orbit-ring orbit-ring-3"></span>
+    <span class="orbit-dot orbit-dot-1"></span>
+    <span class="orbit-dot orbit-dot-2"></span>
+    <span class="orbit-dot orbit-dot-3"></span>
+    <span class="orbit-moon">☽</span>
+  </div>
+
+  <div class="how-orbit how-orbit-right">
+    <span class="orbit-ring orbit-ring-1"></span>
+    <span class="orbit-ring orbit-ring-2"></span>
+    <span class="orbit-ring orbit-ring-3"></span>
+    <span class="orbit-dot orbit-dot-1"></span>
+    <span class="orbit-dot orbit-dot-2"></span>
+    <span class="orbit-dot orbit-dot-3"></span>
+    <span class="orbit-star">✦</span>
+  </div>
+
+
+  <div class="how-it-works-inner">
+
+    <div class="how-it-works-head">
+
+      <div class="eyebrow">How It Works</div>
+
+      <h2>A simple and focused process.</h2>
+
+      <p>
+        From your question to clarity, in three steps.
+      </p>
+
+    </div>
+
+
+    <div class="how-steps">
+
+
+      <div class="how-step">
+
+        <div class="how-step-symbol">
+          <span>✦</span>
+        </div>
+
+        <div class="how-step-number">01</div>
+
+        <h3>Choose Your Reading</h3>
+
+        <p>
+          Select the consultation that best matches
+          what you want to understand.
+        </p>
+
+      </div>
+
+
+      <div class="how-step-connector">
+        <span class="connector-line"></span>
+        <span class="connector-star">✦</span>
+        <span class="connector-line"></span>
+      </div>
+
+
+      <div class="how-step">
+
+        <div class="how-step-symbol">
+          <span>☽</span>
+        </div>
+
+        <div class="how-step-number">02</div>
+
+        <h3>Share Your Details</h3>
+
+        <p>
+          Provide the information and questions needed
+          for a focused analysis.
+        </p>
+
+      </div>
+
+
+      <div class="how-step-connector">
+        <span class="connector-line"></span>
+        <span class="connector-star">✦</span>
+        <span class="connector-line"></span>
+      </div>
+
+
+      <div class="how-step">
+
+        <div class="how-step-symbol">
+          <span>☼</span>
+        </div>
+
+        <div class="how-step-number">03</div>
+
+        <h3>Receive Your Guidance</h3>
+
+        <p>
+          Get a detailed interpretation with practical
+          insights relevant to your situation.
+        </p>
+
+      </div>
+
+
+    </div>
+
+
+    <div class="how-bottom">
+
+      <span class="how-bottom-line"></span>
+
+      <span class="how-bottom-text">
+        ANCIENT WISDOM
+      </span>
+
+      <span class="how-bottom-star">✦</span>
+
+      <span class="how-bottom-text">
+        MODERN PERSPECTIVE
+      </span>
+
+      <span class="how-bottom-line"></span>
+
+    </div>
+
+  </div>
+
+</section>
+<section class="planetary-section">
+  <div class="planetary-inner">
+
+    <div class="planetary-left">
+
+  <div class="planetary-intro-mark">
+    <span></span>
+    CELESTIAL STUDY
+    <span></span>
+  </div>
+
+  <div class="planetary-eyebrow">
+    A GLIMPSE INTO
+  </div>
+
+  <h2 class="planetary-title">
+    The Cosmos
+  </h2>
+
+  <div class="planetary-title-line">
+    <span></span>
+    <i>✦</i>
+    <span></span>
+  </div>
+
+  <p class="planetary-description">
+    The same celestial movements that have guided humanity for centuries
+    continue to shape our experiences today.
+  </p>
+
+  <p class="planetary-description">
+    Explore the planets, their meanings, and the patterns they represent
+    across personality, relationships, career, growth, and timing.
+  </p>
+
+  <div class="planetary-themes">
+    <span>PERSONALITY</span>
+    <span>RELATIONSHIPS</span>
+    <span>CAREER</span>
+    <span>GROWTH</span>
+    <span>TIMING</span>
+  </div>
+
+  <div class="planetary-quote">
+    “As above, so within.”
+  </div>
+
+  <div class="planetary-quote-author">
+    HERMES TRISMEGISTUS
+  </div>
+
+  <a href="/services.html" class="planetary-explore">
+    EXPLORE THE PLANETS
+    <span>→</span>
+  </a>
+
+</div>
+
+    <div class="planetary-center">
+      <img
+        src="/images/planets/solar-system.png"
+        alt="Solar System"
+        class="planetary-visual"
+      >
+    </div>
+
+    <div class="planetary-right">
+
+  <div class="planet-card">
+
+    <!-- PLANET IMAGE -->
+    <div class="planet-card-image">
+      <img
+        src="/images/planets/jupiter.png"
+        alt="Jupiter"
+        id="planet-card-image"
+      >
+    </div>
+
+    <!-- PLANET INFORMATION -->
+    <div class="planet-card-content">
+
+      <div
+        class="planet-card-label"
+        id="planet-card-label"
+      >
+        JUPITER
+      </div>
+
+      <h3 id="planet-card-title">
+        Expansion &amp; Wisdom
+      </h3>
+
+      <p id="planet-card-description">
+        Jupiter represents growth, higher learning, abundance
+        and opportunity. Its influence is associated with
+        optimism, knowledge and a broader perspective on life.
+      </p>
+
+      <div class="planet-card-divider"></div>
+
+      <!-- KEY THEMES -->
+      <div class="planet-card-item">
+        <span class="planet-card-icon">✦</span>
+
+        <div>
+          <strong>Key Themes</strong>
+
+          <p id="planet-card-themes">
+            Growth, wisdom, learning, prosperity
+          </p>
+        </div>
+      </div>
+
+      <!-- INFLUENCE -->
+      <div class="planet-card-item">
+        <span class="planet-card-icon">↗</span>
+
+        <div>
+          <strong>Influence</strong>
+
+          <p id="planet-card-influence">
+            Expansion, guidance and long-term development
+          </p>
+        </div>
+      </div>
+
+      <!-- READ MORE -->
+      <a
+        href="/jupiter.html"
+        class="planet-card-link"
+        id="planet-card-link"
+      >
+        <span>READ MORE</span>
+        <span>→</span>
+      </a>
+
+    </div>
+
+  </div>
+
+  <!-- CAROUSEL ARROWS + DOTS -->
+  <div class="planet-carousel-controls">
+
+    <button
+      type="button"
+      class="planet-arrow"
+      id="planet-prev"
+      aria-label="Previous planet"
+    >
+      ←
+    </button>
+
+    <div
+      class="planet-dots"
+      id="planet-dots"
+    >
+      <span class="planet-dot active"></span>
+      <span class="planet-dot"></span>
+      <span class="planet-dot"></span>
+      <span class="planet-dot"></span>
+      <span class="planet-dot"></span>
+      <span class="planet-dot"></span>
+      <span class="planet-dot"></span>
+      <span class="planet-dot"></span>
+      <span class="planet-dot"></span>
+    </div>
+
+    <button
+      type="button"
+      class="planet-arrow"
+      id="planet-next"
+      aria-label="Next planet"
+    >
+      →
+    </button>
+
+  </div>
+
+</div>
+
+  </div>
+</section>
+<section class="planet-directory">
+
+  <div class="planet-directory-inner">
+
+    <div class="planet-directory-heading">
+      <span>✦</span>
+      EXPLORE THE CELESTIALS
+      <span>✦</span>
+    </div>
+
+    <div class="planet-directory-track">
+
+      <a href="/sun.html" class="planet-directory-item">
+        <img src="/images/planets/sun.png" alt="Sun">
+        <span>Sun</span>
+      </a>
+
+      <a href="/moon.html" class="planet-directory-item">
+        <img src="/images/planets/moon.png" alt="Moon">
+        <span>Moon</span>
+      </a>
+
+      <a href="/mercury.html" class="planet-directory-item">
+        <img src="/images/planets/mercury.png" alt="Mercury">
+        <span>Mercury</span>
+      </a>
+
+      <a href="/venus.html" class="planet-directory-item">
+        <img src="/images/planets/venus.png" alt="Venus">
+        <span>Venus</span>
+      </a>
+
+      <a href="/mars.html" class="planet-directory-item">
+        <img src="/images/planets/mars.png" alt="Mars">
+        <span>Mars</span>
+      </a>
+
+      <a href="/jupiter.html" class="planet-directory-item">
+        <img src="/images/planets/jupiter.png" alt="Jupiter">
+        <span>Jupiter</span>
+      </a>
+
+      <a href="/saturn.html" class="planet-directory-item">
+        <img src="/images/planets/saturn.png" alt="Saturn">
+        <span>Saturn</span>
+      </a>
+
+      <a href="/rahu.html" class="planet-directory-item">
+        <img src="/images/planets/rahu.png" alt="Rahu">
+        <span>Rahu</span>
+      </a>
+
+      <a href="/ketu.html" class="planet-directory-item">
+        <img src="/images/planets/ketu.png" alt="Ketu">
+        <span>Ketu</span>
+      </a>
+
+      <a href="/uranus.html" class="planet-directory-item">
+        <img src="/images/planets/uranus.png" alt="Uranus">
+        <span>Uranus</span>
+      </a>
+
+      <a href="/neptune.html" class="planet-directory-item">
+        <img src="/images/planets/neptune.png" alt="Neptune">
+        <span>Neptune</span>
+      </a>
+
+      <a href="/pluto.html" class="planet-directory-item">
+        <img src="/images/planets/pluto.png" alt="Pluto">
+        <span>Pluto</span>
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
 <section class="section section-dark feature"><div class="container"><h2>Begin your inquiry</h2><p>Thoughtful guidance starts with the right question. Tell us what you are seeking clarity on and we will help you choose the most suitable consultation.</p><a class="btn btn-gold" href="contact.html">Book a Consultation</a></div></section>
 </main><footer class="footer"><div class="container footer-grid">
 <div><div class="brand"><span class="brand-mark">✧</span>Asterism Astro</div><p>Ancient wisdom, modern guidance. Thoughtful astrology and divinatory consultations for curious individuals.</p>
@@ -1830,5 +2633,6 @@ export const routes = {
   "/terms-of-service": "terms-of-service.html",
   "/terms-of-service.html": "terms-of-service.html",
   "/testimonials": "testimonials.html",
-  "/testimonials.html": "testimonials.html"
+  "/testimonials.html": "testimonials.html",
+  
 };
