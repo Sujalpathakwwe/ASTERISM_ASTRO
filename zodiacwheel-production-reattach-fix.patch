@@ -1,0 +1,158 @@
+diff --git a/src/main.jsx b/src/main.jsx
+index 000a5d2..8779ad1 100644
+--- a/src/main.jsx
++++ b/src/main.jsx
+@@ -2433,36 +2433,136 @@ accountLink.textContent =
+     }
+ 
+ 
+-    const target =
+-      document.getElementById(
+-        "zodiac-wheel-root"
+-      );
++    let activeTarget = null;
++    let restoreTimer = null;
+ 
++    function mountCurrentTarget(
++      force = false
++    ) {
++      const target =
++        document.getElementById(
++          "zodiac-wheel-root"
++        );
+ 
+-    if (!target) {
+-      return;
++      if (!target) {
++        activeTarget = null;
++        return;
++      }
++
++      if (
++        !force &&
++        target === activeTarget
++      ) {
++        return;
++      }
++
++      activeTarget = target;
++
++      let wheelRoot =
++        zodiacRoots.get(target);
++
++      if (!wheelRoot) {
++        wheelRoot =
++          createRoot(target);
++
++        zodiacRoots.set(
++          target,
++          wheelRoot
++        );
++      }
++
++      wheelRoot.render(
++        <ZodiacWheel />
++      );
+     }
+ 
++    function scheduleRestore() {
++      if (
++        document.visibilityState !==
++        "visible"
++      ) {
++        return;
++      }
+ 
+-    let wheelRoot =
+-      zodiacRoots.get(target);
++      if (restoreTimer) {
++        window.clearTimeout(
++          restoreTimer
++        );
++      }
+ 
++      restoreTimer =
++        window.setTimeout(
++          () => {
++            mountCurrentTarget(true);
++          },
++          350
++        );
++    }
+ 
+-    if (!wheelRoot) {
+-      wheelRoot =
+-        createRoot(target);
++    mountCurrentTarget();
+ 
+-      zodiacRoots.set(
+-        target,
+-        wheelRoot
++    const pageRoot =
++      document.querySelector(
++        ".react-site-root"
++      );
++
++    const observer =
++      new MutationObserver(
++        () => {
++          mountCurrentTarget();
++        }
++      );
++
++    if (pageRoot) {
++      observer.observe(
++        pageRoot,
++        {
++          childList: true,
++          subtree: true,
++        }
+       );
+     }
+ 
++    document.addEventListener(
++      "visibilitychange",
++      scheduleRestore
++    );
++
++    window.addEventListener(
++      "focus",
++      scheduleRestore
++    );
+ 
+-    wheelRoot.render(
+-      <ZodiacWheel />
++    window.addEventListener(
++      "pageshow",
++      scheduleRestore
+     );
+ 
++    return () => {
++      observer.disconnect();
++
++      document.removeEventListener(
++        "visibilitychange",
++        scheduleRestore
++      );
++
++      window.removeEventListener(
++        "focus",
++        scheduleRestore
++      );
++
++      window.removeEventListener(
++        "pageshow",
++        scheduleRestore
++      );
++
++      if (restoreTimer) {
++        window.clearTimeout(
++          restoreTimer
++        );
++      }
++    };
++
+   }, [
+     html,
+     isHomePage,
+

@@ -19,6 +19,9 @@ import {
   detectCountry,
   COUNTRY_DATA,
 } from "./utils/country";
+import {
+  getCurrencyFromCountry,
+} from "./utils/currency";
 import Auth from "./Auth.jsx";
 import AuthConfirm from "./AuthConfirm.jsx";
 import Booking from "./Booking.jsx";
@@ -40,11 +43,6 @@ import "./styles.css";
 const files = new Set(
   Object.keys(pages)
 );
-
-// Keep one wheel root per real DOM host. There is intentionally no effect
-// cleanup here: React StrictMode runs effect cleanup during its development
-// check, which previously unmounted the wheel immediately after it appeared.
-const zodiacRoots = new WeakMap();
 
 
 /* =========================================================
@@ -1630,6 +1628,7 @@ function App() {
   
   const [detectedCountry, setDetectedCountry] = useState(null);
 const [countryLoading, setCountryLoading] = useState(true);
+const [usdExchangeRates, setUsdExchangeRates] = useState(null);
 
 useEffect(() => {
   let mounted = true;
@@ -1640,10 +1639,6 @@ useEffect(() => {
 
       console.log("Detected country:", country);
       setDetectedCountry(country);
-      localStorage.setItem(
-        "selectedCountry",
-        country.code || "IN"
-      );
       
     })
     .catch((error) => {
@@ -1656,6 +1651,33 @@ useEffect(() => {
       if (mounted) {
         setCountryLoading(false);
       }
+    });
+
+  return () => {
+    mounted = false;
+  };
+}, []);
+
+useEffect(() => {
+  let mounted = true;
+
+  fetch("https://open.er-api.com/v6/latest/USD", {
+    cache: "no-store",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Unable to load exchange rates");
+      }
+
+      return response.json();
+    })
+    .then((result) => {
+      if (mounted && result?.rates) {
+        setUsdExchangeRates(result.rates);
+      }
+    })
+    .catch((error) => {
+      console.warn("Exchange-rate lookup failed; using USD fallback.", error);
     });
 
   return () => {
@@ -1680,6 +1702,10 @@ useEffect(() => {
     setMenuOpen,
   ] = useState(false);
   
+
+
+  const zodiacRootRef =
+    useRef(null);
   const [
     session,
     setSession,
@@ -2010,59 +2036,61 @@ useEffect(() => {
       file === "pricing.html" &&
       detectedCountry?.code
     ) {
-      const pricingCurrencyRates = {
-        IN: { currency: "INR", rate: 1 },
-        US: { currency: "USD", rate: 0.0119 },
-        GB: { currency: "GBP", rate: 0.0088 },
-        CA: { currency: "CAD", rate: 0.0162 },
-        AU: { currency: "AUD", rate: 0.0182 },
-        AE: { currency: "AED", rate: 0.0437 },
-        SG: { currency: "SGD", rate: 0.0159 },
-        JP: { currency: "JPY", rate: 1.76 },
-        DE: { currency: "EUR", rate: 0.0102 },
-        FR: { currency: "EUR", rate: 0.0102 },
-        IT: { currency: "EUR", rate: 0.0102 },
-        ES: { currency: "EUR", rate: 0.0102 },
-        NL: { currency: "EUR", rate: 0.0102 },
-        CH: { currency: "CHF", rate: 0.0100 },
-        ZA: { currency: "ZAR", rate: 0.0209 },
-        SA: { currency: "SAR", rate: 0.0446 },
-        QA: { currency: "QAR", rate: 0.0433 },
-        KW: { currency: "KWD", rate: 0.00365 },
-        MY: { currency: "MYR", rate: 0.0500 },
-        TH: { currency: "THB", rate: 0.380 },
-        ID: { currency: "IDR", rate: 190 },
-        PH: { currency: "PHP", rate: 0.680 },
-        BR: { currency: "BRL", rate: 0.064 },
-        MX: { currency: "MXN", rate: 0.220 },
-        KR: { currency: "KRW", rate: 16.0 },
-      };
+      const isIndia =
+        detectedCountry.code === "IN";
 
-      const pricingData =
-        pricingCurrencyRates[detectedCountry.code] ||
-        pricingCurrencyRates.IN;
+      const requestedCurrency =
+        isIndia
+          ? "INR"
+          : getCurrencyFromCountry(
+              detectedCountry.code
+            );
+
+      const hasExchangeRate =
+        requestedCurrency === "USD" ||
+        Number.isFinite(
+          usdExchangeRates?.[
+            requestedCurrency
+          ]
+        );
+
+      const displayCurrency =
+        isIndia
+          ? "INR"
+          : hasExchangeRate
+            ? requestedCurrency
+            : "USD";
 
       doc
         .querySelectorAll(".dynamic-price")
         .forEach((element) => {
-          const baseINR =
-            Number(element.dataset.priceInr);
+          const baseAmount =
+            Number(
+              isIndia
+                ? element.dataset.priceInr
+                : element.dataset.priceUsd
+            );
 
-          if (!Number.isFinite(baseINR)) {
+          if (!Number.isFinite(baseAmount)) {
             return;
           }
 
+          const rate =
+            isIndia || displayCurrency === "USD"
+              ? 1
+              : usdExchangeRates[
+                  displayCurrency
+                ];
+
           const converted =
-            Math.round(
-              baseINR * pricingData.rate
-            );
+            Math.round(baseAmount * rate);
 
           element.textContent =
             new Intl.NumberFormat(
               undefined,
               {
                 style: "currency",
-                currency: pricingData.currency,
+                currency: displayCurrency,
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
               }
@@ -2072,58 +2100,13 @@ useEffect(() => {
    
    
     /* =====================================================
-       ACCOUNT / LOGIN LINK
+       COUNTRY + SINGLE ACCOUNT / LOGIN LINK
     ===================================================== */
 
     const actions =
-  doc.querySelector(
-    ".actions"
-  );
-
-if (actions) {
-
-  const existing =
-    actions.querySelectorAll(
-      ".session-account-link"
-    );
-
-  existing.forEach(
-    (link) => link.remove()
-  );
-
-  const accountLink =
-    doc.createElement("a");
-
-  accountLink.className =
-    "session-account-link";
-
-  accountLink.href =
-    session
-      ? "/account"
-      : "/login";
-
-  accountLink.textContent =
-    session
-      ? "My Account"
-      : "Log In";
-
-  const themeButton =
-    actions.querySelector(
-      "[data-theme-toggle]"
-    );
-
-  if (themeButton) {
-    actions.insertBefore(
-      accountLink,
-      themeButton
-    );
-  } else {
-    actions.prepend(
-      accountLink
-    );
-  }
-}
-
+      doc.querySelector(
+        ".actions"
+      );
 
     if (actions) {
       
@@ -2189,15 +2172,13 @@ if (actions) {
       }
       
       
-      const existing =
-        actions.querySelector(
-          ".session-account-link"
+      doc
+        .querySelectorAll(
+          '.site-header .session-account-link, .site-header a[href="/login"], .site-header a[href="/account"]'
+        )
+        .forEach(
+          (link) => link.remove()
         );
-
-
-      if (existing) {
-        existing.remove();
-      }
 
 
       const accountLink =
@@ -2396,6 +2377,11 @@ accountLink.textContent =
       }
     }
 
+    if (zodiacRootRef.current) {
+      zodiacRootRef.current.unmount();
+      zodiacRootRef.current = null;
+    }
+
     setHtml(
       doc.body?.innerHTML ||
       ""
@@ -2410,163 +2396,12 @@ accountLink.textContent =
       0
     );
 
-  }, [
+    }, [
     currentPath,
     isReactOnlyPage,
     detectedCountry,
+    usdExchangeRates,
     
-  ]);
-
-
-  /* =======================================================
-     MOUNT ZODIAC WHEEL
-  ======================================================= */
-
-  useEffect(() => {
-
-    if (
-      isReactOnlyPage ||
-      !isHomePage ||
-      !html
-    ) {
-      return;
-    }
-
-
-    let activeTarget = null;
-    let restoreTimer = null;
-
-    function mountCurrentTarget(
-      force = false
-    ) {
-      const target =
-        document.getElementById(
-          "zodiac-wheel-root"
-        );
-
-      if (!target) {
-        activeTarget = null;
-        return;
-      }
-
-      if (
-        !force &&
-        target === activeTarget
-      ) {
-        return;
-      }
-
-      activeTarget = target;
-
-      let wheelRoot =
-        zodiacRoots.get(target);
-
-      if (!wheelRoot) {
-        wheelRoot =
-          createRoot(target);
-
-        zodiacRoots.set(
-          target,
-          wheelRoot
-        );
-      }
-
-      wheelRoot.render(
-        <ZodiacWheel />
-      );
-    }
-
-    function scheduleRestore() {
-      if (
-        document.visibilityState !==
-        "visible"
-      ) {
-        return;
-      }
-
-      if (restoreTimer) {
-        window.clearTimeout(
-          restoreTimer
-        );
-      }
-
-      restoreTimer =
-        window.setTimeout(
-          () => {
-            mountCurrentTarget(true);
-          },
-          350
-        );
-    }
-
-    mountCurrentTarget();
-
-    const pageRoot =
-      document.querySelector(
-        ".react-site-root"
-      );
-
-    const observer =
-      new MutationObserver(
-        () => {
-          mountCurrentTarget();
-        }
-      );
-
-    if (pageRoot) {
-      observer.observe(
-        pageRoot,
-        {
-          childList: true,
-          subtree: true,
-        }
-      );
-    }
-
-    document.addEventListener(
-      "visibilitychange",
-      scheduleRestore
-    );
-
-    window.addEventListener(
-      "focus",
-      scheduleRestore
-    );
-
-    window.addEventListener(
-      "pageshow",
-      scheduleRestore
-    );
-
-    return () => {
-      observer.disconnect();
-
-      document.removeEventListener(
-        "visibilitychange",
-        scheduleRestore
-      );
-
-      window.removeEventListener(
-        "focus",
-        scheduleRestore
-      );
-
-      window.removeEventListener(
-        "pageshow",
-        scheduleRestore
-      );
-
-      if (restoreTimer) {
-        window.clearTimeout(
-          restoreTimer
-        );
-      }
-    };
-
-  }, [
-    html,
-    isHomePage,
-    isReactOnlyPage,
   ]);
 
 
@@ -2616,6 +2451,72 @@ accountLink.textContent =
   html,
 ]);
 
+
+  /* =======================================================
+     ZODIAC WHEEL
+  ======================================================= */
+
+  useEffect(() => {
+
+    if (
+      isReactOnlyPage ||
+      !isHomePage
+    ) {
+      return;
+    }
+
+
+    const element =
+      document.getElementById(
+        "zodiac-wheel-root"
+      );
+
+
+    if (!element) {
+      return;
+    }
+
+
+    element.style.width =
+      "100%";
+
+    element.style.display =
+      "block";
+
+    element.style.position =
+      "relative";
+
+    element.style.overflow =
+      "visible";
+
+
+    const wheelRoot =
+      createRoot(element);
+
+    zodiacRootRef.current =
+      wheelRoot;
+
+    wheelRoot.render(
+      <ZodiacWheel />
+    );
+
+
+    return () => {
+      if (
+        zodiacRootRef.current ===
+        wheelRoot
+      ) {
+        wheelRoot.unmount();
+        zodiacRootRef.current = null;
+      }
+    };
+
+  }, [
+    html,
+    currentPath,
+    isReactOnlyPage,
+    isHomePage,
+  ]);
 
   /* =======================================================
    PLANETARY CAROUSEL
@@ -3413,33 +3314,6 @@ useEffect(() => {
       }
 
 
-      /* LOGO ALREADY ON HOME */
-
-      if (
-        isHomePage &&
-        anchor.matches(
-          ".site-header .brand"
-        ) &&
-        (
-          href === "/" ||
-          href === "index.html"
-        )
-      ) {
-
-        event.preventDefault();
-        event.stopPropagation();
-
-        anchor.blur();
-
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth",
-        });
-
-        return;
-      }
-
-
       if (
         href.startsWith("#") ||
         href.startsWith("mailto:") ||
@@ -3666,7 +3540,6 @@ useEffect(() => {
     };
 
   }, [
-    isHomePage,
     navigate,
     session,
     sessionLoading,
