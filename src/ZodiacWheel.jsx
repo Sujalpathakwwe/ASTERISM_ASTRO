@@ -1508,9 +1508,8 @@ export default function ZodiacWheel() {
        - pageshow (any pageshow, not only bfcache-persisted
          ones — some browsers don't reliably set `persisted`)
 
-     A short cooldown prevents remounting twice for the same
-     "return" event when multiple of these fire together
-     (e.g. visibilitychange and focus firing back to back).
+     A short delayed scheduler combines the return events and waits
+     until the browser has restored painting before remounting once.
   ======================================================= */
 
   const [
@@ -1519,25 +1518,42 @@ export default function ZodiacWheel() {
   ] = useState(0);
 
   useEffect(() => {
-    let lastRemountAt = 0;
+    let remountTimer = null;
 
-    function forceRemount() {
-
-      const now =
-        Date.now();
-
+    function scheduleRemount() {
       if (
-        now - lastRemountAt <
-        400
+        document.visibilityState !==
+        "visible"
       ) {
         return;
       }
 
-      lastRemountAt = now;
+      if (remountTimer) {
+        window.clearTimeout(
+          remountTimer
+        );
+      }
 
-      setCanvasKey(
-        (key) => key + 1
-      );
+      // visibilitychange, focus and pageshow usually arrive together.
+      // Wait until the browser has restored painting, then rebuild once.
+      remountTimer =
+        window.setTimeout(
+          () => {
+            window.requestAnimationFrame(
+              () => {
+                window.requestAnimationFrame(
+                  () => {
+                    setCanvasKey(
+                      (key) =>
+                        key + 1
+                    );
+                  }
+                );
+              }
+            );
+          },
+          300
+        );
     }
 
     function handleVisibilityChange() {
@@ -1545,7 +1561,7 @@ export default function ZodiacWheel() {
         document.visibilityState ===
         "visible"
       ) {
-        forceRemount();
+        scheduleRemount();
       }
     }
 
@@ -1556,12 +1572,12 @@ export default function ZodiacWheel() {
 
     window.addEventListener(
       "focus",
-      forceRemount
+      scheduleRemount
     );
 
     window.addEventListener(
       "pageshow",
-      forceRemount
+      scheduleRemount
     );
 
     return () => {
@@ -1573,13 +1589,19 @@ export default function ZodiacWheel() {
 
       window.removeEventListener(
         "focus",
-        forceRemount
+        scheduleRemount
       );
 
       window.removeEventListener(
         "pageshow",
-        forceRemount
+        scheduleRemount
       );
+
+      if (remountTimer) {
+        window.clearTimeout(
+          remountTimer
+        );
+      }
     };
   }, []);
 
@@ -1653,6 +1675,8 @@ export default function ZodiacWheel() {
           gl={{
             antialias: true,
             alpha: false,
+            preserveDrawingBuffer:
+              true,
             powerPreference:
               "high-performance",
           }}
