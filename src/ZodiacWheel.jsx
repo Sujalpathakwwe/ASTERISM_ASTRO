@@ -1453,6 +1453,70 @@ function ResponsiveScene() {
    MAIN COMPONENT
 ========================================================= */
 
+function CanvasWakeUp({ signal }) {
+  const {
+    gl,
+    camera,
+    size,
+    invalidate,
+  } = useThree();
+
+  useEffect(() => {
+    const canvas =
+      gl.domElement;
+
+    function wakeCanvas() {
+      canvas.style.opacity = "1";
+      canvas.style.visibility =
+        "visible";
+
+      gl.setSize(
+        size.width,
+        size.height,
+        false
+      );
+
+      camera.updateProjectionMatrix();
+      invalidate();
+    }
+
+    wakeCanvas();
+
+    let secondFrame = null;
+
+    const firstFrame =
+      window.requestAnimationFrame(
+        () => {
+          secondFrame =
+            window.requestAnimationFrame(
+              wakeCanvas
+            );
+        }
+      );
+
+    return () => {
+      window.cancelAnimationFrame(
+        firstFrame
+      );
+
+      if (secondFrame) {
+        window.cancelAnimationFrame(
+          secondFrame
+        );
+      }
+    };
+  }, [
+    signal,
+    gl,
+    camera,
+    size.width,
+    size.height,
+    invalidate,
+  ]);
+
+  return null;
+}
+
 export default function ZodiacWheel() {
   const [
     width,
@@ -1509,7 +1573,9 @@ export default function ZodiacWheel() {
          ones — some browsers don't reliably set `persisted`)
 
      A short delayed scheduler combines the return events and waits
-     until the browser has restored painting before remounting once.
+     until the browser has restored painting before waking and resizing
+     the existing canvas. Reusing the canvas avoids WebGL allocation
+     failures caused by destroying and recreating it during tab restore.
   ======================================================= */
 
   const [
@@ -1653,7 +1719,6 @@ export default function ZodiacWheel() {
         }
       >
         <Canvas
-          key={canvasKey}
           camera={{
             position: [
               0,
@@ -1707,6 +1772,9 @@ export default function ZodiacWheel() {
             );
           }}
         >
+          <CanvasWakeUp
+            signal={canvasKey}
+          />
           <ResponsiveScene />
         </Canvas>
       </WheelErrorBoundary>
