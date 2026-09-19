@@ -843,6 +843,7 @@ export const pages = {
 <main>
 <section class="hero"><div class="container hero-inner"><h1>Asterism Astro</h1><div class="eyebrow">Ancient Wisdom. Modern Guidance.</div><p>Step into clarity. We bridge centuries of astrological and divinatory tradition with rational, evidence-within-tradition practice for the thoughtful, curious individual.</p><div class="ctas"><a class="btn btn-gold" href="contact.html">Book a Consultation</a><a class="btn btn-outline" href="services.html">Explore Services</a></div></div></section>
 <section class="stats"><div class="container stats-grid"><div class="stat"><strong>4800+</strong><span>CONSULTATIONS</span></div><div class="stat"><strong>4560</strong><span>SATISFIED CLIENTS</span></div><div class="stat"><strong>12</strong><span>YEARS EXPERIENCE</span></div><div class="stat"><strong>8</strong><span>SERVICES</span></div></div></section>
+
 <section class="section"><div class="container"><div class="section-head"><h2>Precision Analysis</h2><p>Our core offerings are designed to provide powerful, actionable insights into your life.</p></div>
 <div class="cards">
 <div class="card"><div class="card-icon">⌁</div><h3>Palmistry Reading</h3><p>A detailed analysis of your palm lines, mounts, and hand structure to reveal your patterns and potential.</p><span class="link"><a class="link" href="reading-01.html">Learn More →</a></span></div>
@@ -1319,6 +1320,90 @@ export const pages = {
 
   </div>
 
+</section>
+<section class="section testimonials-home">
+  <div class="container">
+
+    <div class="section-head">
+      <div class="eyebrow">FROM OUR CLIENTS</div>
+      <h2>Words from those we've guided.</h2>
+      <p>Personal experiences. Thoughtful questions. Different paths to clarity.</p>
+    </div>
+
+    <div class="testimonial-slider">
+
+      <button class="testimonial-arrow testimonial-prev" type="button" aria-label="Previous testimonial">
+        ←
+      </button>
+
+      <div class="testimonial-track">
+
+        <article class="testimonial-slide active">
+          <div class="testimonial-stars">★★★★★</div>
+          <blockquote>
+            “The reading gave me a completely different perspective on what I was going through. It was detailed, thoughtful and surprisingly practical.”
+          </blockquote>
+          <div class="testimonial-author">
+            <span>— Sarah M.</span>
+            <small>Vedic Astrology Reading</small>
+          </div>
+        </article>
+
+        <article class="testimonial-slide">
+          <div class="testimonial-stars">★★★★★</div>
+          <blockquote>
+            “I came with a lot of questions and left with much more clarity. The entire reading felt personal rather than generic.”
+          </blockquote>
+          <div class="testimonial-author">
+            <span>— Priya K.</span>
+            <small>Palmistry Reading</small>
+          </div>
+        </article>
+
+        <article class="testimonial-slide">
+          <div class="testimonial-stars">★★★★★</div>
+          <blockquote>
+            “One of the most detailed readings I have experienced. Everything was explained clearly and without making me feel rushed.”
+          </blockquote>
+          <div class="testimonial-author">
+            <span>— John D.</span>
+            <small>Relationship Analysis</small>
+          </div>
+        </article>
+
+        <article class="testimonial-slide">
+          <div class="testimonial-stars">★★★★★</div>
+          <blockquote>
+            “The consultation helped me understand my situation from a much calmer and clearer perspective.”
+          </blockquote>
+          <div class="testimonial-author">
+            <span>— Jane S.</span>
+            <small>Career & Finance</small>
+          </div>
+        </article>
+
+      </div>
+
+      <button class="testimonial-arrow testimonial-next" type="button" aria-label="Next testimonial">
+        →
+      </button>
+
+    </div>
+
+    <div class="testimonial-dots">
+      <button class="testimonial-dot active" type="button" aria-label="Testimonial 1"></button>
+      <button class="testimonial-dot" type="button" aria-label="Testimonial 2"></button>
+      <button class="testimonial-dot" type="button" aria-label="Testimonial 3"></button>
+      <button class="testimonial-dot" type="button" aria-label="Testimonial 4"></button>
+    </div>
+
+    <div class="testimonial-more">
+      <a class="btn btn-outline" href="testimonials.html">
+        Read More Testimonials →
+      </a>
+    </div>
+
+  </div>
 </section>
 <section class="section section-dark feature"><div class="container"><h2>Begin your inquiry</h2><p>Thoughtful guidance starts with the right question. Tell us what you are seeking clarity on and we will help you choose the most suitable consultation.</p><a class="btn btn-gold" href="contact.html">Book a Consultation</a></div></section>
 </main><footer class="footer"><div class="container footer-grid">

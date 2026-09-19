@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { readdirSync } from "fs";
+import { readFileSync, readdirSync } from "fs";
 import { resolve } from "path";
 
 const htmlPages = Object.fromEntries(
@@ -13,7 +13,22 @@ const htmlPages = Object.fromEntries(
 );
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    {
+      name: "copy-legacy-header-script",
+      generateBundle() {
+        this.emitFile({
+          type: "asset",
+          fileName: "script.js",
+          source: readFileSync(
+            resolve(__dirname, "script.js"),
+            "utf8"
+          ),
+        });
+      },
+    },
+  ],
   build: {
     rollupOptions: {
       input: htmlPages,

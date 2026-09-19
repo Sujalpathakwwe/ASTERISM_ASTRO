@@ -410,7 +410,7 @@ export default function AdminDashboard({
               className="admin-feature-card"
               onClick={() =>
                 navigate(
-                  "/account"
+                  "/admin/clients"
                 )
               }
             >
@@ -431,9 +431,8 @@ export default function AdminDashboard({
                 </strong>
 
                 <p>
-                  View the account
-                  system and client
-                  information.
+                  View client accounts
+                  and client information.
                 </p>
 
               </div>
@@ -508,6 +507,7 @@ export default function AdminDashboard({
               </strong>
 
             </div>
+
 
           </div>
 

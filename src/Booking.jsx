@@ -50,6 +50,57 @@ const MIN_BIRTH_YEAR =
 
 const CONSULTATION_YEAR_COUNT = 4;
 
+/* =========================================================
+   RAZORPAY
+========================================================= */
+
+function loadRazorpayScript() {
+  return new Promise((resolve) => {
+    if (window.Razorpay) {
+      resolve(true);
+      return;
+    }
+
+    const existingScript =
+      document.querySelector(
+        'script[src="https://checkout.razorpay.com/v1/checkout.js"]'
+      );
+
+    if (existingScript) {
+      existingScript.addEventListener(
+        "load",
+        () => resolve(true)
+      );
+
+      existingScript.addEventListener(
+        "error",
+        () => resolve(false)
+      );
+
+      return;
+    }
+
+    const script =
+      document.createElement("script");
+
+    script.src =
+      "https://checkout.razorpay.com/v1/checkout.js";
+
+    script.async = true;
+
+    script.onload = () =>
+      resolve(true);
+
+    script.onerror = () =>
+      resolve(false);
+
+    document.body.appendChild(
+      script
+    );
+  });
+}
+
+
 
 /* =========================================================
    EMPTY BIRTH DETAILS
@@ -554,22 +605,18 @@ function DateSelector({
 
 
       /*
-       * Consultation dates need Month + Year
-       * before we can determine valid dates.
+       * Consultation dates can be selected in ANY order.
+       * When Month/Year are not selected yet, show 1–31.
+       * Once Month + Year are known, reduce the list to the
+       * real number of days in that month and remove blocked dates.
        */
-      if (
-        month === "" ||
-        year === ""
-      ) {
-        return [];
-      }
-
-
       const maxDay =
-        daysInMonth(
-          Number(year),
-          Number(month)
-        );
+        month !== "" && year !== ""
+          ? daysInMonth(
+              Number(year),
+              Number(month)
+            )
+          : 31;
 
 
       return Array.from(
@@ -584,6 +631,14 @@ function DateSelector({
 
           if (
             !isDateAvailable
+          ) {
+            return true;
+          }
+
+
+          if (
+            month === "" ||
+            year === ""
           ) {
             return true;
           }
@@ -1048,10 +1103,80 @@ function TimeSelector({
   onChange,
   disabled = false,
 }) {
-  const parts =
-    timeToParts(
-      value
+  const initialParts =
+    timeToParts(value);
+
+  const [
+    selectedHour,
+    setSelectedHour,
+  ] = useState(
+    initialParts.hour
+  );
+
+  const [
+    selectedMinute,
+    setSelectedMinute,
+  ] = useState(
+    initialParts.minute
+  );
+
+  const [
+    selectedPeriod,
+    setSelectedPeriod,
+  ] = useState(
+    initialParts.period
+  );
+
+  useEffect(() => {
+    const nextParts =
+      timeToParts(value);
+
+    setSelectedHour(
+      nextParts.hour
     );
+
+    setSelectedMinute(
+      nextParts.minute
+    );
+
+    setSelectedPeriod(
+      nextParts.period
+    );
+  }, [value]);
+
+  function updateTime(
+    hour,
+    minute,
+    period
+  ) {
+    setSelectedHour(
+      hour === "" ? "" : Number(hour)
+    );
+
+    setSelectedMinute(
+      minute === "" ? "" : Number(minute)
+    );
+
+    setSelectedPeriod(
+      period || ""
+    );
+
+    const result =
+      partsToTime(
+        hour,
+        minute,
+        period
+      );
+
+    onChange(result);
+  }
+
+
+  const parts = {
+    hour: selectedHour,
+    minute: selectedMinute,
+    period: selectedPeriod,
+  };
 
 
   const hours =
@@ -1074,26 +1199,6 @@ function TimeSelector({
       (_, index) =>
         index * 5
     );
-
-
-  function updateTime(
-    hour,
-    minute,
-    period
-  ) {
-
-    const result =
-      partsToTime(
-        hour,
-        minute,
-        period
-      );
-
-
-    onChange(
-      result
-    );
-  }
 
 
   return (
@@ -1997,26 +2102,6 @@ export default function Booking() {
 
         const {
           data:
-            scheduleData,
-          error:
-            scheduleError,
-        } =
-          await supabase
-            .from(
-              "availability_schedule"
-            )
-            .select(
-              "day_of_week, is_available"
-            );
-
-
-        if (scheduleError) {
-          throw scheduleError;
-        }
-
-
-        const {
-          data:
             blockedData,
           error:
             blockedError,
@@ -2038,12 +2123,6 @@ export default function Booking() {
         if (!mounted) {
           return;
         }
-
-
-        setAvailability(
-          scheduleData ||
-          []
-        );
 
 
         setBlockedDates(
@@ -2118,42 +2197,19 @@ export default function Booking() {
 
 
   /* =======================================================
-     AVAILABILITY DAYS
+     AVAILABILITY
+     All dates are available by default.
+     Only dates added to blocked_dates are unavailable.
   ======================================================= */
-
-  const availableDays =
-    useMemo(
-      () =>
-        new Set(
-          availability
-            .filter(
-              (item) =>
-                item.is_available
-            )
-            .map(
-              (item) =>
-                Number(
-                  item.day_of_week
-                )
-            )
-        ),
-      [
-        availability,
-      ]
-    );
-
 
   const isAvailableDate =
     useMemo(
       () =>
         (dateString) => {
 
-          if (
-            !dateString
-          ) {
+          if (!dateString) {
             return false;
           }
-
 
           if (
             blockedDates.includes(
@@ -2163,12 +2219,10 @@ export default function Booking() {
             return false;
           }
 
-
           const date =
             new Date(
               `${dateString}T00:00:00`
             );
-
 
           if (
             Number.isNaN(
@@ -2178,14 +2232,9 @@ export default function Booking() {
             return false;
           }
 
-
-          return availableDays.has(
-            date.getDay()
-          );
-
+          return true;
         },
       [
-        availableDays,
         blockedDates,
       ]
     );
@@ -2293,135 +2342,94 @@ export default function Booking() {
   async function handleSubmit(
     event
   ) {
-
     event.preventDefault();
 
     setError("");
     setSuccess("");
 
-
     if (!service) {
-
       setError(
         "Please select a consultation."
       );
-
       return;
     }
-
 
     if (!currentUser) {
-
-      navigate(
-        "/login"
-      );
-
+      navigate("/login");
       return;
     }
 
-
     if (!preferredDate) {
-
       setError(
         "Please select your preferred consultation date."
       );
-
       return;
     }
-
 
     if (
       !isAvailableDate(
         preferredDate
       )
     ) {
-
       setError(
         "That date is not available. Please select another date."
       );
-
       return;
     }
-
 
     const contactError =
       validateContact();
 
-
     if (contactError) {
-
-      setError(
-        contactError
-      );
-
+      setError(contactError);
       return;
     }
-
 
     if (
       service.needsBirthDetails
     ) {
-
       const birthError =
         validateBirth(
           clientBirth,
           "Your birth details"
         );
 
-
       if (birthError) {
-
-        setError(
-          birthError
-        );
-
+        setError(birthError);
         return;
       }
     }
 
-
     if (
       service.needsPartner
     ) {
-
       if (!hasPartner) {
-
         setError(
           "Please tell us whether you currently have a partner."
         );
-
         return;
       }
 
-
       if (
-        hasPartner ===
-        "yes"
+        hasPartner === "yes"
       ) {
-
         if (
           !partnerName.trim()
         ) {
-
           setError(
             "Please enter your partner's name."
           );
-
           return;
         }
-
 
         if (
           !relationshipStatus
         ) {
-
           setError(
             "Please select your relationship status."
           );
-
           return;
         }
-
 
         const partnerError =
           validateBirth(
@@ -2429,33 +2437,31 @@ export default function Booking() {
             "Partner birth details"
           );
 
-
         if (partnerError) {
-
-          setError(
-            partnerError
-          );
-
+          setError(partnerError);
           return;
         }
       }
     }
 
-
     setLoading(true);
 
-
     try {
+      const razorpayLoaded =
+        await loadRazorpayScript();
+
+      if (!razorpayLoaded) {
+        throw new Error(
+          "Unable to load Razorpay checkout. Please try again."
+        );
+      }
 
       const finalContact =
-        contactMethod ===
-        "email"
+        contactMethod === "email"
           ? currentUser.email
           : contactDetails.trim();
 
-
       const consultationData = {
-
         user_id:
           currentUser.id,
 
@@ -2480,7 +2486,6 @@ export default function Booking() {
         consultation_message:
           message.trim() ||
           null,
-
 
         /* CLIENT */
 
@@ -2525,7 +2530,6 @@ export default function Booking() {
             ? clientBirth.longitude
             : null,
 
-
         /* RELATIONSHIP */
 
         relationship_status:
@@ -2533,7 +2537,6 @@ export default function Booking() {
           hasPartner === "yes"
             ? relationshipStatus
             : null,
-
 
         /* PARTNER */
 
@@ -2593,57 +2596,212 @@ export default function Booking() {
             : null,
       };
 
-
       const {
-        error:
-          insertError,
-      } =
-        await supabase
-          .from(
-            "consultations"
-          )
-          .insert(
-            consultationData
-          );
-
-
-      if (insertError) {
-        throw insertError;
-      }
-
-
-      setSuccess(
-        "Your consultation request has been submitted successfully."
+        data: orderData,
+        error: orderError,
+      } = await supabase.functions.invoke(
+        "create-razorpay-order",
+        {
+          body: {
+            serviceId:
+              service.id,
+          },
+        }
       );
 
+      if (orderError) {
+        console.error(
+          "Razorpay order error:",
+          orderError
+        );
 
-      setPreferredDate("");
-      setContactMethod("");
-      setContactDetails("");
-      setMessage("");
+        throw new Error(
+          orderError.message ||
+            "Unable to create payment order."
+        );
+      }
 
+      if (
+        !orderData?.success ||
+        !orderData?.orderId ||
+        !orderData?.keyId
+      ) {
+        throw new Error(
+          orderData?.error ||
+            "Unable to create Razorpay payment order."
+        );
+      }
 
+      const razorpayOptions = {
+        key:
+          orderData.keyId,
+
+        amount:
+          orderData.amountPaise,
+
+        currency:
+          orderData.currency ||
+          "INR",
+
+        name:
+          "Asterism Astro",
+
+        description:
+          service.name,
+
+        order_id:
+          orderData.orderId,
+
+        prefill: {
+          email:
+            currentUser.email ||
+            "",
+        },
+
+        notes: {
+          service:
+            service.name,
+        },
+
+        theme: {
+          color:
+            "#c6a15b",
+        },
+
+        handler:
+          async function (
+            response
+          ) {
+            try {
+              setLoading(true);
+              setError("");
+              setSuccess("");
+
+              const {
+                data: verificationData,
+                error:
+                  verificationError,
+              } =
+                await supabase.functions.invoke(
+                  "verify-razorpay-payment",
+                  {
+                    body: {
+                      serviceId:
+                        service.id,
+
+                      razorpayPaymentId:
+                        response.razorpay_payment_id,
+
+                      razorpayOrderId:
+                        response.razorpay_order_id,
+
+                      razorpaySignature:
+                        response.razorpay_signature,
+
+                      consultationData,
+                    },
+                  }
+                );
+
+              if (
+                verificationError
+              ) {
+                console.error(
+                  "Payment verification error:",
+                  verificationError
+                );
+
+                throw new Error(
+                  verificationError.message ||
+                    "Payment verification failed."
+                );
+              }
+
+              if (
+                !verificationData?.success
+              ) {
+                throw new Error(
+                  verificationData?.error ||
+                    "Payment verification failed."
+                );
+              }
+
+              setSuccess(
+                "Payment successful. Your consultation has been booked."
+              );
+
+              setPreferredDate("");
+              setContactMethod("");
+              setContactDetails("");
+              setMessage("");
+            } catch (
+              verificationSubmitError
+            ) {
+              console.error(
+                "Payment verification error:",
+                verificationSubmitError
+              );
+
+              setError(
+                verificationSubmitError?.message ||
+                  "Payment was received, but we could not confirm your booking. Please contact us."
+              );
+            } finally {
+              setLoading(false);
+            }
+          },
+
+        modal: {
+          ondismiss:
+            function () {
+              setLoading(false);
+
+              setError(
+                "Payment was cancelled. Your consultation has not been booked."
+              );
+            },
+        },
+      };
+
+      const razorpay =
+        new window.Razorpay(
+          razorpayOptions
+        );
+
+      razorpay.on(
+        "payment.failed",
+        function (
+          response
+        ) {
+          console.error(
+            "Razorpay payment failed:",
+            response?.error
+          );
+
+          setLoading(false);
+
+          setError(
+            response?.error?.description ||
+              "Payment failed. Please try again."
+          );
+        }
+      );
+
+      razorpay.open();
     } catch (
       submitError
     ) {
-
       console.error(
-        "Booking submission error:",
+        "Booking payment error:",
         submitError
       );
 
-
       setError(
         submitError?.message ||
-        "Unable to submit your consultation request."
+          "Unable to start payment. Please try again."
       );
 
-
-    } finally {
-
-      setLoading(
-        false
-      );
+      setLoading(false);
     }
   }
 
@@ -3008,14 +3166,6 @@ export default function Booking() {
 
                   <div className="booking-loading">
                     Checking availability...
-                  </div>
-
-                ) : availability.length ===
-                  0 ? (
-
-                  <div className="booking-unavailable">
-                    Consultation dates are
-                    currently unavailable.
                   </div>
 
                 ) : (

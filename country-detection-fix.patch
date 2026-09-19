@@ -1,0 +1,76 @@
+diff --git a/script.js b/script.js
+index 4805a0b..dfb92d6 100644
+--- a/script.js
++++ b/script.js
+@@ -48,9 +48,32 @@
+       if (/^[A-Za-z]{2}$/.test(saved)) return saved.toUpperCase();
+     }
+ 
+-    var locale = navigator.language || "en-IN";
+-    var localeMatch = locale.match(/[-_]([A-Za-z]{2})$/);
+-    return localeMatch ? localeMatch[1].toUpperCase() : "IN";
++    return "IN";
++  }
++
++  function setCountryIndicator(button, code) {
++    code = String(code || "IN").toUpperCase();
++    button.textContent = countryFlag(code) + " " + code;
++    button.setAttribute("aria-label", "Region: " + code);
++    button.title = "Region: " + code;
++  }
++
++  function refreshCountryFromIp(button) {
++    fetch("https://ipwho.is/")
++      .then(function (response) {
++        if (!response.ok) throw new Error("Country lookup failed");
++        return response.json();
++      })
++      .then(function (data) {
++        var code = data && data.success && data.country_code;
++        if (!/^[A-Za-z]{2}$/.test(code || "")) return;
++        code = code.toUpperCase();
++        localStorage.setItem("selectedCountry", code);
++        setCountryIndicator(button, code);
++      })
++      .catch(function () {
++        /* India remains the reliable fallback if location lookup is unavailable. */
++      });
+   }
+ 
+   function hasActiveSession() {
+@@ -87,12 +110,12 @@
+       countryButton = document.createElement("button");
+       countryButton.type = "button";
+       countryButton.className = "country-indicator";
+-      countryButton.setAttribute("aria-label", "Region: " + countryCode);
+-      countryButton.title = "Region: " + countryCode;
+-      countryButton.textContent = countryFlag(countryCode) + " " + countryCode;
++      setCountryIndicator(countryButton, countryCode);
+       actions.insertBefore(countryButton, themeButton || actions.firstChild);
+     }
+ 
++    refreshCountryFromIp(countryButton);
++
+     var signedIn = hasActiveSession();
+     var accountLink = actions.querySelector(".session-account-link");
+ 
+@@ -134,4 +157,3 @@
+   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind);
+   else bind();
+ })();
+-
+diff --git a/src/main.jsx b/src/main.jsx
+index 368d330..593f66a 100644
+--- a/src/main.jsx
++++ b/src/main.jsx
+@@ -1635,6 +1635,10 @@ useEffect(() => {
+ 
+       console.log("Detected country:", country);
+       setDetectedCountry(country);
++      localStorage.setItem(
++        "selectedCountry",
++        country.code || "IN"
++      );
+       
+     })
+     .catch((error) => {

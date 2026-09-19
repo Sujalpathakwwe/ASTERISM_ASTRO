@@ -1145,4 +1145,53 @@ html[data-theme="light"] .contact-panel{background:#fbfaf6!important;border-colo
     transform: translateY(-2px);
   }
 
+}/* Keep the real Asterism Astro logo consistent across every legacy page. */
+.site-header .brand{
+  flex:0 0 150px;
+  width:150px;
+  height:52px;
+  overflow:hidden;
+  font-size:0;
+  line-height:0;
+  color:transparent;
+  background:url('/asterism-astro-logo-transparent.png') center / contain no-repeat;
+}
+
+.site-header .brand .brand-mark,
+.site-header .brand .brand-logo{
+  display:none;
+}
+
+@media (max-width:600px){
+  .site-header .brand{
+    flex-basis:118px;
+    width:118px;
+    height:46px;
+  }
+}
+
+/* Shared country and account controls for standalone pages. */
+.country-indicator,
+.session-account-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:38px;
+  padding:0 13px;
+  border:1px solid rgba(202,161,58,.28);
+  border-radius:20px;
+  background:rgba(202,161,58,.04);
+  color:var(--text);
+  font:inherit;
+  font-size:12px;
+  white-space:nowrap;
+}
+
+.country-indicator{cursor:default}
+.session-account-link:hover{color:var(--gold);border-color:rgba(202,161,58,.58)}
+.mobile-session-account-link{display:none}
+
+@media (max-width:900px){
+  .session-account-link{display:none}
+  .navlinks.open .mobile-session-account-link{display:block}
 }

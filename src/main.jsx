@@ -1635,6 +1635,10 @@ useEffect(() => {
 
       console.log("Detected country:", country);
       setDetectedCountry(country);
+      localStorage.setItem(
+        "selectedCountry",
+        country.code || "IN"
+      );
       
     })
     .catch((error) => {
@@ -1673,7 +1677,8 @@ useEffect(() => {
   
 
 
-const zodiacRootRef = useRef(null);
+  const zodiacRootRef =
+    useRef(null);
   const [
     session,
     setSession,
@@ -1689,6 +1694,12 @@ const zodiacRootRef = useRef(null);
     normalizePath(
       location.pathname
     );
+
+  // The standalone planet pages link back to index.html, while
+  // client-side navigation uses /. Both addresses are the homepage.
+  const isHomePage =
+    currentPath === "/" ||
+    currentPath === "/index.html";
 
 
   /* =======================================================
@@ -1918,7 +1929,7 @@ const zodiacRootRef = useRef(null);
         0
       );
 
-
+     
       if (isLoginPage) {
         document.title =
           "Log In — Asterism Astro";
@@ -2057,8 +2068,8 @@ const zodiacRootRef = useRef(null);
             ).format(converted);
         });
     }
-
-
+   
+   
     /* =====================================================
        ACCOUNT / LOGIN LINK
     ===================================================== */
@@ -2385,9 +2396,9 @@ accountLink.textContent =
     }
 
     if (zodiacRootRef.current) {
-  zodiacRootRef.current.unmount();
-  zodiacRootRef.current = null;
-}
+      zodiacRootRef.current.unmount();
+      zodiacRootRef.current = null;
+    }
 
     setHtml(
       doc.body?.innerHTML ||
@@ -2466,7 +2477,7 @@ accountLink.textContent =
 
     if (
       isReactOnlyPage ||
-      currentPath !== "/"
+      !isHomePage
     ) {
       return;
     }
@@ -2497,11 +2508,10 @@ accountLink.textContent =
 
 
     const wheelRoot =
-      createRoot(
-        element
-      );
-    
-    zodiacRootRef.current = wheelRoot;
+      createRoot(element);
+
+    zodiacRootRef.current =
+      wheelRoot;
 
     wheelRoot.render(
       <ZodiacWheel />
@@ -2509,15 +2519,20 @@ accountLink.textContent =
 
 
     return () => {
-  if (element.isConnected) {
-    wheelRoot.unmount();
-  }
-};
+      if (
+        zodiacRootRef.current ===
+        wheelRoot
+      ) {
+        wheelRoot.unmount();
+        zodiacRootRef.current = null;
+      }
+    };
 
   }, [
     html,
     currentPath,
     isReactOnlyPage,
+    isHomePage,
   ]);
 
   /* =======================================================
@@ -2527,7 +2542,7 @@ accountLink.textContent =
 useEffect(() => {
   if (
     isReactOnlyPage ||
-    currentPath !== "/"
+    !isHomePage
   ) {
     return;
   }
@@ -2815,7 +2830,16 @@ useEffect(() => {
 
     updatePlanet();
   }
+  
+  function openCurrentPlanet() {
+  window.location.href =
+    planets[currentIndex].link;
+}
 
+image.addEventListener(
+  "click",
+  openCurrentPlanet
+);
   function showNext() {
     currentIndex =
       (currentIndex + 1) %
@@ -2866,15 +2890,182 @@ document.addEventListener(
 });
 
 return () => {
-    document.removeEventListener(
-  "click",
-  handlePlanetCarouselClick
-);
-  };
+  document.removeEventListener(
+    "click",
+    handlePlanetCarouselClick
+  );
+
+  image.removeEventListener(
+    "click",
+    openCurrentPlanet
+  );
+};
 }, [
   html,
   currentPath,
   isReactOnlyPage,
+  isHomePage,
+]);
+
+  /* =======================================================
+   HOMEPAGE TESTIMONIAL SLIDER
+======================================================= */
+
+useEffect(() => {
+
+  if (
+    isReactOnlyPage ||
+    !isHomePage
+  ) {
+    return;
+  }
+
+  let cleanup = null;
+
+  const initTestimonials = () => {
+
+    const slides =
+      document.querySelectorAll(
+        ".testimonial-slide"
+      );
+
+    const dots =
+      document.querySelectorAll(
+        ".testimonial-dot"
+      );
+
+    const previous =
+      document.querySelector(
+        ".testimonial-prev"
+      );
+
+    const next =
+      document.querySelector(
+        ".testimonial-next"
+      );
+
+    if (
+      !slides.length ||
+      !dots.length
+    ) {
+      return;
+    }
+
+    let current = 0;
+
+    function showSlide(index) {
+
+      current =
+        (index + slides.length) %
+        slides.length;
+
+      slides.forEach(
+        (slide, i) => {
+          slide.classList.toggle(
+            "active",
+            i === current
+          );
+        }
+      );
+
+      dots.forEach(
+        (dot, i) => {
+          dot.classList.toggle(
+            "active",
+            i === current
+          );
+        }
+      );
+    }
+
+    function handlePrevious() {
+      showSlide(current - 1);
+    }
+
+    function handleNext() {
+      showSlide(current + 1);
+    }
+
+    previous?.addEventListener(
+      "click",
+      handlePrevious
+    );
+
+    next?.addEventListener(
+      "click",
+      handleNext
+    );
+
+    dots.forEach(
+      (dot, index) => {
+
+        dot.addEventListener(
+          "click",
+          () => showSlide(index)
+        );
+
+      }
+    );
+
+    showSlide(0);
+
+    cleanup = () => {
+
+      previous?.removeEventListener(
+        "click",
+        handlePrevious
+      );
+
+      next?.removeEventListener(
+        "click",
+        handleNext
+      );
+
+      dots.forEach(
+        (dot, index) => {
+          dot.replaceWith(
+            dot.cloneNode(true)
+          );
+        }
+      );
+
+    };
+
+  };
+
+  /*
+     Wait until React has injected the
+     new static homepage HTML.
+  */
+  const frame1 =
+    requestAnimationFrame(() => {
+
+      const frame2 =
+        requestAnimationFrame(() => {
+          initTestimonials();
+        });
+
+      cleanup = () => {
+        cancelAnimationFrame(frame2);
+      };
+
+    });
+
+  return () => {
+
+    cancelAnimationFrame(frame1);
+
+    if (cleanup) {
+      cleanup();
+    }
+
+  };
+
+}, [
+  html,
+  currentPath,
+  isReactOnlyPage,
+  isHomePage,
 ]);
   /* =======================================================
      THEME
@@ -3350,8 +3541,8 @@ return () => {
 
     document.addEventListener(
       "click",
-      handleClick,
-      true
+      handleClick
+      
     );
 
 
@@ -3359,8 +3550,8 @@ return () => {
 
       document.removeEventListener(
         "click",
-        handleClick,
-        true
+        handleClick
+        
       );
 
     };
@@ -3589,7 +3780,6 @@ return () => {
 
       )}
 
-
       {/* =================================================
           MOBILE MENU
       ================================================= */}
@@ -3817,13 +4007,9 @@ createRoot(
     "root"
   )
 ).render(
-  <React.StrictMode>
+  <BrowserRouter>
 
-    <BrowserRouter>
+    <App />
 
-      <App />
-
-    </BrowserRouter>
-
-  </React.StrictMode>
+  </BrowserRouter>
 );
