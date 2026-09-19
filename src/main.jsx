@@ -1,7 +1,6 @@
 import React, {
   useEffect,
   useState,
-  useRef,
 } from "react";
 
 import {
@@ -43,6 +42,11 @@ import "./styles.css";
 const files = new Set(
   Object.keys(pages)
 );
+
+// Keep one wheel root per real DOM host. The homepage HTML can be rebuilt
+// when country or exchange-rate data arrives, so each replacement host needs
+// its own stable React root.
+const zodiacRoots = new WeakMap();
 
 
 /* =========================================================
@@ -1704,8 +1708,6 @@ useEffect(() => {
   
 
 
-  const zodiacRootRef =
-    useRef(null);
   const [
     session,
     setSession,
@@ -2377,11 +2379,6 @@ accountLink.textContent =
       }
     }
 
-    if (zodiacRootRef.current) {
-      zodiacRootRef.current.unmount();
-      zodiacRootRef.current = null;
-    }
-
     setHtml(
       doc.body?.innerHTML ||
       ""
@@ -2453,69 +2450,160 @@ accountLink.textContent =
 
 
   /* =======================================================
-     ZODIAC WHEEL
+     MOUNT ZODIAC WHEEL
+
+     Country and exchange-rate updates can replace the injected homepage
+     DOM. Watch for a new #zodiac-wheel-root and attach the wheel to that
+     host without destroying roots that React may still be cleaning up.
   ======================================================= */
 
   useEffect(() => {
 
     if (
       isReactOnlyPage ||
-      !isHomePage
+      !isHomePage ||
+      !html
     ) {
       return;
     }
 
+    let activeTarget = null;
+    let restoreTimer = null;
 
-    const element =
-      document.getElementById(
-        "zodiac-wheel-root"
+    function mountCurrentTarget(
+      force = false
+    ) {
+      const target =
+        document.getElementById(
+          "zodiac-wheel-root"
+        );
+
+      if (!target) {
+        activeTarget = null;
+        return;
+      }
+
+      if (
+        !force &&
+        target === activeTarget
+      ) {
+        return;
+      }
+
+      activeTarget = target;
+
+      target.style.width = "100%";
+      target.style.display = "block";
+      target.style.position = "relative";
+      target.style.overflow = "visible";
+
+      let wheelRoot =
+        zodiacRoots.get(target);
+
+      if (!wheelRoot) {
+        wheelRoot =
+          createRoot(target);
+
+        zodiacRoots.set(
+          target,
+          wheelRoot
+        );
+      }
+
+      wheelRoot.render(
+        <ZodiacWheel />
       );
-
-
-    if (!element) {
-      return;
     }
 
+    function scheduleRestore() {
+      if (
+        document.visibilityState !==
+        "visible"
+      ) {
+        return;
+      }
 
-    element.style.width =
-      "100%";
+      if (restoreTimer) {
+        window.clearTimeout(
+          restoreTimer
+        );
+      }
 
-    element.style.display =
-      "block";
+      restoreTimer =
+        window.setTimeout(
+          () => {
+            mountCurrentTarget(true);
+          },
+          350
+        );
+    }
 
-    element.style.position =
-      "relative";
+    mountCurrentTarget();
 
-    element.style.overflow =
-      "visible";
+    const pageRoot =
+      document.querySelector(
+        ".react-site-root"
+      );
 
+    const observer =
+      new MutationObserver(
+        mountCurrentTarget
+      );
 
-    const wheelRoot =
-      createRoot(element);
+    if (pageRoot) {
+      observer.observe(
+        pageRoot,
+        {
+          childList: true,
+          subtree: true,
+        }
+      );
+    }
 
-    zodiacRootRef.current =
-      wheelRoot;
-
-    wheelRoot.render(
-      <ZodiacWheel />
+    document.addEventListener(
+      "visibilitychange",
+      scheduleRestore
     );
 
+    window.addEventListener(
+      "focus",
+      scheduleRestore
+    );
+
+    window.addEventListener(
+      "pageshow",
+      scheduleRestore
+    );
 
     return () => {
-      if (
-        zodiacRootRef.current ===
-        wheelRoot
-      ) {
-        wheelRoot.unmount();
-        zodiacRootRef.current = null;
+      observer.disconnect();
+
+      document.removeEventListener(
+        "visibilitychange",
+        scheduleRestore
+      );
+
+      window.removeEventListener(
+        "focus",
+        scheduleRestore
+      );
+
+      window.removeEventListener(
+        "pageshow",
+        scheduleRestore
+      );
+
+      if (restoreTimer) {
+        window.clearTimeout(
+          restoreTimer
+        );
       }
     };
 
   }, [
     html,
-    currentPath,
-    isReactOnlyPage,
     isHomePage,
+    isReactOnlyPage,
   ]);
 
   /* =======================================================
