@@ -41,6 +41,11 @@ const files = new Set(
   Object.keys(pages)
 );
 
+// Keep one wheel root per real DOM host. There is intentionally no effect
+// cleanup here: React StrictMode runs effect cleanup during its development
+// check, which previously unmounted the wheel immediately after it appeared.
+const zodiacRoots = new WeakMap();
+
 
 /* =========================================================
    PATH HELPERS
@@ -1675,10 +1680,6 @@ useEffect(() => {
     setMenuOpen,
   ] = useState(false);
   
-
-
-  const zodiacRootRef =
-    useRef(null);
   const [
     session,
     setSession,
@@ -2395,11 +2396,6 @@ accountLink.textContent =
       }
     }
 
-    if (zodiacRootRef.current) {
-      zodiacRootRef.current.unmount();
-      zodiacRootRef.current = null;
-    }
-
     setHtml(
       doc.body?.innerHTML ||
       ""
@@ -2414,11 +2410,63 @@ accountLink.textContent =
       0
     );
 
-    }, [
+  }, [
     currentPath,
     isReactOnlyPage,
     detectedCountry,
     
+  ]);
+
+
+  /* =======================================================
+     MOUNT ZODIAC WHEEL
+  ======================================================= */
+
+  useEffect(() => {
+
+    if (
+      isReactOnlyPage ||
+      !isHomePage ||
+      !html
+    ) {
+      return;
+    }
+
+
+    const target =
+      document.getElementById(
+        "zodiac-wheel-root"
+      );
+
+
+    if (!target) {
+      return;
+    }
+
+
+    let wheelRoot =
+      zodiacRoots.get(target);
+
+
+    if (!wheelRoot) {
+      wheelRoot =
+        createRoot(target);
+
+      zodiacRoots.set(
+        target,
+        wheelRoot
+      );
+    }
+
+
+    wheelRoot.render(
+      <ZodiacWheel />
+    );
+
+  }, [
+    html,
+    isHomePage,
+    isReactOnlyPage,
   ]);
 
 
@@ -2468,72 +2516,6 @@ accountLink.textContent =
   html,
 ]);
 
-
-  /* =======================================================
-     ZODIAC WHEEL
-  ======================================================= */
-
-  useEffect(() => {
-
-    if (
-      isReactOnlyPage ||
-      !isHomePage
-    ) {
-      return;
-    }
-
-
-    const element =
-      document.getElementById(
-        "zodiac-wheel-root"
-      );
-
-
-    if (!element) {
-      return;
-    }
-
-
-    element.style.width =
-      "100%";
-
-    element.style.display =
-      "block";
-
-    element.style.position =
-      "relative";
-
-    element.style.overflow =
-      "visible";
-
-
-    const wheelRoot =
-      createRoot(element);
-
-    zodiacRootRef.current =
-      wheelRoot;
-
-    wheelRoot.render(
-      <ZodiacWheel />
-    );
-
-
-    return () => {
-      if (
-        zodiacRootRef.current ===
-        wheelRoot
-      ) {
-        wheelRoot.unmount();
-        zodiacRootRef.current = null;
-      }
-    };
-
-  }, [
-    html,
-    currentPath,
-    isReactOnlyPage,
-    isHomePage,
-  ]);
 
   /* =======================================================
    PLANETARY CAROUSEL
@@ -3331,6 +3313,33 @@ useEffect(() => {
       }
 
 
+      /* LOGO ALREADY ON HOME */
+
+      if (
+        isHomePage &&
+        anchor.matches(
+          ".site-header .brand"
+        ) &&
+        (
+          href === "/" ||
+          href === "index.html"
+        )
+      ) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        anchor.blur();
+
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+
+        return;
+      }
+
+
       if (
         href.startsWith("#") ||
         href.startsWith("mailto:") ||
@@ -3557,6 +3566,7 @@ useEffect(() => {
     };
 
   }, [
+    isHomePage,
     navigate,
     session,
     sessionLoading,

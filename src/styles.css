@@ -11851,11 +11851,33 @@ html[data-theme="dark"]
   line-height:0;
   color:transparent;
   background:url('/asterism-astro-logo-transparent.png') center / contain no-repeat;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
 }
 
-.site-header .brand .brand-mark,
-.site-header .brand .brand-logo{
+.site-header .brand .brand-mark{
   display:none;
+}
+
+.site-header .brand .brand-logo{
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  max-width:100% !important;
+  max-height:100% !important;
+  object-fit:contain;
+  opacity:1 !important;
+  visibility:visible !important;
+  pointer-events:none;
+}
+
+.site-header .brand:hover,
+.site-header .brand:active,
+.site-header .brand:focus,
+.site-header .brand:focus-visible{
+  opacity:1;
+  visibility:visible;
+  background-color:transparent;
 }
 
 @media (max-width:600px){
