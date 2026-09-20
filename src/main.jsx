@@ -1867,6 +1867,52 @@ useEffect(() => {
 
 
   /* =======================================================
+     RETURN TO SELECTED CONSULTATION AFTER LOGIN
+  ======================================================= */
+
+  useEffect(() => {
+    if (
+      !session ||
+      !isLoginPage
+    ) {
+      return;
+    }
+
+    let bookingPath = "";
+
+    try {
+      bookingPath =
+        window.sessionStorage.getItem(
+          "pendingBookingPath"
+        ) || "";
+
+      window.sessionStorage.removeItem(
+        "pendingBookingPath"
+      );
+    } catch {
+      bookingPath = "";
+    }
+
+    if (
+      bookingPath.startsWith(
+        "/book-consultation"
+      )
+    ) {
+      navigate(
+        bookingPath,
+        {
+          replace: true,
+        }
+      );
+    }
+  }, [
+    session,
+    isLoginPage,
+    navigate,
+  ]);
+
+
+  /* =======================================================
      PROTECT ACCOUNT
   ======================================================= */
 
@@ -3334,10 +3380,33 @@ useEffect(() => {
 
         setMenuOpen(false);
 
+        const requestedPath =
+          bookingButton.getAttribute(
+            "href"
+          );
+
+        const bookingPath =
+          requestedPath?.startsWith(
+            "/book-consultation"
+          )
+            ? requestedPath
+            : "/book-consultation";
+
+        if (!session) {
+          try {
+            window.sessionStorage.setItem(
+              "pendingBookingPath",
+              bookingPath
+            );
+          } catch {
+            // Continue to login if storage is unavailable.
+          }
+        }
+
 
         navigate(
           session
-            ? "/book-consultation"
+            ? bookingPath
             : "/login"
         );
 
@@ -3458,7 +3527,9 @@ useEffect(() => {
       /* BOOKING */
 
       if (
-        href === "/book-consultation"
+        href.startsWith(
+          "/book-consultation"
+        )
       ) {
 
         event.preventDefault();
@@ -3466,9 +3537,20 @@ useEffect(() => {
 
         setMenuOpen(false);
 
+        if (!session) {
+          try {
+            window.sessionStorage.setItem(
+              "pendingBookingPath",
+              href
+            );
+          } catch {
+            // Continue to login if storage is unavailable.
+          }
+        }
+
         navigate(
           session
-            ? "/book-consultation"
+            ? href
             : "/login"
         );
 
