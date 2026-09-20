@@ -5,6 +5,7 @@ import React, {
 } from "react";
 
 import {
+  useLocation,
   useNavigate,
 } from "react-router-dom";
 
@@ -21,6 +22,10 @@ import {
 import {
   supabase,
 } from "./lib/supabase";
+
+import {
+  detectCountry,
+} from "./utils/country";
 
 
 /* =========================================================
@@ -1868,6 +1873,25 @@ export default function Booking() {
   const navigate =
     useNavigate();
 
+  const location =
+    useLocation();
+
+  const requestedServiceId =
+    useMemo(
+      () =>
+        new URLSearchParams(
+          location.search
+        ).get("service") || "",
+      [location.search]
+    );
+
+  const lockedServiceId =
+    BOOKING_SERVICES[
+      requestedServiceId
+    ]
+      ? requestedServiceId
+      : "";
+
 
   /* =======================================================
      USER
@@ -1892,13 +1916,23 @@ export default function Booking() {
   const [
     serviceId,
     setServiceId,
-  ] = useState("");
+  ] = useState(
+    lockedServiceId
+  );
 
 
   const service =
     BOOKING_SERVICES[
       serviceId
     ];
+
+  useEffect(() => {
+    if (lockedServiceId) {
+      setServiceId(
+        lockedServiceId
+      );
+    }
+  }, [lockedServiceId]);
 
 
   /* =======================================================
@@ -2447,15 +2481,6 @@ export default function Booking() {
     setLoading(true);
 
     try {
-      const razorpayLoaded =
-        await loadRazorpayScript();
-
-      if (!razorpayLoaded) {
-        throw new Error(
-          "Unable to load Razorpay checkout. Please try again."
-        );
-      }
-
       const finalContact =
         contactMethod === "email"
           ? currentUser.email
@@ -2595,6 +2620,67 @@ export default function Booking() {
             ? partnerBirth.longitude
             : null,
       };
+
+      const customerCountry =
+        await detectCountry();
+
+      const isIndia =
+        customerCountry?.code ===
+        "IN";
+
+      if (!isIndia) {
+        const {
+          data: dodoData,
+          error: dodoError,
+        } =
+          await supabase.functions.invoke(
+            "create-dodo-checkout",
+            {
+              body: {
+                serviceId:
+                  service.id,
+
+                consultationData,
+              },
+            }
+          );
+
+        if (dodoError) {
+          console.error(
+            "Dodo checkout error:",
+            dodoError
+          );
+
+          throw new Error(
+            dodoError.message ||
+              "Unable to create international checkout."
+          );
+        }
+
+        if (
+          !dodoData?.success ||
+          !dodoData?.checkoutUrl
+        ) {
+          throw new Error(
+            dodoData?.error ||
+              "Unable to create Dodo checkout."
+          );
+        }
+
+        window.location.href =
+          dodoData.checkoutUrl;
+
+        return;
+      }
+
+      const razorpayLoaded =
+        await loadRazorpayScript();
+
+      if (!razorpayLoaded) {
+        throw new Error(
+          "Unable to load Razorpay checkout. Please try again."
+        );
+      }
 
       const {
         data: orderData,
@@ -2907,7 +2993,10 @@ export default function Booking() {
                 )
               }
               disabled={
-                loading
+                loading ||
+                Boolean(
+                  lockedServiceId
+                )
               }
               required
             >
