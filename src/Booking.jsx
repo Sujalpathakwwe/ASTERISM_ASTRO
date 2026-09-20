@@ -1892,6 +1892,41 @@ export default function Booking() {
       ? requestedServiceId
       : "";
 
+  const isDodoReturn =
+    useMemo(
+      () => {
+        const returnParams =
+          new URLSearchParams(
+            window.location.search ||
+            location.search
+          );
+
+        const paymentProvider =
+          returnParams.get(
+            "payment"
+          );
+
+        const dodoPaymentId =
+          returnParams.get(
+            "payment_id"
+          );
+
+        const dodoStatus =
+          returnParams.get(
+            "status"
+          );
+
+        return (
+          paymentProvider === "dodo" ||
+          Boolean(
+            dodoPaymentId &&
+            dodoStatus === "succeeded"
+          )
+        );
+      },
+      [location.search]
+    );
+
 
   /* =======================================================
      USER
@@ -2049,6 +2084,12 @@ export default function Booking() {
   ] = useState("");
 
 
+  const [
+    dodoReturnChecking,
+    setDodoReturnChecking,
+  ] = useState(false);
+
+
   /* =======================================================
      USER
   ======================================================= */
@@ -2114,6 +2155,202 @@ export default function Booking() {
     };
 
   }, []);
+
+
+  /* =======================================================
+     DODO RETURN
+     Confirm payment from the database. The redirect itself
+     is never treated as proof that payment succeeded.
+  ======================================================= */
+
+  useEffect(() => {
+
+    if (
+      !isDodoReturn ||
+      userLoading
+    ) {
+      return;
+    }
+
+
+    if (!currentUser) {
+      setDodoReturnChecking(false);
+      setError(
+        "Please sign in to check your consultation payment."
+      );
+      return;
+    }
+
+
+    let cancelled = false;
+
+
+    async function confirmDodoPayment() {
+
+      setDodoReturnChecking(true);
+      setError("");
+      setSuccess("");
+
+
+      const storedConsultationId =
+        window.sessionStorage.getItem(
+          "dodoConsultationId"
+        );
+
+
+      try {
+
+        for (
+          let attempt = 0;
+          attempt < 12;
+          attempt += 1
+        ) {
+
+          let consultationQuery =
+            supabase
+              .from("consultations")
+              .select(
+                "id, service_name, payment_status, created_at"
+              )
+              .eq(
+                "user_id",
+                currentUser.id
+              )
+              .eq(
+                "payment_provider",
+                "dodo"
+              );
+
+
+          if (storedConsultationId) {
+            consultationQuery =
+              consultationQuery.eq(
+                "id",
+                storedConsultationId
+              );
+          } else {
+            consultationQuery =
+              consultationQuery
+                .order(
+                  "created_at",
+                  {
+                    ascending: false,
+                  }
+                )
+                .limit(1);
+          }
+
+
+          const {
+            data:
+              consultationRows,
+            error:
+              consultationError,
+          } =
+            await consultationQuery;
+
+
+          if (consultationError) {
+            throw consultationError;
+          }
+
+
+          const consultation =
+            consultationRows?.[0];
+
+
+          if (
+            consultation?.payment_status ===
+            "paid"
+          ) {
+
+            if (cancelled) {
+              return;
+            }
+
+
+            window.sessionStorage.removeItem(
+              "dodoConsultationId"
+            );
+
+            setSuccess(
+              "Payment confirmed. Opening My Consultations..."
+            );
+
+            setDodoReturnChecking(false);
+
+            window.setTimeout(
+              () => {
+                if (!cancelled) {
+                  navigate(
+                    "/account",
+                    {
+                      replace: true,
+                    }
+                  );
+                }
+              },
+              700
+            );
+
+            return;
+          }
+
+
+          if (attempt < 11) {
+            await new Promise(
+              (resolve) =>
+                window.setTimeout(
+                  resolve,
+                  1500
+                )
+            );
+          }
+        }
+
+
+        if (!cancelled) {
+          setError(
+            "Your payment is still being confirmed. Please check My Consultations in a moment."
+          );
+
+          setDodoReturnChecking(false);
+        }
+
+      } catch (
+        confirmationError
+      ) {
+
+        console.error(
+          "Dodo payment confirmation error:",
+          confirmationError
+        );
+
+
+        if (!cancelled) {
+          setError(
+            "We could not check the payment status yet. Please open My Consultations to view your booking."
+          );
+
+          setDodoReturnChecking(false);
+        }
+      }
+    }
+
+
+    confirmDodoPayment();
+
+
+    return () => {
+      cancelled = true;
+    };
+
+  }, [
+    isDodoReturn,
+    userLoading,
+    currentUser,
+    navigate,
+  ]);
 
 
   /* =======================================================
@@ -2667,6 +2904,15 @@ export default function Booking() {
           );
         }
 
+        if (
+          dodoData.consultationId
+        ) {
+          window.sessionStorage.setItem(
+            "dodoConsultationId",
+            dodoData.consultationId
+          );
+        }
+
         window.location.href =
           dodoData.checkoutUrl;
 
@@ -2922,6 +3168,85 @@ export default function Booking() {
             <p>
               Preparing your consultation form...
             </p>
+
+          </div>
+
+        </div>
+
+      </main>
+    );
+  }
+
+
+  /* =======================================================
+     DODO PAYMENT RETURN
+  ======================================================= */
+
+  if (isDodoReturn) {
+
+    return (
+      <main className="booking-page">
+
+        <div className="booking-card">
+
+          <div className="booking-header">
+
+            <div className="booking-symbol">
+              ✦
+            </div>
+
+            <div className="booking-kicker">
+              ASTERISM ASTRO
+            </div>
+
+            <h1>
+              Book a Consultation
+            </h1>
+
+            <p>
+              Your payment has been received and your booking is being confirmed.
+            </p>
+
+          </div>
+
+
+          <div
+            className={
+              success
+                ? "auth-message auth-success"
+                : error
+                  ? "auth-message auth-error"
+                  : "auth-message"
+            }
+            role={
+              error
+                ? "alert"
+                : "status"
+            }
+          >
+
+            {dodoReturnChecking
+              ? "Confirming your payment and booking..."
+              : success ||
+                error ||
+                "Checking your payment status..."}
+
+
+            {!dodoReturnChecking && (
+
+              <button
+                type="button"
+                className="booking-success-link"
+                onClick={() =>
+                  navigate(
+                    "/account"
+                  )
+                }
+              >
+                View My Consultations →
+              </button>
+
+            )}
 
           </div>
 
