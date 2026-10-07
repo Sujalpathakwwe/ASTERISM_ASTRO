@@ -27,6 +27,7 @@ import Booking from "./Booking.jsx";
 import AdminDashboard from "./AdminDashboard.jsx";
 import AdminAvailability from "./AdminAvailability.jsx";
 import AdminConsultations from "./AdminConsultations.jsx";
+import AstrologyStudio from "./AstrologyStudio.jsx";
 
 import ZodiacWheel from "./ZodiacWheel.jsx";
 
@@ -1747,6 +1748,10 @@ useEffect(() => {
     currentPath ===
     "/book-consultation";
 
+  const isAstrologyStudioPage =
+    currentPath ===
+    "/chart-studio";
+
   const isAccountPage =
     currentPath ===
     "/account";
@@ -1768,6 +1773,7 @@ useEffect(() => {
     isLoginPage ||
     isAuthConfirmPage ||
     isBookingPage ||
+    isAstrologyStudioPage ||
     isAccountPage ||
     isAdminPage ||
     isAdminAvailabilityPage ||
@@ -3731,6 +3737,13 @@ useEffect(() => {
 
         <AuthConfirm />
 
+      ) : isAstrologyStudioPage ? (
+
+        <AstrologyStudio
+          session={session}
+          detectedCountry={detectedCountry}
+        />
+
       ) : isBookingPage ? (
 
         sessionLoading ? (
@@ -3923,13 +3936,22 @@ useEffect(() => {
 
       ) : (
 
-        <div
-          className="react-site-root"
-          dangerouslySetInnerHTML={{
-            __html:
-              html,
-          }}
-        />
+        <>
+          <div
+            className="react-site-root"
+            dangerouslySetInnerHTML={{
+              __html:
+                html,
+            }}
+          />
+          <button
+            type="button"
+            className="chart-studio-launch"
+            onClick={() => navigate("/chart-studio")}
+          >
+            ✦ Create Your Birth Chart
+          </button>
+        </>
 
       )}
 
