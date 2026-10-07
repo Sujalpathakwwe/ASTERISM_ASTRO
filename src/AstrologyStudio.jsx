@@ -1928,17 +1928,25 @@ function StudioFooter({ navigate }) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
+              title="Instagram"
             >
-              ◎
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="5" />
+                <circle cx="12" cy="12" r="4" />
+                <circle cx="17.4" cy="6.6" r="1" />
+              </svg>
             </a>
             <a
               className="social-icon"
-              href="https://discord.gg/Puj8sHbJ9"
+              href="https://discord.gg/szBpp7zqZZ"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Discord"
+              title="Discord"
             >
-              ◈
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M18.7 5.2A16.4 16.4 0 0 0 15 4l-.5 1.1a14.4 14.4 0 0 0-5 0L9 4a16.4 16.4 0 0 0-3.7 1.2C3.1 8.4 2.5 11.5 2.8 14.6a15.6 15.6 0 0 0 4.5 2.3l1.1-1.5c-.6-.2-1.2-.5-1.7-.8l.4-.3c3.3 1.5 6.9 1.5 10.2 0l.4.3c-.5.3-1.1.6-1.7.8l1.1 1.5a15.6 15.6 0 0 0 4.5-2.3c.3-3.6-.6-6.7-2.9-9.4ZM8.6 13.1c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Zm6.8 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Z" />
+              </svg>
             </a>
             <a
               className="social-icon"
@@ -1946,8 +1954,11 @@ function StudioFooter({ navigate }) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Reddit"
+              title="Reddit"
             >
-              ●
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20.1 11.2c.1-.3.2-.7.2-1.1 0-1.3-1-2.3-2.3-2.3-.6 0-1.2.2-1.6.6-1.1-.8-2.5-1.3-4-1.4l.8-3.5 2.4.5c.1.8.8 1.4 1.6 1.4.9 0 1.6-.7 1.6-1.6s-.7-1.6-1.6-1.6c-.6 0-1.2.4-1.4.9l-2.8-.6c-.4-.1-.7.2-.8.5l-1 4.1c-1.5.1-2.9.6-4 1.4-.5-.4-1-.6-1.6-.6-1.3 0-2.3 1-2.3 2.3 0 .4.1.8.3 1.1-.4.6-.6 1.3-.6 2 0 3.1 3.6 5.6 8.1 5.6s8.1-2.5 8.1-5.6c0-.7-.2-1.4-.7-2Z" />
+              </svg>
             </a>
             <a
               className="social-icon"
@@ -1955,8 +1966,11 @@ function StudioFooter({ navigate }) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Linktree"
+              title="Linktree"
             >
-              ✣
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M11 3h2v5.1l3.6-3.6 1.4 1.4-3.6 3.6H20v2h-5.6l3.6 3.6-1.4 1.4-3.6-3.6V21h-2v-8.1l-3.6 3.6L6 15.1l3.6-3.6H4v-2h5.6L6 5.9l1.4-1.4L11 8.1V3Z" />
+              </svg>
             </a>
           </div>
         </div>
