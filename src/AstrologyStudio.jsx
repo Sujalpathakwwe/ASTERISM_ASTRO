@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Country, State, City } from "country-state-city";
 import {
@@ -18,6 +18,7 @@ import {
 } from "./astrology/ChartViews";
 import CompatibilityWorkspace from "./astrology/CompatibilityWorkspace";
 import StudioAdvancedPanel from "./astrology/StudioAdvancedPanel";
+import { supabase } from "./lib/supabase";
 
 const INITIAL = {
   name: "",
@@ -238,12 +239,115 @@ export default function AstrologyStudio({ session, detectedCountry }) {
   );
   const [menuOpen, setMenuOpen] = useState(false);
   const [showWesternAspects, setShowWesternAspects] = useState(true);
-  const [reportSections, setReportSections] = useState({
-    charts: true,
-    positions: true,
-    interpretations: true,
-    forecasting: true,
-  });
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadBirthDetails() {
+      const userId = session?.user?.id;
+      if (!userId) return;
+
+      try {
+        const [profileResult, consultationResult] = await Promise.all([
+          supabase
+            .from("profiles")
+            .select("full_name")
+            .eq("id", userId)
+            .maybeSingle(),
+          supabase
+            .from("consultations")
+            .select(
+              "client_birth_date, client_birth_time, client_birth_country, client_birth_region, client_birth_city, client_birth_latitude, client_birth_longitude, client_birth_timezone, created_at",
+            )
+            .eq("user_id", userId)
+            .not("client_birth_date", "is", null)
+            .order("created_at", { ascending: false })
+            .limit(1)
+            .maybeSingle(),
+        ]);
+
+        if (profileResult.error) throw profileResult.error;
+        if (consultationResult.error) throw consultationResult.error;
+        if (!active) return;
+
+        const birth = consultationResult.data;
+        const country = birth?.client_birth_country
+          ? Country.getAllCountries().find(
+              (item) =>
+                item.isoCode === birth.client_birth_country ||
+                item.name.toLowerCase() ===
+                  String(birth.client_birth_country).toLowerCase(),
+            )
+          : null;
+        const countryCode = country?.isoCode || "IN";
+        const countryStates = State.getStatesOfCountry(countryCode);
+        const matchedState = birth?.client_birth_region
+          ? countryStates.find(
+              (item) =>
+                item.isoCode === birth.client_birth_region ||
+                item.name.toLowerCase() ===
+                  String(birth.client_birth_region).toLowerCase(),
+            )
+          : null;
+        // Region names saved by the booking form are not always identical to
+        // country-state-city labels (common with European counties/regions).
+        // Search the entire country first, then derive the library state code.
+        const countryCities = City.getCitiesOfCountry(countryCode) || [];
+        const city = birth?.client_birth_city
+          ? countryCities.find(
+              (item) =>
+                item.name.toLowerCase() ===
+                String(birth.client_birth_city).toLowerCase(),
+            )
+          : null;
+        const state =
+          matchedState ||
+          countryStates.find((item) => item.isoCode === city?.stateCode) ||
+          null;
+        const stateCode = state?.isoCode || city?.stateCode || "";
+        const cityName = city?.name || birth?.client_birth_city || "";
+        const timeZone =
+          birth?.client_birth_timezone ||
+          country?.timezones?.[0]?.zoneName ||
+          "Asia/Kolkata";
+        const date = birth?.client_birth_date || "";
+        const time = birth?.client_birth_time
+          ? String(birth.client_birth_time).slice(0, 5)
+          : "12:00";
+        const latitude =
+          birth?.client_birth_latitude || city?.latitude || "";
+        const longitude =
+          birth?.client_birth_longitude || city?.longitude || "";
+
+        setForm((current) => ({
+          ...current,
+          name:
+            profileResult.data?.full_name ||
+            session.user.user_metadata?.full_name ||
+            current.name,
+          date,
+          time,
+          countryCode,
+          stateCode,
+          cityName,
+          timeZone,
+          place: cityName
+            ? [cityName, state?.name, country?.name].filter(Boolean).join(", ")
+            : "",
+          latitude: String(latitude),
+          longitude: String(longitude),
+          utcOffset: historicalOffsetMinutes(timeZone, date, time),
+        }));
+      } catch (loadError) {
+        console.error("Unable to load saved birth details:", loadError);
+      }
+    }
+
+    loadBirthDetails();
+    return () => {
+      active = false;
+    };
+  }, [session?.user?.id]);
 
   const countries = useMemo(() => Country.getAllCountries(), []);
   const allStates = useMemo(() => State.getAllStates(), []);
@@ -253,10 +357,17 @@ export default function AstrologyStudio({ session, detectedCountry }) {
     [form.countryCode],
   );
   const cities = useMemo(
-    () =>
-      form.countryCode && form.stateCode
-        ? City.getCitiesOfState(form.countryCode, form.stateCode)
-        : [],
+    () => {
+      if (!form.countryCode) return [];
+      if (form.stateCode) {
+        return City.getCitiesOfState(form.countryCode, form.stateCode);
+      }
+      // Countries without a state-level selection still need a usable city
+      // list, which is especially important for European birth locations.
+      return State.getStatesOfCountry(form.countryCode).length
+        ? []
+        : City.getCitiesOfCountry(form.countryCode) || [];
+    },
     [form.countryCode, form.stateCode],
   );
   const selectedCountry = useMemo(
@@ -309,9 +420,12 @@ export default function AstrologyStudio({ session, detectedCountry }) {
   }
   function selectCity(event) {
     const city = cities.find((item) => item.name === event.target.value);
-    const state = states.find((item) => item.isoCode === form.stateCode);
+    const state = states.find(
+      (item) => item.isoCode === (city?.stateCode || form.stateCode),
+    );
     setForm((value) => ({
       ...value,
+      stateCode: city?.stateCode || value.stateCode,
       cityName: city?.name || "",
       place: city
         ? `${city.name}, ${state?.name || ""}, ${selectedCountry?.name || ""}`
@@ -420,8 +534,6 @@ export default function AstrologyStudio({ session, detectedCountry }) {
   const isWesternView = system === "western";
   const isMapView = system === "astrocartography";
   const isCompatibilityView = system === "compatibility";
-  const reportClass = (section) =>
-    reportSections[section] ? "" : " report-excluded";
   function changeSystem(next) {
     setSystem(next);
     setTab(
@@ -801,22 +913,11 @@ export default function AstrologyStudio({ session, detectedCountry }) {
                 <small>Synastry and Vedic matching</small>
               </button>
             </nav>
-            <StudioAdvancedPanel
-              chart={chart}
-              system={system}
-              layout={layout}
-              setLayout={setLayout}
-              division={division}
-              setDivision={setDivision}
-              showWesternAspects={showWesternAspects}
-              setShowWesternAspects={setShowWesternAspects}
-              reportSections={reportSections}
-              setReportSections={setReportSections}
-            />
+            <StudioAdvancedPanel chart={chart} system={system} />
             <section className="studio-panel">
               {system === "vedic" && (
                 <div className="vedic-complete-report">
-                  <section className={`vedic-report-section vedic-birth-chart${reportClass("charts")}`}>
+                  <section className="vedic-report-section vedic-birth-chart">
                     <div className="section-heading chart-area-heading">
                       <span className="studio-kicker">VEDIC CHART STUDIO</span>
                       <h3>Sidereal birth and divisional charts</h3>
@@ -908,10 +1009,10 @@ export default function AstrologyStudio({ session, detectedCountry }) {
                       />
                     </div>
                   </section>
-                  <section className={`vedic-report-section vedic-planet-section${reportClass("positions")}`}>
+                  <section className="vedic-report-section vedic-planet-section">
                     <PlanetTable planets={chart.planets} mode="vedic" />
                   </section>
-                  <section className={`vedic-report-section vedic-varga-section${reportClass("charts")}`}>
+                  <section className="vedic-report-section vedic-varga-section">
                     <div className="section-heading">
                       <span className="studio-kicker">VARGA EXPLORER</span>
                       <h3>Divisional charts</h3>
@@ -942,7 +1043,7 @@ export default function AstrologyStudio({ session, detectedCountry }) {
                     </div>
                     <VedicDivisionalAtlas chart={chart} />
                   </section>
-                  <section className={`vedic-report-section vedic-dasha-section${reportClass("forecasting")}`}>
+                  <section className="vedic-report-section vedic-dasha-section">
                     <div className="section-heading">
                       <span className="studio-kicker">VIMSHOTTARI</span>
                       <h3>Mahadasha timeline</h3>
@@ -972,7 +1073,7 @@ export default function AstrologyStudio({ session, detectedCountry }) {
                       ))}
                     </div>
                   </section>
-                  <section className={`vedic-report-section vedic-transit-section${reportClass("forecasting")}`}>
+                  <section className="vedic-report-section vedic-transit-section">
                     <div className="section-heading">
                       <span className="studio-kicker">LIVE SKY</span>
                       <h3>Current sidereal transits</h3>
@@ -1010,14 +1111,14 @@ export default function AstrologyStudio({ session, detectedCountry }) {
                       </tbody>
                     </table>
                   </section>
-                  <section className={`vedic-report-section vedic-bnn-section${reportClass("interpretations")}`}>
+                  <section className="vedic-report-section vedic-bnn-section">
                     <BnnInsights chart={chart} />
                   </section>
                 </div>
               )}
               {system === "western" && (
                 <div className="western-complete-report">
-                  <section className={`western-report-section western-chart-page${reportClass("charts")}`}>
+                  <section className="western-report-section western-chart-page">
                     <div className="section-heading chart-area-heading">
                       <span className="studio-kicker">WESTERN ASTROLOGY</span>
                       <h3>Tropical circular birth chart</h3>
@@ -1061,11 +1162,11 @@ export default function AstrologyStudio({ session, detectedCountry }) {
                       />
                     </div>
                   </section>
-                  <section className={`western-report-section western-placements-page${reportClass("positions")}`}>
+                  <section className="western-report-section western-placements-page">
                     <PlanetTable planets={chart.planets} mode="western" />
                   </section>
-                  <WesternAnalysis chart={chart} transits={transits} reportSections={reportSections} />
-                  <section className={`western-report-section western-insights-page${reportClass("interpretations")}`}>
+                  <WesternAnalysis chart={chart} transits={transits} />
+                  <section className="western-report-section western-insights-page">
                     <ChartInterpretation
                       chart={chart}
                       positionKey="tropical"
@@ -1077,7 +1178,7 @@ export default function AstrologyStudio({ session, detectedCountry }) {
               )}
               {system === "astrocartography" && (
                 <div className="astro-complete-report">
-                  <section className={`astro-report-section astro-map-page${reportClass("charts")}`}>
+                  <section className="astro-report-section astro-map-page">
                     <div className="section-heading">
                       <span className="studio-kicker">WORLD LINES</span>
                       <h3>Astrocartography explorer</h3>
@@ -1095,7 +1196,7 @@ export default function AstrologyStudio({ session, detectedCountry }) {
                       states={allStates}
                     />
                   </section>
-                  <section className={`astro-report-section astro-insights-page${reportClass("interpretations")}`}>
+                  <section className="astro-report-section astro-insights-page">
                     <div className="angle-guide">
                       <article>
                         <b>AC · Ascendant</b>
@@ -1345,7 +1446,7 @@ function ChartInterpretation({
   );
 }
 
-function WesternAnalysis({ chart, transits, reportSections }) {
+function WesternAnalysis({ chart, transits }) {
   const planets = chart.planets.filter(
     (planet) => !["Rahu", "Ketu"].includes(planet.name),
   );
@@ -1458,7 +1559,7 @@ function WesternAnalysis({ chart, transits, reportSections }) {
     });
   return (
     <>
-      <section className={`western-report-section western-structure-page${reportSections.interpretations ? "" : " report-excluded"}`}>
+      <section className="western-report-section western-structure-page">
         <div className="section-heading">
           <span className="studio-kicker">CHART STRUCTURE</span>
           <h3>Ruler, balance and dominant signatures</h3>
@@ -1522,7 +1623,7 @@ function WesternAnalysis({ chart, transits, reportSections }) {
           </article>
         </div>
       </section>
-      <section className={`western-report-section western-aspects-page${reportSections.interpretations ? "" : " report-excluded"}`}>
+      <section className="western-report-section western-aspects-page">
         <div className="section-heading">
           <span className="studio-kicker">PLANETARY DYNAMICS</span>
           <h3>Major natal aspects</h3>
@@ -1576,7 +1677,7 @@ function WesternAnalysis({ chart, transits, reportSections }) {
           ))}
         </div>
       </section>
-      <section className={`western-report-section western-houses-page${reportSections.interpretations ? "" : " report-excluded"}`}>
+      <section className="western-report-section western-houses-page">
         <div className="section-heading">
           <span className="studio-kicker">TWELVE LIFE AREAS</span>
           <h3>House cusps and natal emphasis</h3>
@@ -1614,7 +1715,7 @@ function WesternAnalysis({ chart, transits, reportSections }) {
           })}
         </div>
       </section>
-      <section className={`western-report-section western-transits-page${reportSections.forecasting ? "" : " report-excluded"}`}>
+      <section className="western-report-section western-transits-page">
         <div className="section-heading">
           <span className="studio-kicker">CURRENT SKY</span>
           <h3>Western transits</h3>
