@@ -31426,3 +31426,31 @@ body.light-mode .testimonials-home .testimonial-more {
     font-size: 13px;
   }
 }
+
+
+/* Reliable full-width birth date and time controls */
+.chart-studio-page .birth-moment-grid {
+  grid-template-columns: 1fr;
+}
+.chart-studio-page .easy-time-select {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+.chart-studio-page .easy-time-select select {
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+  min-height: 56px;
+  padding: 15px 10px 15px 14px;
+  cursor: pointer;
+}
+@media (max-width: 650px) {
+  .chart-studio-page .easy-time-select { gap: 6px; }
+  .chart-studio-page .easy-time-select select {
+    min-height: 52px;
+    padding: 11px 8px;
+    font-size: 13px;
+  }
+}
