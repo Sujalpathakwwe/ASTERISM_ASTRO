@@ -31398,3 +31398,31 @@ body.light-mode .testimonials-home .testimonial-more {
   .composite-panel{display:block!important;padding:5mm!important;border-color:#d8c8aa!important;background:#faf6ee!important;break-before:page!important;page-break-before:always!important}.composite-panel>div:first-child{text-align:center!important}.composite-panel h4{color:#17140f!important}.composite-panel p{color:#5f584e!important}.composite-panel .astro-wheel-svg{display:block!important;width:145mm!important;max-width:145mm!important;max-height:145mm!important;margin:5mm auto 0!important}
   .overlay-grid,.vedic-marriage-grid{grid-template-columns:repeat(4,1fr)!important;gap:3mm!important}.compat-western .planet-table{margin-top:5mm!important}.compat-d9-note,.unknown-time-note{background:#faf6ee!important;border-color:#d8c8aa!important;color:#17140f!important;break-inside:avoid!important}.compat-d9-note p,.unknown-time-note p{color:#5f584e!important}
 }
+
+
+/* Safari and mobile birth-date controls */
+.chart-studio-page .easy-date-select {
+  display: grid;
+  grid-template-columns: .72fr 1.35fr .95fr;
+  gap: 8px;
+  width: 100%;
+}
+.chart-studio-page .easy-date-select select {
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+  min-height: 56px;
+  padding: 15px 8px 15px 12px;
+  cursor: pointer;
+}
+@media (max-width: 650px) {
+  .chart-studio-page .easy-date-select {
+    grid-template-columns: .7fr 1.35fr .95fr;
+    gap: 6px;
+  }
+  .chart-studio-page .easy-date-select select {
+    min-height: 52px;
+    padding: 11px 6px;
+    font-size: 13px;
+  }
+}
