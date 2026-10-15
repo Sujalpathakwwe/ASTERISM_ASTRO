@@ -270,6 +270,74 @@ function EasyDateSelect({ value, onChange }) {
   );
 }
 
+function EasyTimeSelect({ value, onChange }) {
+  const [initialHour = "12", initialMinute = "00"] = (value || "12:00").split(":");
+  const numericHour = Number(initialHour);
+  const [hour, setHour] = useState(String(numericHour % 12 || 12).padStart(2, "0"));
+  const [minute, setMinute] = useState(initialMinute || "00");
+  const [period, setPeriod] = useState(numericHour >= 12 ? "PM" : "AM");
+
+  useEffect(() => {
+    if (!/^\d{2}:\d{2}$/.test(value || "")) return;
+    const [nextHour, nextMinute] = value.split(":");
+    const number = Number(nextHour);
+    setHour(String(number % 12 || 12).padStart(2, "0"));
+    setMinute(nextMinute);
+    setPeriod(number >= 12 ? "PM" : "AM");
+  }, [value]);
+
+  function commit(nextHour, nextMinute, nextPeriod) {
+    let hour24 = Number(nextHour) % 12;
+    if (nextPeriod === "PM") hour24 += 12;
+    onChange(`${String(hour24).padStart(2, "0")}:${nextMinute}`);
+  }
+
+  return (
+    <div className="easy-time-select" aria-label="Exact birth time">
+      <select
+        aria-label="Birth hour"
+        value={hour}
+        onChange={(event) => {
+          const next = event.target.value;
+          setHour(next);
+          commit(next, minute, period);
+        }}
+      >
+        {Array.from({ length: 12 }, (_, index) => {
+          const item = String(index + 1).padStart(2, "0");
+          return <option key={item} value={item}>{item}</option>;
+        })}
+      </select>
+      <select
+        aria-label="Birth minute"
+        value={minute}
+        onChange={(event) => {
+          const next = event.target.value;
+          setMinute(next);
+          commit(hour, next, period);
+        }}
+      >
+        {Array.from({ length: 60 }, (_, index) => {
+          const item = String(index).padStart(2, "0");
+          return <option key={item} value={item}>{item}</option>;
+        })}
+      </select>
+      <select
+        aria-label="Birth time period"
+        value={period}
+        onChange={(event) => {
+          const next = event.target.value;
+          setPeriod(next);
+          commit(hour, minute, next);
+        }}
+      >
+        <option value="AM">AM</option>
+        <option value="PM">PM</option>
+      </select>
+    </div>
+  );
+}
+
 function historicalOffsetMinutes(timeZone, date, time) {
   if (!timeZone || !date || !time) return "";
   const [year, month, day] = date.split("-").map(Number);
@@ -550,6 +618,13 @@ export default function AstrologyStudio({ session, detectedCountry }) {
       utcOffset: historicalOffsetMinutes(value.timeZone, date, value.time),
     }));
   }
+  function updateBirthTime(time) {
+    setForm((value) => ({
+      ...value,
+      time,
+      utcOffset: historicalOffsetMinutes(value.timeZone, value.date, time),
+    }));
+  }
   function submit(event) {
     event.preventDefault();
     setError("");
@@ -690,20 +765,14 @@ export default function AstrologyStudio({ session, detectedCountry }) {
                   autoComplete="name"
                 />
               </label>
-              <div className="studio-grid">
+              <div className="studio-grid birth-moment-grid">
                 <label>
                   Birth date
                   <EasyDateSelect value={form.date} onChange={updateBirthDate} />
                 </label>
                 <label>
                   Exact birth time
-                  <input
-                    type="time"
-                    name="time"
-                    value={form.time}
-                    onChange={updateBirthMoment}
-                    onClick={(event) => event.currentTarget.showPicker?.()}
-                  />
+                  <EasyTimeSelect value={form.time} onChange={updateBirthTime} />
                 </label>
               </div>
               <div className="studio-grid">
