@@ -186,6 +186,90 @@ const formatDate = (date) =>
     day: "2-digit",
   }).format(new Date(date));
 
+const MONTHS = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+
+function EasyDateSelect({ value, onChange }) {
+  const parsed = /^\d{4}-\d{2}-\d{2}$/.test(value || "")
+    ? value.split("-")
+    : ["", "", ""];
+  const [year, setYear] = useState(parsed[0]);
+  const [month, setMonth] = useState(parsed[1]);
+  const [day, setDay] = useState(parsed[2]);
+  const currentYear = new Date().getFullYear();
+  const daysInMonth = year && month
+    ? new Date(Number(year), Number(month), 0).getDate()
+    : 31;
+
+  useEffect(() => {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(value || "")) return;
+    const [nextYear, nextMonth, nextDay] = value.split("-");
+    setYear(nextYear);
+    setMonth(nextMonth);
+    setDay(nextDay);
+  }, [value]);
+
+  function commit(nextYear, nextMonth, nextDay) {
+    if (!nextYear || !nextMonth || !nextDay) return;
+    const maximum = new Date(Number(nextYear), Number(nextMonth), 0).getDate();
+    const safeDay = String(Math.min(Number(nextDay), maximum)).padStart(2, "0");
+    if (safeDay !== nextDay) setDay(safeDay);
+    onChange(`${nextYear}-${nextMonth}-${safeDay}`);
+  }
+
+  return (
+    <div className="easy-date-select" aria-label="Birth date">
+      <select
+        aria-label="Birth day"
+        value={day}
+        onChange={(event) => {
+          const next = event.target.value;
+          setDay(next);
+          commit(year, month, next);
+        }}
+      >
+        <option value="">Day</option>
+        {Array.from({ length: daysInMonth }, (_, index) => {
+          const item = String(index + 1).padStart(2, "0");
+          return <option key={item} value={item}>{index + 1}</option>;
+        })}
+      </select>
+      <select
+        aria-label="Birth month"
+        value={month}
+        onChange={(event) => {
+          const next = event.target.value;
+          setMonth(next);
+          commit(year, next, day);
+        }}
+      >
+        <option value="">Month</option>
+        {MONTHS.map((name, index) => {
+          const item = String(index + 1).padStart(2, "0");
+          return <option key={item} value={item}>{name}</option>;
+        })}
+      </select>
+      <select
+        aria-label="Birth year"
+        value={year}
+        onChange={(event) => {
+          const next = event.target.value;
+          setYear(next);
+          commit(next, month, day);
+        }}
+      >
+        <option value="">Year</option>
+        {Array.from({ length: currentYear - 1899 }, (_, index) => {
+          const item = String(currentYear - index);
+          return <option key={item} value={item}>{item}</option>;
+        })}
+      </select>
+    </div>
+  );
+}
+
 function historicalOffsetMinutes(timeZone, date, time) {
   if (!timeZone || !date || !time) return "";
   const [year, month, day] = date.split("-").map(Number);
@@ -239,6 +323,12 @@ export default function AstrologyStudio({ session, detectedCountry }) {
   );
   const [menuOpen, setMenuOpen] = useState(false);
   const [showWesternAspects, setShowWesternAspects] = useState(true);
+  const [useEasyDateInput] = useState(() => {
+    const agent = window.navigator.userAgent;
+    const isSafari = /Safari/i.test(agent) && !/Chrome|CriOS|Chromium|Android/i.test(agent);
+    const isTouch = window.matchMedia?.("(pointer: coarse)").matches;
+    return isSafari || Boolean(isTouch);
+  });
 
   useEffect(() => {
     let active = true;
@@ -360,7 +450,16 @@ export default function AstrologyStudio({ session, detectedCountry }) {
     () => {
       if (!form.countryCode) return [];
       if (form.stateCode) {
-        return City.getCitiesOfState(form.countryCode, form.stateCode);
+        const stateCities = City.getCitiesOfState(
+          form.countryCode,
+          form.stateCode,
+        );
+        // Some datasets assign a city to a wider province instead of its
+        // selected county (for example Dublin city is tagged as Leinster).
+        // Fall back to the country list when the selected region has no cities.
+        return stateCities.length
+          ? stateCities
+          : City.getCitiesOfCountry(form.countryCode) || [];
       }
       // Countries without a state-level selection still need a usable city
       // list, which is especially important for European birth locations.
@@ -421,11 +520,10 @@ export default function AstrologyStudio({ session, detectedCountry }) {
   function selectCity(event) {
     const city = cities.find((item) => item.name === event.target.value);
     const state = states.find(
-      (item) => item.isoCode === (city?.stateCode || form.stateCode),
+      (item) => item.isoCode === form.stateCode,
     );
     setForm((value) => ({
       ...value,
-      stateCode: city?.stateCode || value.stateCode,
       cityName: city?.name || "",
       place: city
         ? `${city.name}, ${state?.name || ""}, ${selectedCountry?.name || ""}`
@@ -450,6 +548,13 @@ export default function AstrologyStudio({ session, detectedCountry }) {
       next.time,
     );
     setForm(next);
+  }
+  function updateBirthDate(date) {
+    setForm((value) => ({
+      ...value,
+      date,
+      utcOffset: historicalOffsetMinutes(value.timeZone, date, value.time),
+    }));
   }
   function submit(event) {
     event.preventDefault();
@@ -594,13 +699,17 @@ export default function AstrologyStudio({ session, detectedCountry }) {
               <div className="studio-grid">
                 <label>
                   Birth date
-                  <input
-                    type="date"
-                    name="date"
-                    value={form.date}
-                    onChange={updateBirthMoment}
-                    onClick={(event) => event.currentTarget.showPicker?.()}
-                  />
+                  {useEasyDateInput ? (
+                    <EasyDateSelect value={form.date} onChange={updateBirthDate} />
+                  ) : (
+                    <input
+                      type="date"
+                      name="date"
+                      value={form.date}
+                      onChange={updateBirthMoment}
+                      onClick={(event) => event.currentTarget.showPicker?.()}
+                    />
+                  )}
                 </label>
                 <label>
                   Exact birth time
