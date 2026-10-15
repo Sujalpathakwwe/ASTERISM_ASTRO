@@ -323,12 +323,6 @@ export default function AstrologyStudio({ session, detectedCountry }) {
   );
   const [menuOpen, setMenuOpen] = useState(false);
   const [showWesternAspects, setShowWesternAspects] = useState(true);
-  const [useEasyDateInput] = useState(() => {
-    const agent = window.navigator.userAgent;
-    const isSafari = /Safari/i.test(agent) && !/Chrome|CriOS|Chromium|Android/i.test(agent);
-    const isTouch = window.matchMedia?.("(pointer: coarse)").matches;
-    return isSafari || Boolean(isTouch);
-  });
 
   useEffect(() => {
     let active = true;
@@ -699,17 +693,7 @@ export default function AstrologyStudio({ session, detectedCountry }) {
               <div className="studio-grid">
                 <label>
                   Birth date
-                  {useEasyDateInput ? (
-                    <EasyDateSelect value={form.date} onChange={updateBirthDate} />
-                  ) : (
-                    <input
-                      type="date"
-                      name="date"
-                      value={form.date}
-                      onChange={updateBirthMoment}
-                      onClick={(event) => event.currentTarget.showPicker?.()}
-                    />
-                  )}
+                  <EasyDateSelect value={form.date} onChange={updateBirthDate} />
                 </label>
                 <label>
                   Exact birth time
