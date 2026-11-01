@@ -31509,3 +31509,30 @@ body{background:#fff!important;color:#17140f!important;-webkit-print-color-adjus
 .vedic-bnn-section .studio-disclaimer{margin-top:3mm!important;padding:3mm 4mm!important;break-inside:avoid!important;page-break-inside:avoid!important}
 .vedic-bnn-section .studio-disclaimer p{margin:1.5mm 0 0!important;font-size:7.5px!important;line-height:1.4!important}
 }
+
+/* Western report pagination: compact complete rows and avoid orphan cards. */
+@media print{
+.western-chart-page{padding-top:14mm!important}
+.western-chart-page .section-heading,.western-chart-page .chart-explainer{margin-bottom:4mm!important}
+.western-chart-page .astro-wheel-svg{width:148mm!important;max-width:148mm!important;max-height:148mm!important}
+.western-structure-page,.western-aspects-page,.western-houses-page,.western-transits-page,.western-insights-page{padding-top:12mm!important;padding-bottom:14mm!important}
+.western-structure-page .section-heading,.western-aspects-page .section-heading,.western-houses-page .section-heading,.western-transits-page .section-heading,.western-insights-page .reading-heading{margin-bottom:4mm!important}
+.western-aspects-page .aspect-reading-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:2.5mm!important}
+.western-aspects-page .aspect-reading-grid article{padding:3mm!important}
+.western-aspects-page .aspect-reading-grid h4{margin:1.5mm 0!important;font-size:10.5px!important}
+.western-aspects-page .aspect-reading-grid p{font-size:7.2px!important;line-height:1.35!important}
+.western-houses-page .house-reading-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:2.5mm!important}
+.western-houses-page .house-reading-grid article{padding:3mm!important}
+.western-houses-page .house-reading-grid h4{margin:1.5mm 0!important;font-size:10.5px!important}
+.western-houses-page .house-reading-grid p{font-size:7.2px!important;line-height:1.35!important}
+.western-insights-page .chart-reading{margin-top:0!important;padding-top:0!important;border-top:0!important}
+.western-insights-page .general-reading,.western-insights-page .planet-reading-grid{gap:2.5mm!important}
+.western-insights-page .general-reading{margin-bottom:2.5mm!important}
+.western-insights-page .general-reading article,.western-insights-page .planet-reading-grid article{padding:3mm!important}
+.western-insights-page .general-reading h4{margin:1mm 0!important;font-size:11px!important}
+.western-insights-page .general-reading p,.western-insights-page .planet-reading-grid p{margin-top:2mm!important;font-size:7.2px!important;line-height:1.34!important}
+.western-insights-page .planet-reading-title{gap:2mm!important}
+.western-insights-page .planet-reading-title>span{width:8mm!important;height:8mm!important;font-size:13px!important}
+.western-insights-page .planet-reading-title h4{font-size:10px!important}
+.western-insights-page .planet-reading-title small{font-size:6.7px!important}
+}
