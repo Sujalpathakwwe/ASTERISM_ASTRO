@@ -31454,3 +31454,33 @@ body.light-mode .testimonials-home .testimonial-more {
     font-size: 13px;
   }
 }
+
+
+/* Stable A4 pagination for Safari, Chrome and mobile print previews. */
+@page{size:A4 portrait;margin:0}
+@media print{
+html,body,#root,.chart-studio-page{width:210mm!important;margin:0!important;padding:0!important}
+body{background:#fff!important;color:#17140f!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+.print-cover{width:210mm!important;min-height:297mm!important;height:297mm!important;margin:0!important;padding:16mm 16mm 18mm!important;border:0!important;box-sizing:border-box!important;break-after:page!important;page-break-after:always!important}
+.print-cover::before{inset:8mm!important}.print-cover::after{right:16mm!important;bottom:14mm!important;left:16mm!important}
+.chart-studio-page .studio-panel{width:210mm!important;max-width:210mm!important;margin:0!important;padding:0 14mm 16mm!important;box-sizing:border-box!important}
+.vedic-birth-chart,.western-chart-page,.astro-map-page{break-before:auto!important;page-break-before:auto!important}
+.vedic-complete-report>.vedic-report-section:not(:first-child),.western-complete-report>.western-report-section:not(:first-child),.astro-complete-report>.astro-report-section:not(:first-child){break-before:page!important;page-break-before:always!important}
+.vedic-birth-chart{padding-top:14mm!important}
+.print-d1-chart>.chart-explainer{margin-bottom:4mm!important}
+.print-d1-chart>.chart-stage{max-width:142mm!important;margin-bottom:0!important}
+.print-d1-chart>.chart-reading{break-before:page!important;page-break-before:always!important}
+.vedic-varga-section{padding:0!important;border:0!important}
+.print-varga-page{width:182mm!important;height:281mm!important;min-height:0!important;margin:0!important;padding:12mm 0 14mm!important;box-sizing:border-box!important;grid-template-rows:auto minmax(0,1fr) minmax(0,1fr)!important;gap:4mm 6mm!important;break-before:page!important;page-break-before:always!important;break-after:auto!important;page-break-after:auto!important;overflow:hidden!important}
+.print-divisional-atlas>.print-varga-page:first-child{break-before:auto!important;page-break-before:auto!important}
+.print-varga-chart .north-detailed{max-height:101mm!important}
+.vedic-dasha-section{height:auto!important;min-height:281mm!important;padding:14mm 0 16mm!important;box-sizing:border-box!important;overflow:visible!important}
+.vedic-dasha-section .dasha-list{gap:3.5mm!important}
+.vedic-dasha-section .dasha-list>div{min-height:40mm!important;padding:4.5mm!important}
+.bnn-cards,.aspect-reading-grid,.house-reading-grid,.western-summary-grid{break-inside:auto!important;page-break-inside:auto!important}
+.bnn-cards article,.aspect-reading-grid article,.house-reading-grid article,.western-summary-grid article{break-inside:avoid!important;page-break-inside:avoid!important}
+.western-aspects-page .aspect-reading-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:3mm!important}
+.western-aspects-page .aspect-reading-grid article{padding:3.5mm!important}
+.print-report-watermark{display:block!important;position:fixed!important;left:50%!important;top:50%!important;width:105mm!important;height:105mm!important;opacity:.04!important;transform:translate(-50%,-50%)!important}
+.print-report-footer{display:flex!important;position:fixed!important;right:14mm!important;bottom:5mm!important;left:14mm!important;min-height:6mm!important;background:#fff!important}
+}
