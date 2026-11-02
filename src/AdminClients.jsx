@@ -14,10 +14,15 @@ function formatDate(value) {
   });
 }
 
+function formatStatus(value) {
+  if (!value) return "Pending";
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
 export default function AdminClients({ session, onBack }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [clients, setClients] = useState([]);
+  const [bookings, setBookings] = useState([]);
   const [error, setError] = useState("");
 
   function goBack() {
@@ -31,7 +36,7 @@ export default function AdminClients({ session, onBack }) {
   useEffect(() => {
     let mounted = true;
 
-    async function loadClients() {
+    async function loadPaidBookings() {
       setLoading(true);
       setError("");
 
@@ -59,25 +64,24 @@ export default function AdminClients({ session, onBack }) {
         const { data: consultationData, error: consultationError } = await supabase
           .from("consultations")
           .select(
-            "id, user_id, service_name, status, payment_status, scheduled_at, created_at"
+            "id, user_id, service_name, status, payment_status, payment_provider, payment_amount, payment_currency, scheduled_at, preferred_date, created_at"
           )
           .eq("payment_status", "paid")
-          .eq("status", "completed")
           .order("created_at", { ascending: false });
 
         if (consultationError) throw consultationError;
 
-        const completed = (consultationData || []).filter(
-          (item) => item.user_id
-        );
+        const paidBookings = consultationData || [];
+        const userIds = [
+          ...new Set(paidBookings.map((item) => item.user_id).filter(Boolean)),
+        ];
 
-        const userIds = [...new Set(completed.map((item) => item.user_id))];
         let profileMap = new Map();
 
         if (userIds.length > 0) {
           const { data: profileData, error: profileError } = await supabase
             .from("profiles")
-            .select("id, full_name, email, created_at, is_admin")
+            .select("id, full_name, email, is_admin")
             .in("id", userIds);
 
           if (profileError) throw profileError;
@@ -89,52 +93,28 @@ export default function AdminClients({ session, onBack }) {
           );
         }
 
-        const grouped = new Map();
-
-        completed.forEach((booking) => {
-          const profile = profileMap.get(booking.user_id);
-          if (!profile) return;
-
-          const existing = grouped.get(booking.user_id);
-
-          if (!existing) {
-            grouped.set(booking.user_id, {
-              ...profile,
-              completedBookings: 1,
-              lastService: booking.service_name || "Consultation",
-              lastBookingDate:
-                booking.scheduled_at || booking.created_at || null,
-            });
-            return;
-          }
-
-          existing.completedBookings += 1;
-        });
-
-        const clientList = Array.from(grouped.values()).sort((a, b) => {
-          const aTime = a.lastBookingDate
-            ? new Date(a.lastBookingDate).getTime()
-            : 0;
-          const bTime = b.lastBookingDate
-            ? new Date(b.lastBookingDate).getTime()
-            : 0;
-          return bTime - aTime;
-        });
+        const rows = paidBookings
+          .map((booking) => ({
+            ...booking,
+            client: booking.user_id ? profileMap.get(booking.user_id) || null : null,
+          }))
+          .filter((booking) => {
+            if (!booking.user_id) return true;
+            return Boolean(booking.client);
+          });
 
         if (!mounted) return;
-        setClients(clientList);
+        setBookings(rows);
       } catch (loadError) {
-        console.error("Admin clients error:", loadError);
+        console.error("Admin paid bookings error:", loadError);
         if (!mounted) return;
-        setError(
-          loadError?.message || "Unable to load completed client accounts."
-        );
+        setError(loadError?.message || "Unable to load paid bookings.");
       } finally {
         if (mounted) setLoading(false);
       }
     }
 
-    loadClients();
+    loadPaidBookings();
 
     return () => {
       mounted = false;
@@ -147,7 +127,7 @@ export default function AdminClients({ session, onBack }) {
         <div className="admin-card admin-loading">
           <div className="admin-symbol">✦</div>
           <div className="admin-kicker">ASTERISM ASTRO</div>
-          <h1>Loading clients</h1>
+          <h1>Loading paid bookings</h1>
           <p>Please wait...</p>
         </div>
       </main>
@@ -160,7 +140,7 @@ export default function AdminClients({ session, onBack }) {
         <div className="admin-card">
           <div className="admin-symbol">✦</div>
           <div className="admin-kicker">ASTERISM ASTRO</div>
-          <h1>Unable to load clients</h1>
+          <h1>Unable to load paid bookings</h1>
           <p>{error}</p>
           <button type="button" className="btn btn-gold" onClick={goBack}>
             ← Admin Dashboard
@@ -177,7 +157,7 @@ export default function AdminClients({ session, onBack }) {
           <div>
             <div className="admin-kicker">ASTERISM ASTRO</div>
             <h1>Client Accounts</h1>
-            <p>Clients with paid and completed consultations.</p>
+            <p>Every consultation with a confirmed paid payment.</p>
           </div>
 
           <div className="admin-header-actions">
@@ -194,10 +174,11 @@ export default function AdminClients({ session, onBack }) {
         <section className="admin-section">
           <div className="admin-section-heading">
             <div>
-              <div className="admin-section-kicker">CLIENTS</div>
-              <h2>Completed customers</h2>
+              <div className="admin-section-kicker">PAID BOOKINGS</div>
+              <h2>Customers & bookings</h2>
               <p style={{ margin: "6px 0 0", opacity: 0.7 }}>
-                Only customers whose payment is paid and booking status is completed.
+                Each row represents one paid consultation, including pending,
+                confirmed and completed bookings.
               </p>
             </div>
 
@@ -211,18 +192,15 @@ export default function AdminClients({ session, onBack }) {
                 whiteSpace: "nowrap",
               }}
             >
-              {clients.length} client{clients.length === 1 ? "" : "s"}
+              {bookings.length} paid booking{bookings.length === 1 ? "" : "s"}
             </div>
           </div>
 
-          {clients.length === 0 ? (
+          {bookings.length === 0 ? (
             <div className="admin-card" style={{ marginTop: "22px" }}>
               <div className="admin-symbol">◌</div>
-              <h2>No completed clients yet</h2>
-              <p>
-                A client will appear here after payment is marked paid and the
-                consultation is marked completed.
-              </p>
+              <h2>No paid bookings yet</h2>
+              <p>Successful paid consultations will appear here.</p>
             </div>
           ) : (
             <div
@@ -232,25 +210,27 @@ export default function AdminClients({ session, onBack }) {
                 marginTop: "22px",
               }}
             >
-              {clients.map((client) => {
-                const initial = (
-                  client.full_name || client.email || "C"
-                )
-                  .charAt(0)
-                  .toUpperCase();
+              {bookings.map((booking) => {
+                const name = booking.client?.full_name || "Client";
+                const email = booking.client?.email || "Email unavailable";
+                const initial = (name || email || "C").charAt(0).toUpperCase();
+                const bookingDate =
+                  booking.scheduled_at || booking.preferred_date || booking.created_at;
 
                 return (
                   <article
-                    key={client.id}
+                    key={booking.id}
+                    className="paid-booking-row"
                     style={{
                       display: "grid",
-                      gridTemplateColumns: "56px minmax(0, 1.4fr) minmax(170px, 0.8fr) minmax(150px, 0.7fr)",
+                      gridTemplateColumns:
+                        "56px minmax(0, 1.3fr) minmax(160px, 0.8fr) minmax(130px, 0.6fr) minmax(130px, 0.6fr)",
                       gap: "18px",
                       alignItems: "center",
                       padding: "18px 20px",
                       border: "1px solid rgba(120, 94, 45, 0.18)",
                       borderRadius: "16px",
-                      background: "rgba(255,255,255,0.38)",
+                      background: "rgba(255,255,255,0.42)",
                       boxShadow: "0 8px 24px rgba(45, 34, 15, 0.04)",
                     }}
                   >
@@ -280,7 +260,7 @@ export default function AdminClients({ session, onBack }) {
                           marginBottom: "5px",
                         }}
                       >
-                        {client.full_name || "Unnamed Client"}
+                        {name}
                       </strong>
                       <span
                         style={{
@@ -290,54 +270,45 @@ export default function AdminClients({ session, onBack }) {
                           overflowWrap: "anywhere",
                         }}
                       >
-                        {client.email || "Email unavailable"}
+                        {email}
                       </span>
                     </div>
 
                     <div>
-                      <span
-                        style={{
-                          display: "block",
-                          fontSize: "10px",
-                          letterSpacing: "0.16em",
-                          fontWeight: 700,
-                          opacity: 0.6,
-                          marginBottom: "5px",
-                        }}
-                      >
-                        LAST SERVICE
-                      </span>
-                      <strong style={{ fontSize: "14px" }}>
-                        {client.lastService}
+                      <span className="paid-booking-label">SERVICE</span>
+                      <strong style={{ display: "block", fontSize: "14px" }}>
+                        {booking.service_name || "Consultation"}
                       </strong>
                       <div style={{ fontSize: "12px", opacity: 0.65, marginTop: "4px" }}>
-                        {formatDate(client.lastBookingDate)}
+                        {formatDate(bookingDate)}
                       </div>
                     </div>
 
-                    <div style={{ textAlign: "right" }}>
+                    <div>
+                      <span className="paid-booking-label">BOOKING STATUS</span>
                       <span
                         style={{
                           display: "inline-block",
-                          padding: "7px 11px",
+                          padding: "6px 10px",
                           borderRadius: "999px",
-                          background: "rgba(177, 131, 24, 0.1)",
                           border: "1px solid rgba(177, 131, 24, 0.22)",
+                          background: "rgba(177, 131, 24, 0.08)",
                           fontSize: "12px",
                           fontWeight: 700,
                         }}
                       >
-                        {client.completedBookings} completed
+                        {formatStatus(booking.status)}
                       </span>
-                      <div
-                        style={{
-                          fontSize: "11px",
-                          opacity: 0.48,
-                          marginTop: "8px",
-                          overflowWrap: "anywhere",
-                        }}
-                      >
-                        {client.id}
+                    </div>
+
+                    <div style={{ textAlign: "right" }}>
+                      <span className="paid-booking-label">PAYMENT</span>
+                      <strong style={{ display: "block", fontSize: "14px" }}>
+                        {booking.payment_currency || ""}{" "}
+                        {booking.payment_amount ?? "Paid"}
+                      </strong>
+                      <div style={{ fontSize: "11px", opacity: 0.55, marginTop: "4px" }}>
+                        {booking.payment_provider || "payment"}
                       </div>
                     </div>
                   </article>
@@ -349,12 +320,23 @@ export default function AdminClients({ session, onBack }) {
       </div>
 
       <style>{`
-        @media (max-width: 850px) {
-          .admin-dashboard article {
+        .paid-booking-label {
+          display: block;
+          font-size: 10px;
+          letter-spacing: 0.16em;
+          font-weight: 700;
+          opacity: 0.58;
+          margin-bottom: 6px;
+        }
+
+        @media (max-width: 900px) {
+          .paid-booking-row {
             grid-template-columns: 48px minmax(0, 1fr) !important;
           }
-          .admin-dashboard article > div:nth-child(3),
-          .admin-dashboard article > div:nth-child(4) {
+
+          .paid-booking-row > div:nth-child(3),
+          .paid-booking-row > div:nth-child(4),
+          .paid-booking-row > div:nth-child(5) {
             grid-column: 2;
             text-align: left !important;
           }
