@@ -24,6 +24,12 @@ const COPY = {
 
 export default function StudioAdvancedPanel({ chart, system, layout, setLayout, division, setDivision, showWesternAspects, setShowWesternAspects, reportSections, setReportSections }) {
   const [open, setOpen] = useState(false);
+  const [localReportSections, setLocalReportSections] = useState({
+    chart: true,
+    positions: true,
+    insights: true,
+    timing: true,
+  });
   const [transitDate, setTransitDate] = useState(new Date().toISOString().slice(0, 10));
   const transits = useMemo(() => currentTransits(chart, new Date(`${transitDate}T12:00:00Z`)), [chart, transitDate]);
   const active = chart.dashas.find((d) => Date.now() >= new Date(d.start) && Date.now() < new Date(d.end)) || chart.dashas[0];
@@ -34,7 +40,9 @@ export default function StudioAdvancedPanel({ chart, system, layout, setLayout, 
   const moon = chart.planets.find((p) => p.name === "Moon");
   const year = new Date().getFullYear();
   const annual = useMemo(() => { try { return calculateChart({ ...chart.input, date: `${year}-${chart.input.date.slice(5)}` }); } catch { return null; } }, [chart, year]);
-  const toggleReport = (key) => setReportSections((value) => ({ ...value, [key]: !value[key] }));
+  const visibleReportSections = reportSections || localReportSections;
+  const updateReportSections = setReportSections || setLocalReportSections;
+  const toggleReport = (key) => updateReportSections((value) => ({ ...value, [key]: !value[key] }));
   const copy = COPY[system] || COPY.vedic;
   const shiftDate = (days) => setTransitDate(new Date(Date.parse(transitDate) + days * 86400000).toISOString().slice(0, 10));
 
@@ -49,12 +57,12 @@ export default function StudioAdvancedPanel({ chart, system, layout, setLayout, 
           <div><dt>Timezone</dt><dd>{chart.input.timeZone || "Recorded offset"}</dd></div>
         </dl></article>
         <article><span>{copy[0]}</span><h4>{copy[1]}</h4>
-          {system === "vedic" && <><label>Chart layout<select value={layout} onChange={(e) => setLayout(e.target.value)}><option value="north">North Indian</option><option value="south">South Indian</option><option value="east">East Indian</option></select></label><label>Detailed chart<select value={division} onChange={(e) => setDivision(Number(e.target.value))}>{[1,2,3,4,7,9,10,12,16,20,24,27,30,40,45,60].map((n) => <option key={n} value={n}>D{n}</option>)}</select></label><p>Lahiri sidereal zodiac, true nodes and Vimshottari timing are used by this window.</p></>}
-          {system === "western" && <><label className="report-check"><input type="checkbox" checked={showWesternAspects} onChange={(e) => setShowWesternAspects(e.target.checked)} />Show major aspect lines</label><p>Tropical zodiac and equal houses are used. Planet names, degrees and exact aspect orbs remain visible.</p></>}
+          {system === "vedic" && <><label>Chart layout<select value={layout || "north"} onChange={(e) => setLayout?.(e.target.value)}><option value="north">North Indian</option><option value="south">South Indian</option><option value="east">East Indian</option></select></label><label>Detailed chart<select value={division || 1} onChange={(e) => setDivision?.(Number(e.target.value))}>{[1,2,3,4,7,9,10,12,16,20,24,27,30,40,45,60].map((n) => <option key={n} value={n}>D{n}</option>)}</select></label><p>Lahiri sidereal zodiac, true nodes and Vimshottari timing are used by this window.</p></>}
+          {system === "western" && <><label className="report-check"><input type="checkbox" checked={showWesternAspects ?? true} onChange={(e) => setShowWesternAspects?.(e.target.checked)} />Show major aspect lines</label><p>Tropical zodiac and equal houses are used. Planet names, degrees and exact aspect orbs remain visible.</p></>}
           {system === "astrocartography" && <p>Use the planet and angle chips above the map. Selecting a location recalculates its relocated chart at the same UTC birth moment.</p>}
           {system === "compatibility" && <p>Western synastry uses tropical positions. Vedic matching uses the sidereal Moon, nakshatra, D1 and D9. Person B controls are inside this workspace.</p>}
         </article>
-        <article><span>REPORT BUILDER</span><h4>Include in PDF</h4>{Object.entries(reportSections).map(([key, value]) => <label className="report-check" key={key}><input type="checkbox" checked={value} onChange={() => toggleReport(key)} />{key[0].toUpperCase() + key.slice(1)}</label>)}<p>These switches now control which matching sections appear in the printed report.</p></article>
+        <article><span>REPORT BUILDER</span><h4>Include in PDF</h4>{Object.entries(visibleReportSections).map(([key, value]) => <label className="report-check" key={key}><input type="checkbox" checked={value} onChange={() => toggleReport(key)} />{key[0].toUpperCase() + key.slice(1)}</label>)}<p>Choose the sections to include in the report.</p></article>
       </div>
       {system !== "astrocartography" && system !== "compatibility" && <>
         <section className="transit-date-panel"><div><span>FORECAST DATE</span><h4>{system === "vedic" ? "Gochar date" : "Transit date"}</h4></div><input type="date" value={transitDate} onClick={(e) => e.currentTarget.showPicker?.()} onChange={(e) => setTransitDate(e.target.value)} /><button onClick={() => shiftDate(-1)}>Previous day</button><button onClick={() => shiftDate(1)}>Next day</button></section>
