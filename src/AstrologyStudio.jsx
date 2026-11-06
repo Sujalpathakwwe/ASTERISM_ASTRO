@@ -1075,7 +1075,16 @@ export default function AstrologyStudio({ session, detectedCountry }) {
                 <small>Synastry and Vedic matching</small>
               </button>
             </nav>
-            <StudioAdvancedPanel chart={chart} system={system} />
+            <StudioAdvancedPanel
+              chart={chart}
+              system={system}
+              layout={layout}
+              setLayout={setLayout}
+              division={division}
+              setDivision={setDivision}
+              showWesternAspects={showWesternAspects}
+              setShowWesternAspects={setShowWesternAspects}
+            />
             <section className="studio-panel">
               {system === "vedic" && (
                 <div className="vedic-complete-report">
