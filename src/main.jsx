@@ -14,6 +14,7 @@ import {
 } from "react-router-dom";
 
 import { pages } from "./pages";
+import contactPageHtml from "../contact.html?raw";
 import {
   detectCountry,
   COUNTRY_DATA,
@@ -2057,7 +2058,9 @@ useEffect(() => {
 
 
     const source =
-      pages[file];
+      file === "contact.html"
+        ? contactPageHtml
+        : pages[file];
 
 
     if (!source) {
