@@ -35,6 +35,7 @@ import ZodiacWheel from "./ZodiacWheel.jsx";
 import { supabase } from "./lib/supabase";
 
 import "./styles.css";
+import "./contact.css";
 
 
 /* =========================================================
